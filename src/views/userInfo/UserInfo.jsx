@@ -33,8 +33,8 @@ export const UserInfo = () => {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: "ເກີດຂໍໍໍຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍໍໍມູນໄດ້",
+                title: "ເກີດຂໍ້ຜິດພາດ",
+                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
             });
             console.error('Error fetching data:', error);
         } finally {
@@ -86,7 +86,7 @@ export const UserInfo = () => {
                 }
             }
         } catch (error) {
-            Swal.fire('ເກີດຂໍໍໍຜິດພາດ', 'ບໍ່ສາມາດອັບເດດຂໍໍໍມູນໄດ້', 'error');
+            Swal.fire('ເກີດຂໍ້ຜິດພາດ', 'ບໍ່ສາມາດອັບເດດຂໍໍໍມູນໄດ້', 'error');
             console.error('Error updating user:', error);
         } finally {
             setLoading(false);
@@ -126,7 +126,7 @@ export const UserInfo = () => {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'ເກີດຂໍໍໍຜິດພາດ',
+                title: 'ເກີດຂໍ້ຜິດພາດ',
                 text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
             });
             console.error('Error deleting item:', error);

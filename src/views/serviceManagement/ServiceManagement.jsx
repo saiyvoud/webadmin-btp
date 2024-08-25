@@ -26,8 +26,8 @@ export const ServiceManagement = () => {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: "ເກີດຂໍໍໍຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍໍໍມູນໄດ້",
+                title: "ເກີດຂໍ້ຜິດພາດ",
+                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
             });
             console.error('Error fetching data:', error);
         } finally {
@@ -46,8 +46,8 @@ export const ServiceManagement = () => {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: "ເກີດຂໍໍໍຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍໍໍມູນໄດ້",
+                title: "ເກີດຂໍ້ຜິດພາດ",
+                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
             });
             console.error('Error fetching data:', error);
         } finally {

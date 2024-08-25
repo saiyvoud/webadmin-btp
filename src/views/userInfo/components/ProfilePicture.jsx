@@ -29,7 +29,7 @@ export const ProfilePicture = () => {
             Swal.fire({
                 icon: 'error',
                 title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍໍໍມູນໄດ້",
+                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
             });
             console.error('Error fetching data:', error);
         } finally {
