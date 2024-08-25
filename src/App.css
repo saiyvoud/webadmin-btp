@@ -1,0 +1,41 @@
+*{
+  font-family: 'Noto sans lao','Roboto',sans-serif !important;
+  font-size: 12px;
+}
+body{
+  background: #f1f5f9;
+  /* padding: 24px; */
+  color: #374151;
+}
+
+.ant-picker-input > input::placeholder {
+  color: #01A7B1 !important;
+}
+
+.custom-switch.ant-switch-checked {
+  @apply bg-green-400 !important; /* Tailwind class for #4ADE80 */
+}
+/* input type text */
+input[type="text"] {
+  font-size: 14px;
+}
+
+/* input outline color #01A7B1 */
+input[type="text"]:focus{
+  outline: none;
+  border: 2px solid #01A7B1;
+}
+textarea{
+  font-size: 14px;
+  
+}
+textarea:focus{
+  outline: none;
+  border: 2px solid #01A7B1;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
