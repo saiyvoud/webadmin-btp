@@ -26,7 +26,7 @@ export const LoginApi = async (username, password) => {
             localStorage.setItem("token", response.data.data.token.token);
             localStorage.setItem("refreshToken", response.data.data.token.refreshToken);
             localStorage.setItem("UID", response.data.data.id);
-            localStorage.setItem("role", encryptData(response.data.data.role.role));
+            localStorage.setItem("role", encryptData(response.data.data.role));
             return true;
         } else {
             // console.log("Login failed: status is false");

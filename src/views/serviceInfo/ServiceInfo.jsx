@@ -38,6 +38,7 @@ export const ServiceInfo = () => {
 
     useEffect(() => {
         fetchData();
+        console.log(category);
     }, []);
 
     const showModal = () => {
@@ -91,7 +92,7 @@ export const ServiceInfo = () => {
             <td className="py-4 px-6 text-[12px] text-gray-500">{index}</td>
             <td className="py-4 px-6 text-[12px] text-center text-gray-900">{name}</td>
             <td className="py-4 px-6 text-[12px] text-center text-gray-500">{formatDate(updatedAt)}</td>
-            <td className="py-4 px-6 text-[12px] text-center text-gray-900">Admin</td>
+            <td className="py-4 px-6 text-[12px] text-center text-gray-900">{user?.username}</td> {/* Access the username from the user object */}
             <td className="py-4 px-6 text-[12px]">
                 <div className='flex items-center justify-center'>
                     <button onClick={() => showModalEdit(id, name)} className="bg-[#01A7B1] text-white w-[45px] py-1 rounded-full mr-2">ແກ້ໄຂ</button>
@@ -100,6 +101,7 @@ export const ServiceInfo = () => {
             </td>
         </tr>
     );
+
 
     return (
         <Sidebar>
@@ -142,11 +144,15 @@ export const ServiceInfo = () => {
                                     <TableRow
                                         key={item.id}
                                         index={index + 1}
-                                        {...item}
+                                        id={item.id}
+                                        name={item.name}
+                                        updatedAt={item.updatedAt}
+                                        user={item.user} // Pass the user object to TableRow
                                         onDelete={handleDelete}
                                     />
                                 ))}
                             </tbody>
+
                         </table>
                     )}
                 </div>

@@ -18,12 +18,18 @@ import { FormAboutInfo } from "../views/aboutManagement/components/FormAboutInfo
 import { AboutBanner } from "../views/aboutManagement/components/AboutBanner";
 import { ProfilePicture } from "../views/userInfo/components/ProfilePicture";
 import { FormEditBanner } from "../views/bannerManage/components/FormEditBanner";
+import Authentication from "../components/Authentication";
+import { Role } from "../constants";  // Ensure this import exists
 
 export const RouterPaths = () => {
     const router = createBrowserRouter([
         {
-            path: '/',
-            element: <Dashboard />
+            path: "/",
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <Dashboard />
+                </Authentication>
+            ),
         },
         {
             path: '/serviceManagement',
@@ -32,8 +38,7 @@ export const RouterPaths = () => {
         {
             path: "/serviceManagement/formEditCard/:id",
             element: <FormEditService />
-        }
-        ,
+        },
         {
             path: '/serviceManagement/formAddCard',
             element: <FormAddCard />
@@ -67,19 +72,19 @@ export const RouterPaths = () => {
             element: <FormEditBanner />
         },
         {
-            path: '/aboutManangement',
+            path: '/aboutManagement',  // corrected path
             element: <AboutManagement />
         },
         {
-            path: '/aboutManangement/formAddImage',
+            path: '/aboutManagement/formAddImage',  // corrected path
             element: <FormAddImage />
         },
         {
-            path: '/aboutManangement/aboutBanner',
+            path: '/aboutManagement/aboutBanner',  // corrected path
             element: <AboutBanner />
         },
         {
-            path: '/aboutManangement/aboutInfo/:id',
+            path: '/aboutManagement/aboutInfo/:id',  // corrected path
             element: <FormAboutInfo />
         },
         {
