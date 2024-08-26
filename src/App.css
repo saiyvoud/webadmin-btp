@@ -41,3 +41,31 @@ textarea:focus{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+/* CSS for the Input label when the field is not empty */
+.input-not-empty label {
+  transform: translateY(-100%);
+  font-size: 12px;
+  color: #01A7B1;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+  transform: translateY(-100%);
+  font-size: 12px;
+  color: #01A7B1;
+}

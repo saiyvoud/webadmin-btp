@@ -93,12 +93,12 @@ export const Login = () => {
                         <Card color="transparent" shadow={false}>
                             <form className="mt-8 mb-2 w-full" onSubmit={handleSubmit}>
                                 <div className="mb-1 flex flex-col gap-6">
-                                    <div className='relative'>
+                                    <div className='relative input-container'>
                                         <Input
                                             color="teal"
                                             size='lg'
                                             label="Username"
-                                            className='h-[40px]'
+                                            className={`h-[40px] ${username ? 'input-not-empty' : ''}`}
                                             style={{ fontSize: '14px' }}
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
@@ -107,13 +107,13 @@ export const Login = () => {
                                             <p className="text-red-500 text-xs mt-1">{errors.username}</p>
                                         )}
                                     </div>
-                                    <div className='relative'>
+                                    <div className='relative input-container'>
                                         <Input
                                             color="teal"
                                             size='lg'
                                             type='password'
                                             label="Password"
-                                            className='h-[40px]'
+                                            className={`h-[40px] ${password ? 'input-not-empty' : ''}`}
                                             style={{ fontSize: '14px' }}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
@@ -122,6 +122,7 @@ export const Login = () => {
                                             <p className="text-red-500 text-xs mt-1">{errors.password}</p>
                                         )}
                                     </div>
+
                                 </div>
                                 <Checkbox
                                     color='teal'
