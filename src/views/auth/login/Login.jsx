@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Card,
-    Input,
     Checkbox,
     Button,
     Typography,
@@ -11,6 +10,7 @@ import bgAuth from '../../../assets/images/webp/bgLogin.webp';
 import { LoginApi } from '../../../api/auth';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -18,6 +18,24 @@ export const Login = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({ username: '', password: '' });
     const [loading, setLoading] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+
+    useEffect(() => {
+        // Load saved username from localStorage if it exists
+        const savedUsername = localStorage.getItem('username');
+        const savedPassword = localStorage.getItem('password');
+        if (savedUsername) {
+            setUsername(savedUsername);
+        }
+        if (savedPassword) {
+            setUsername(savedPassword);
+        }
+    }, []);
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
 
     const validateForm = () => {
         const newErrors = { username: '', password: '' };
@@ -43,14 +61,17 @@ export const Login = () => {
 
         if (validateForm()) {
             try {
-                // console.log('Submitting login with:', username, password);
-                const response = await LoginApi(username, password);
+                const response = await LoginApi(username, password); // Encrypt password before sending if necessary
 
                 if (response) {
+                    if (rememberMe) {
+                        localStorage.setItem('username', username); // Save username
+                    } else {
+                        localStorage.removeItem('username'); // Clear saved username if not remembering
+                    }
                     navigate('/');
                     Swal.fire({
                         title: "ເຂົ້າສູ່ລະບົບສຳເລັດ",
-                        // text: "Logged in successfully",
                         icon: "success"
                     });
                 } else {
@@ -86,20 +107,19 @@ export const Login = () => {
                             Login
                         </h2>
                         <p className='text-[14px]'>
-                            ກະລຸນາປ້ອນຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜໍ່າເພື່ອເຂົ້າສູ່ລະບົບ
+                            ກະລຸນາປ້ອນຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານເພື່ອເຂົ້າສູ່ລະບົບ
                         </p>
                     </div>
                     <div className='w-full'>
                         <Card color="transparent" shadow={false}>
                             <form className="mt-8 mb-2 w-full" onSubmit={handleSubmit}>
                                 <div className="mb-1 flex flex-col gap-6">
-                                    <div className='relative input-container'>
-                                        <Input
-                                            color="teal"
-                                            size='lg'
-                                            label="Username"
-                                            className={`h-[40px] ${username ? 'input-not-empty' : ''}`}
-                                            style={{ fontSize: '14px' }}
+                                    <div className='relative'>
+                                        <label htmlFor="username" className='block mb-2 text-[14px] font-medium text-gray-900'>Username</label>
+                                        <input
+                                            id="username"
+                                            type="text"
+                                            className='border border-gray-300 text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
                                         />
@@ -107,22 +127,25 @@ export const Login = () => {
                                             <p className="text-red-500 text-xs mt-1">{errors.username}</p>
                                         )}
                                     </div>
-                                    <div className='relative input-container'>
-                                        <Input
-                                            color="teal"
-                                            size='lg'
-                                            type='password'
-                                            label="Password"
-                                            className={`h-[40px] ${password ? 'input-not-empty' : ''}`}
-                                            style={{ fontSize: '14px' }}
+                                    <div className='relative'>
+                                        <label htmlFor="password" className='block mb-2 text-[14px] font-medium text-gray-900'>Password</label>
+                                        <input
+                                            id="password"
+                                            type={passwordVisible ? "text" : "password"}
+                                            className='border border-gray-300 text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
+                                        <span
+                                            className="absolute right-4 top-12 cursor-pointer"
+                                            onClick={togglePasswordVisibility}
+                                        >
+                                            {passwordVisible ? <FaEyeSlash className=' text-[20px]' /> : <FaEye className=' text-[20px]' />}
+                                        </span>
                                         {errors.password && (
                                             <p className="text-red-500 text-xs mt-1">{errors.password}</p>
                                         )}
                                     </div>
-
                                 </div>
                                 <Checkbox
                                     color='teal'
@@ -130,12 +153,13 @@ export const Login = () => {
                                         <Typography
                                             variant="small"
                                             color="teal"
-                                            className="flex items-center font-normal"
+                                            className="flex text-[12px] items-center font-normal"
                                         >
                                             ຈື່ຂ້ອຍ
                                         </Typography>
                                     }
                                     containerProps={{ className: "-ml-2.5" }}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
                                 />
                                 <Button
                                     type="submit"
@@ -147,7 +171,7 @@ export const Login = () => {
                                 </Button>
                                 <Typography color="gray" className="mt-6 text-center font-normal">
                                     ຍັງທີ່ບໍ່ມີບັນຊີແມ່ນບໍ່?{" "}
-                                    <a href="#" className="font-medium text-gray-900">
+                                    <a href="#" className="font-medium underline text-gray-900">
                                         ລົງທະບຽນ
                                     </a>
                                 </Typography>
