@@ -53,7 +53,7 @@ export const Sidebar = ({ children }) => {
             id: 6,
             title: 'ຈັດການຂໍ້ມູນກ່ຽວກັບເຮົາ',
             icon: <HiOutlineChatAlt className='text-[24px]' />,
-            path: '/aboutManangement'
+            path: '/aboutManagement'
         },
         {
             id: 7,

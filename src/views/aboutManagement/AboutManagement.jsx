@@ -67,16 +67,16 @@ export const AboutManagement = () => {
                         />
                     </div>
                     <div className=' flex items-center gap-x-10'>
-                        <button onClick={() => navigate('/aboutManangement/aboutBanner')}
+                        <button onClick={() => navigate('/aboutManagement/aboutBanner')}
                             className="text-white w-[100px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
                             ແກ້ໄຂຮູບໜ້າປົກ
                         </button>
-                        <button onClick={() => navigate(`/aboutManangement/aboutInfo/${cDataID}`)}
+                        <button onClick={() => navigate(`/aboutManagement/aboutInfo/${cDataID}`)}
                             className="text-white w-[100px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
                             ແກ້ໄຂຂໍ້ມູນ
                         </button>
                         <button
-                            onClick={() => navigate('/aboutManangement/formAddImage')}
+                            onClick={() => navigate('/aboutManagement/formAddImage')}
                             className="text-white w-[100px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
                             ເພີ່ມຮູບພາບ
                         </button>

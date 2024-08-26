@@ -15,11 +15,11 @@ import { Login } from "../views/auth/login/Login";
 import { FormEditService } from "../views/serviceManagement/components/FormEditService";
 import { FormEditCardNews } from "../views/newsManagement/components/FormEditCardNews";
 import { FormAboutInfo } from "../views/aboutManagement/components/FormAboutInfo";
-import { AboutBanner } from "../views/aboutManagement/components/AboutBanner";
 import { ProfilePicture } from "../views/userInfo/components/ProfilePicture";
 import { FormEditBanner } from "../views/bannerManage/components/FormEditBanner";
 import Authentication from "../components/Authentication";
 import { Role } from "../constants";  // Ensure this import exists
+import { AboutBanner } from "../views/aboutManagement/components/AboutBanner";
 
 export const RouterPaths = () => {
     const router = createBrowserRouter([
@@ -72,15 +72,15 @@ export const RouterPaths = () => {
             element: <FormEditBanner />
         },
         {
-            path: '/aboutManagement',  // corrected path
+            path: '/aboutManagement',
             element: <AboutManagement />
         },
         {
-            path: '/aboutManagement/formAddImage',  // corrected path
-            element: <FormAddImage />
+            path: '/aboutManagement/aboutInfo',
+            element: <FormAboutInfo />
         },
         {
-            path: '/aboutManagement/aboutBanner',  // corrected path
+            path: '/aboutManagement/aboutBanner',
             element: <AboutBanner />
         },
         {

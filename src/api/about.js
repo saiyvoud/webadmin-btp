@@ -59,24 +59,25 @@ export const addCoverImageApi = async (data) => {
     }
 }
 export const updateCoverImageApi = async (id, data) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     const configHeader = {
         headers: {
             'Content-Type': 'multipart/form-data',
-            "Authorization": `Bearer ${token}`
-        }
-    }
+            "Authorization": `Bearer ${token}`,
+        },
+    };
     const formData = new FormData();
     formData.append("image", data?.image || "");
+    formData.append("oldImage", data?.oldImg || "");  // Ensure consistency with naming
 
     try {
-        const response = await axios.put(`${ApiPath.updateCoverImage}/${id}`, formData, configHeader)
-        return response
+        const response = await axios.put(`${ApiPath.updateCoverImage}/${id}`, formData, configHeader);
+        return response;
     } catch (error) {
-        console.error("Error add cover img api", error);
-        return false
+        console.error("Error in updateCoverImageApi", error);
+        return false;
     }
-}
+};
 
 export const updateCompanyData = async (id, data) => {
     const token = localStorage.getItem("token")

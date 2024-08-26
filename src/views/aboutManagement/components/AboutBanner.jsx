@@ -14,7 +14,8 @@ export const AboutBanner = () => {
     const imageInputRef = useRef(null);
     const [coverImg, setCoverImg] = useState([]);
 
-    const imgID = coverImg.map((item) => item.map(item => item.id))
+    const imgID = coverImg.map((item) => item.id)
+    // console.log("this is imgID=", );
     // console.log(imgID);
 
     const fetchData = async () => {
@@ -40,6 +41,7 @@ export const AboutBanner = () => {
 
     useEffect(() => {
         fetchData();
+        // console.log();
     }, []);
 
     const handleImageUpload = (event) => {
@@ -57,7 +59,7 @@ export const AboutBanner = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            handleSaveData(imgID);
+            handleSaveData(imgID[0]);
         } else {
             console.log('Form has errors');
         }
@@ -75,8 +77,11 @@ export const AboutBanner = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const data = {
-                    image: fileImg
-                }
+                    image: fileImg,
+                    oldImg: coverImg.map(item => item.image)
+                };
+
+                // console.log("this is old img", data.oldImg);
 
                 try {
                     setLoading(true); // Set loading to true when saving data
@@ -86,7 +91,7 @@ export const AboutBanner = () => {
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         }).then(() => {
-                            navigate('/serviceManagement');
+                            navigate('/aboutManagement');
                         });
                     } else {
                         Swal.fire({
@@ -129,7 +134,7 @@ export const AboutBanner = () => {
                                     <div className='w-full h-full relative'>
                                         <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                         <div onClick={() => setImage(null)}
-                                            className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg flex items-center justify-center'>
+                                            className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                             <FaTrashAlt className='text-white text-[14px]' />
                                         </div>
                                     </div>
@@ -156,7 +161,13 @@ export const AboutBanner = () => {
                             </div>
                             <div className='flex items-center justify-center'>
                                 <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                    {loading ? <Loading /> : "ແກ້ໄຂ"}
+                                    {loading ?
+                                        <div className=' flex items-center justify-center gap-x-2'>
+                                            <span className=' text-[14px]'>ກຳລັງບັນທຶກ</span><Loading />
+                                        </div>
+                                        :
+                                        image ? "ບັນທຶກ" : "ແກ້ໄຂ"
+                                    }
                                 </button>
                             </div>
                         </form>

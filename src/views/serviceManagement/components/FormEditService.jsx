@@ -166,7 +166,7 @@ export const FormEditService = () => {
                                                 <div className='w-full h-full relative'>
                                                     <img src={image || item.image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                                     <div onClick={handleImageRemove}
-                                                        className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg flex items-center justify-center'>
+                                                        className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                                         <FaTrashAlt className='text-white text-[14px]' />
                                                     </div>
                                                 </div>

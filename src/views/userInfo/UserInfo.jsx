@@ -4,6 +4,7 @@ import { Modal, Input, Button, Skeleton } from 'antd'; // Import Skeleton from A
 import { useNavigate } from 'react-router-dom';
 import { delteUserApi, getUserApi, updateUserApi } from '../../api/user'; // Import updateUserApi
 import Swal from 'sweetalert2';
+import { FaCamera } from 'react-icons/fa6';
 
 
 
@@ -138,9 +139,14 @@ export const UserInfo = () => {
         <tr className="border-b w-full border-gray-200">
             <td className="py-4 px-1 w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
             <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
-                <div onClick={() => navigate(`/userInfo/editProfile/${id}`)}
-                    className='w-16 h-16 rounded-full flex items-center justify-center'>
+                <div className="relative w-16 h-16">
                     <img src={profile} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
+                    <div
+                        onClick={() => navigate(`/userInfo/editProfile/${id}`)}
+                        className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                    >
+                        <FaCamera className='text-white text-[16px]' />
+                    </div>
                 </div>
             </td>
             <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-900 truncate">{firstName}</td>

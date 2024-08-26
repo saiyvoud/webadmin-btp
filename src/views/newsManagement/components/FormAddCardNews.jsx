@@ -141,7 +141,7 @@ export const FormAddCardNews = () => {
                                                 setImage(null);
                                                 setImagePreview(null);
                                             }}
-                                                className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg flex items-center justify-center'>
+                                                className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                                 <FaTrashAlt className='text-white text-[14px]' />
                                             </div>
                                         </div>
