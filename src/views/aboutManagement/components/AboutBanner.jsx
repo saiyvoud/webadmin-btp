@@ -22,11 +22,7 @@ export const AboutBanner = () => {
         setLoading(true); // Set loading to true when fetching data
         try {
             const response = await getCoverImageApi();
-            if (!response || response.length === 0) {
-                throw new Error('No response or empty data');
-            }
             setCoverImg(response);
-
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -41,7 +37,7 @@ export const AboutBanner = () => {
 
     useEffect(() => {
         fetchData();
-        // console.log();
+        console.log("this is data in cover img", coverImg);
     }, []);
 
     const handleImageUpload = (event) => {
@@ -163,7 +159,7 @@ export const AboutBanner = () => {
                                 <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
                                     {loading ?
                                         <div className=' flex items-center justify-center gap-x-2'>
-                                            <span className=' text-[14px]'>ກຳລັງບັນທຶກ</span><Loading />
+                                            <span>ກຳລັງບັນທຶກ</span><Loading />
                                         </div>
                                         :
                                         image ? "ບັນທຶກ" : "ແກ້ໄຂ"

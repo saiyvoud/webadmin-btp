@@ -32,7 +32,7 @@ export const delAboutApi = async (id) => {
 export const getCoverImageApi = async () => {
     try {
         const response = await axios.get(ApiPath.getCoverImage, getHeaderConfig())
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error cover image API", error);

@@ -10,26 +10,26 @@ export const AboutManagement = () => {
     const navigate = useNavigate()
     const { RangePicker } = DatePicker;
     const [loading, setLoading] = useState(false)
-    const [aboutData, setAboutData] = useState([])
+    // const [aboutData, setAboutData] = useState([])
     const [companyData, setCompanyData] = useState([])
 
 
-    const fetchData = async () => {
-        setLoading(true)
-        try {
-            const response = await getAboutApi()
-            setAboutData(response)
-        } catch (error) {
-            Swal.fire({
-                title: "ເກີດຂໍ້ຜິດພາດ!",
-                text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
-                icon: "error"
-            })
-            console.log("Error response About Data", error);
-        } finally {
-            setLoading(false)
-        }
-    }
+    // const fetchData = async () => {
+    //     setLoading(true)
+    //     try {
+    //         const response = await getAboutApi()
+    //         setAboutData(response)
+    //     } catch (error) {
+    //         Swal.fire({
+    //             title: "ເກີດຂໍ້ຜິດພາດ!",
+    //             text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
+    //             icon: "error"
+    //         })
+    //         console.log("Error response About Data", error);
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     const fetchCompanydata = async () => {
         setLoading(true)
@@ -49,7 +49,7 @@ export const AboutManagement = () => {
     }
 
     useEffect(() => {
-        fetchData()
+        // fetchData()
         fetchCompanydata()
         // console.log(companyData);
     }, [])
@@ -83,7 +83,9 @@ export const AboutManagement = () => {
                     </div>
                 </div>
 
-                <AboutList aboutData={aboutData} />
+                <AboutList
+                //  aboutData={aboutData}
+                />
             </div>
         </Sidebar>
     )

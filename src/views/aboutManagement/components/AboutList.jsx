@@ -16,14 +16,15 @@ import Swal from 'sweetalert2';
 import { formatDate } from '../../utils';
 
 
-export const AboutList = ({ aboutData }) => {
+export const AboutList = () => {
     const [loading, setLoading] = useState(false)
+    const [aboutData, setAboutData] = useState([])
 
-    const fetchData = async ({ aboutData }) => {
+    const fetchData = async () => {
         setLoading(true)
         try {
             const response = await getAboutApi()
-            // setAboutData(response)
+            setAboutData(response)
         } catch (error) {
             Swal.fire({
                 title: "ເກີດຂໍ້ຜິດພາດ!",
@@ -85,7 +86,7 @@ export const AboutList = ({ aboutData }) => {
     return (
         <div className=' mt-10'>
             <p className=' text-[14px]'>
-                ທັງໝົດ 10 ລາຍການ
+                ທັງໝົດ {aboutData.length} ລາຍການ
             </p>
             <hr className='mt-3 mb-10 border border-[#D9D9D9]' />
             <div className=' grid grid-cols-12 gap-10'>
