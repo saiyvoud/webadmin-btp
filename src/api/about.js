@@ -29,11 +29,32 @@ export const delAboutApi = async (id) => {
     }
 }
 
+
+export const addAboutApi = async (data) => {
+    const token = localStorage.getItem("token")
+    const configHeader = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    const formData = new FormData();
+    formData.append("title", data?.title || "");
+    formData.append("images", data?.images || "");
+    try {
+        const response = await axios.post(ApiPath.addAbout, formData, configHeader)
+        return response
+    } catch (error) {
+        console.error("Error add cover img api", error);
+        return false
+    }
+}
+
 export const getCoverImageApi = async () => {
     try {
         const response = await axios.get(ApiPath.getCoverImage, getHeaderConfig())
         // console.log(response?.data?.data);
-        return response?.data?.data
+        return response?.data?.data[0]
     } catch (error) {
         console.error("Error cover image API", error);
         return false
@@ -102,12 +123,41 @@ export const updateCompanyData = async (id, data) => {
         return false
     }
 }
+export const updateIconCompanyDataApi = async (id, data) => {
+    const token = localStorage.getItem("token")
+    const configHeader = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+    const formData = new FormData()
+    formData.append("icon", data?.icon || "")
+    formData.append("oldIcon", data?.oldIcon || "")
+
+    console.log(data);
+    try {
+        const response = await axios.put(`${ApiPath.updateIconCompanyData}/${id}`, formData, configHeader)
+        return response
+    } catch (error) {
+        console.error("Error add cover img api", error);
+        return false
+    }
+}
 
 export const getCompanyDataApi = async () => {
     try {
-        const response = await axios.get(ApiPath.getCompanyData, getHeaderConfig())
-        console.log(response?.data?.data);
-        return response?.data?.data
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        const response = await axios.get(ApiPath.getCompanyData, config);
+
+        console.log("Get companyData is success => \n", response?.data?.data[0]);
+
+        return response?.data?.data[0]
     } catch (error) {
         console.error("Error cover image API", error);
         return false

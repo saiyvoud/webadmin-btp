@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Sidebar } from '../../../components/Sidebar';
-import { Upload, Image } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { PlusOutlined } from '@ant-design/icons';
-
-// icons
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
+import { addAboutApi } from '../../../api/about';
 
 // Helper function to convert image file to base64
 const getBase64 = (file) => {
@@ -21,44 +18,27 @@ const getBase64 = (file) => {
 
 export const FormAddImage = () => {
     const navigate = useNavigate();
+    const [image, setImage] = useState(null);
+    const [fileImg, setFileImg] = useState(null);
+    const imageInputRef = useRef(null);
     const [title, setTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
     const [errors, setErrors] = useState({});
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
 
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        setFileImg(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImage(e.target.result);
+            };
+            reader.readAsDataURL(file);
         }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
     };
-
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
-    const uploadButton = (
-        <button
-            style={{
-                border: 0,
-                background: 'none',
-            }}
-            type="button"
-        >
-            <PlusOutlined />
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Upload
-            </div>
-        </button>
-    );
 
     const validateForm = () => {
         let newErrors = {};
-        if (fileList.length === 0) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
+        if (!fileImg) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
         if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້ກ່ອນ!';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -82,13 +62,20 @@ export const FormAddImage = () => {
             cancelButtonColor: "#d33",
             confirmButtonText: "ຕົກລົງ",
             cancelButtonText: 'ຍົກເລີກ'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "ບັນທຶກສຳເລັດ!",
-                    //text: "Your item has been saved.",
-                    icon: "success"
-                });
+                const data = {
+                    title,
+                    images: fileImg,
+                };
+                const response = await addAboutApi(data)
+                if (response) {
+                    Swal.fire({
+                        title: "ບັນທຶກສຳເລັດ!",
+                        icon: "success"
+                    });
+                    navigate('/aboutManagement')
+                }
             }
         });
     };
@@ -121,26 +108,34 @@ export const FormAddImage = () => {
 
                             {/* Image Upload */}
                             <div className="mb-6">
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg h-[350px] w-full text-center p-2">
-                                    <Upload
-                                        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                                        listType="picture-card"
-                                        fileList={fileList}
-                                        onPreview={handlePreview}
-                                        onChange={handleChange}
-                                    >
-                                        {fileList.length >= 8 ? null : uploadButton}
-                                    </Upload>
-                                    {previewImage && (
-                                        <Image
-                                            preview={{
-                                                visible: previewOpen,
-                                                onVisibleChange: (visible) => setPreviewOpen(visible),
-                                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                            }}
-                                            src={previewImage}
-                                            style={{ maxWidth: '100%', maxHeight: '100%' }}
-                                        />
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg h-[300px] w-full text-center p-2">
+                                    {image ? (
+                                        <div className='w-full h-full relative'>
+                                            <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                            <div onClick={() => setImage(null)}
+                                                className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
+                                                <FaTrashAlt className='text-white text-[14px]' />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className='flex items-center flex-col justify-center h-full w-full'>
+                                            <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
+                                            <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
+                                            <input
+                                                type="file"
+                                                ref={imageInputRef}
+                                                onChange={handleImageUpload}
+                                                accept="image/*"
+                                                className="hidden"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => imageInputRef.current.click()}
+                                                className="mt-2 px-4 py-2 bg-[#01A7B1] text-white rounded-md"
+                                            >
+                                                Upload
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                                 {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}

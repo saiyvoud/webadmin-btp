@@ -14,12 +14,12 @@ export const AboutBanner = () => {
     const imageInputRef = useRef(null);
     const [coverImg, setCoverImg] = useState([]);
 
-    const imgID = coverImg.map((item) => item.id)
-    // console.log("this is imgID=", );
-    // console.log(imgID);
+    const imgID = coverImg.id
+    console.log("this is imgID=",);
+    console.log(imgID);
 
     const fetchData = async () => {
-        setLoading(true); // Set loading to true when fetching data
+        // setLoading(true);
         try {
             const response = await getCoverImageApi();
             setCoverImg(response);
@@ -55,7 +55,7 @@ export const AboutBanner = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            handleSaveData(imgID[0]);
+            handleSaveData(imgID);
         } else {
             console.log('Form has errors');
         }
@@ -74,10 +74,10 @@ export const AboutBanner = () => {
             if (result.isConfirmed) {
                 const data = {
                     image: fileImg,
-                    oldImg: coverImg.map(item => item.image)
+                    oldImg: coverImg.image
                 };
 
-                // console.log("this is old img", data.oldImg);
+                // console.log("this is old img", coverImg[0].image);
 
                 try {
                     setLoading(true); // Set loading to true when saving data

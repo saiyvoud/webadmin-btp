@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import { formatDate } from '../../utils';
 
 
-export const AboutList = () => {
+export const AboutList = ({ filteredDates }) => {
     const [loading, setLoading] = useState(false)
     const [aboutData, setAboutData] = useState([])
 
@@ -83,6 +83,12 @@ export const AboutList = () => {
             console.error('Error deleting item:', error);
         }
     };
+
+    const filteredData = filteredDates && filteredDates.length === 2 ?
+        aboutData.filter(item =>
+            new Date(item.createdAt) >= filteredDates[0] && new Date(item.createdAt) <= filteredDates[1]
+        ) :
+        aboutData;
     return (
         <div className=' mt-10'>
             <p className=' text-[14px]'>
@@ -91,7 +97,7 @@ export const AboutList = () => {
             <hr className='mt-3 mb-10 border border-[#D9D9D9]' />
             <div className=' grid grid-cols-12 gap-10'>
                 {
-                    aboutData.map((card, index) => (
+                    filteredData.map((card, index) => (
                         <animated.div
                             key={index}
                             className='relative h-[280px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:scale-125 duration-300 cursor-pointer bg-white col-span-3'

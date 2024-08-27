@@ -76,6 +76,10 @@ export const RouterPaths = () => {
             element: <AboutManagement />
         },
         {
+            path: '/aboutManagement/formAddImage',
+            element: <FormAddImage />
+        },
+        {
             path: '/aboutManagement/aboutInfo',
             element: <FormAboutInfo />
         },

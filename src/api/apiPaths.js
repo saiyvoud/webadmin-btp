@@ -3,6 +3,7 @@ const baseUrl = "https://scholarship-api-0oe7.onrender.com/api/v1"
 
 export default class ApiPath {
     // about
+    static addAbout = `${baseUrl}/about/insert`
     static getAbout = `${baseUrl}/about/selAll`
     static delAbout = `${baseUrl}/about/delete`
     static updateAbout = `${baseUrl}/about/update`
@@ -11,6 +12,7 @@ export default class ApiPath {
     static getCoverImage = `${baseUrl}/coverImage/selAll`
     static getCompanyData = `${baseUrl}/companyData/selAll`
     static updateCompanyData = `${baseUrl}/companyData/update`
+    static updateIconCompanyData = `${baseUrl}/companyData/updateIcon`
 
     // category
     static getCategory = `${baseUrl}/category/selAll`
