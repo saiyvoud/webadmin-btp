@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
-import { Modal, Input, Button, Skeleton } from 'antd';
+import { Modal, Input, Button, Skeleton, DatePicker } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { delteUserApi, getUserApi, updateUserApi } from '../../api/user';
 import Swal from 'sweetalert2';
@@ -20,6 +20,9 @@ export const ContactManagement = () => {
         comment: '',
     });
     const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const { RangePicker } = DatePicker;
+    const [dateRange, setDateRange] = useState(null);
 
     const fetchData = async () => {
         setLoading(true);
@@ -29,6 +32,7 @@ export const ContactManagement = () => {
                 throw new Error('No response from API');
             }
             setData(response);
+            setFilteredData(response);
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -128,6 +132,22 @@ export const ContactManagement = () => {
         }
     };
 
+    const handleDateChange = (dates) => {
+        setDateRange(dates);
+        if (dates && dates[0] && dates[1]) {
+            const startDate = dates[0].startOf('day');
+            const endDate = dates[1].endOf('day');
+            const filtered = data.filter(item => {
+                const createdAt = new Date(item.createdAt);
+                return createdAt >= startDate && createdAt <= endDate;
+            });
+            setFilteredData(filtered);
+        } else {
+            setFilteredData(data);
+        }
+
+    };
+
     const TableRow = ({ index, id, name, phoneNumber, email, comment, onShowDetail, onDelete }) => (
         <tr className="border-b w-full border-gray-200">
             <td className="py-4 px-1 w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
@@ -155,15 +175,19 @@ export const ContactManagement = () => {
 
     return (
         <Sidebar>
-            <div className="mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-screen">
+            <div className={`mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-full ${filteredData.length <= 10 ? 'h-full' : 'h-screen'}`}>
                 <div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
-                        ທັງໝົດ {data ? data.length : 0} ລາຍການ
+                        ທັງໝົດ {filteredData.length} ລາຍການ
                     </p>
-                    {/* <button onClick={() => navigate('/userInfo/formAddUser')}
-                        className="text-white px-4 py-2 text-[14px] bg-[#01A7B1] rounded-full">
-                        ເພີ່ມປະເພດລາຍການ
-                    </button> */}
+                    <div>
+                        <RangePicker
+                            className='border-2 border-[#01A7B1] rounded-full py-2 px-5'
+                            style={{ color: '#01A7B1' }}
+                            placeholder={['ວັນທີ່ເລີ່ມຕົ້ນ', 'ວັນທີ່ສິ້ນສຸດ']}
+                            onChange={handleDateChange}
+                        />
+                    </div>
                 </div>
                 <Modal
                     open={isModalVisible}
@@ -208,7 +232,7 @@ export const ContactManagement = () => {
                 {loading ? (
                     <Skeleton active />
                 ) : (
-                    <div className="rounded-lg overflow-x-auto border w-full h-full pb-5">
+                    <div className="rounded-lg overflow-x-auto border w-full pb-5">
                         <table className="w-full h-full">
                             <thead>
                                 <tr className="bg-[#01A7B1]/20 border-b w-full">
@@ -221,7 +245,7 @@ export const ContactManagement = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data && data.map((item, index) => (
+                                {filteredData.map((item, index) => (
                                     <TableRow
                                         key={item.id}
                                         index={index + 1}

@@ -172,13 +172,13 @@ export const FormAboutInfo = () => {
 
                             <div className="mb-6">
                                 <p className='text-[14px] font-medium'>ໂລໂກ້</p>
-                                <div className=' w-full h-[300px] flex justify-center mt-5'>
-                                    <div className="border-2 border-dashed border-gray-300 rounded-full h-[250px] w-[250px] text-center p-2">
+                                <div className=' w-full flex justify-center mt-5'>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-[250px] text-center p-2">
                                         {image ? (
                                             <div className='w-full h-full relative'>
-                                                <img src={image} alt="Preview" className="w-full h-full object-cover rounded-full" />
+                                                <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                                 <div onClick={() => setImage(null)}
-                                                    className='w-[25px] h-[25px] absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
+                                                    className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                                     <FaTrashAlt className='text-white text-[14px]' />
                                                 </div>
                                             </div>
