@@ -202,10 +202,10 @@ export const FormAboutInfo = () => {
                                         </div>
                                     )}
                                 </div>
-                                <p className=' mt-3 flex items-center gap-x-1'>
+                                {/* <p className=' mt-3 flex items-center gap-x-1'>
                                     <span className=' text-red-400 underline'>ໝາຍເຫດ:</span>
                                     ຖ້າແກ້ໄຂຂໍ້ມູນໃໝ່ຕ້ອງອັພໂຫຼດຮູບໃໝ່ທຸກຄັ້ງ
-                                </p>
+                                </p> */}
                             </div>
 
                             <div className="text-center mt-4">

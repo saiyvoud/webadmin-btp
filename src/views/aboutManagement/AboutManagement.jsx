@@ -108,7 +108,15 @@ export const AboutManagement = () => {
                                 />
                             ))
                         ) : (
-                            <Empty description="ບໍ່ມີຂໍ້ມູນຮູບພາບພື້ນຫຼັງ" />
+                            converImg.length == 0 ? (
+                                <Empty description="ບໍ່ມີຂໍ້ມູນຮູບພາບພື້ນຫຼັງ" />
+                            ) : (
+                                Array.from({ length: 4 }).map((_, index) => (
+                                    <div key={index} className="h-[330px] col-span-3">
+                                        <Skeleton active avatar />
+                                    </div>
+                                ))
+                            )
                         )
                     }
                 </div>
