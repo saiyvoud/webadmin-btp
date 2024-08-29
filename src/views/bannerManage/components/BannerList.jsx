@@ -89,12 +89,20 @@ export const BannerList = ({ dateRange }) => {
     const handleChangeSwitch = async (id, value) => {
         const response = await upadteSwitchBannerApi(id, value);
         if (response) {
+            await fetchData();
+        }
+        if (value == true) {
+            Swal.fire(
+                'ປິດການເຊື່ອງສຳເລັດ!',
+                'ປິດການເຊື່ອງລາຍການແລ້ວ.',
+                'success'
+            );
+        } else {
             Swal.fire(
                 'ເຊື່ອງສຳເລັດ!',
                 'ລາຍການຖືກເຊື່ອງແລ້ວ.',
                 'success'
             );
-            await fetchData();
         }
     };
 
