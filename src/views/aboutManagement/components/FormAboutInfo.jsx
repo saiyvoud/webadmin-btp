@@ -171,36 +171,39 @@ export const FormAboutInfo = () => {
                             </div>
 
                             <div className="mb-6">
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
-                                    {image ? (
-                                        <div className='w-full h-full relative'>
-                                            <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-                                            <div onClick={() => setImage(null)}
-                                                className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
-                                                <FaTrashAlt className='text-white text-[14px]' />
+                                <p className='text-[14px] font-medium'>ໂລໂກ້</p>
+                                <div className=' w-full h-[300px] flex justify-center mt-5'>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-full h-[250px] w-[250px] text-center p-2">
+                                        {image ? (
+                                            <div className='w-full h-full relative'>
+                                                <img src={image} alt="Preview" className="w-full h-full object-cover rounded-full" />
+                                                <div onClick={() => setImage(null)}
+                                                    className='w-[25px] h-[25px] absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
+                                                    <FaTrashAlt className='text-white text-[14px]' />
+                                                </div>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <div className='flex items-center flex-col justify-center h-full w-full'>
-                                            <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
-                                            <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
-                                            <input
-                                                type="file"
-                                                ref={imageInputRef}
-                                                onChange={handleImageUpload}
-                                                accept="image/*"
-                                                className="hidden"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => imageInputRef.current.click()}
-                                                className="bg-[#01A7B1] text-white py-2 px-4 mt-4 rounded-md"
-                                            >
-                                                ເລືອກຮູບພາບ
-                                            </button>
-                                            {errors.image && <p className="text-red-500 text-sm mt-2">{errors.image}</p>}
-                                        </div>
-                                    )}
+                                        ) : (
+                                            <div className='flex items-center flex-col justify-center h-full w-full'>
+                                                <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
+                                                <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
+                                                <input
+                                                    type="file"
+                                                    ref={imageInputRef}
+                                                    onChange={handleImageUpload}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => imageInputRef.current.click()}
+                                                    className="bg-[#01A7B1] text-white py-2 px-4 mt-4 rounded-md"
+                                                >
+                                                    ເລືອກຮູບພາບ
+                                                </button>
+                                                {errors.image && <p className="text-red-500 text-sm mt-2">{errors.image}</p>}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 {/* <p className=' mt-3 flex items-center gap-x-1'>
                                     <span className=' text-red-400 underline'>ໝາຍເຫດ:</span>
