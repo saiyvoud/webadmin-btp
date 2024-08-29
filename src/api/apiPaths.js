@@ -5,11 +5,16 @@ export default class ApiPath {
     // about
     static addAbout = `${baseUrl}/about/insert`
     static getAbout = `${baseUrl}/about/selAll`
+    static getAboutOne = `${baseUrl}/about/selOne`
     static delAbout = `${baseUrl}/about/delete`
     static updateAbout = `${baseUrl}/about/update`
+    static updateAboutImg = `${baseUrl}/about/updateImages`
     static addCoverImage = `${baseUrl}/coverImage/insert`
     static updateCoverImage = `${baseUrl}/coverImage/updateImage`
+    static addCoverImage = `${baseUrl}/coverImage/insert`
     static getCoverImage = `${baseUrl}/coverImage/selAll`
+
+    static addCompanyData = `${baseUrl}/companyData/insert`
     static getCompanyData = `${baseUrl}/companyData/selAll`
     static updateCompanyData = `${baseUrl}/companyData/update`
     static updateIconCompanyData = `${baseUrl}/companyData/updateIcon`
@@ -45,6 +50,10 @@ export default class ApiPath {
     static updateFileBanner = `${baseUrl}/banner/updateFile`
     static updateBanner = `${baseUrl}/banner/update`
     static updateSwitchBanner = `${baseUrl}/banner/updateIsPublished`
+
+    // contact
+    static getContact = `${baseUrl}/comment/selAll`
+    static deleteContact = `${baseUrl}/comment/delete`
 
     // user
     static getUser = `${baseUrl}/user/selAll`

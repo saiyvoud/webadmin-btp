@@ -20,6 +20,11 @@ import { FormEditBanner } from "../views/bannerManage/components/FormEditBanner"
 import Authentication from "../components/Authentication";
 import { Role } from "../constants";  // Ensure this import exists
 import { AboutBanner } from "../views/aboutManagement/components/AboutBanner";
+import { FormAddCompanyInfo } from "../views/aboutManagement/components/FormAddCompanyInfo";
+import { FormAddCoverImg } from "../views/aboutManagement/components/FormAddCoverImg";
+import { FormEditAbout } from "../views/aboutManagement/components/FormEditAbout";
+import { ContactManagement } from "../views/contact/ContactManagement";
+import { ContactDetail } from "../views/contact/components/ContactDetail";
 
 export const RouterPaths = () => {
     const router = createBrowserRouter([
@@ -80,16 +85,36 @@ export const RouterPaths = () => {
             element: <FormAddImage />
         },
         {
-            path: '/aboutManagement/aboutInfo',
+            path: '/aboutManagement/formEditAbout/:id',
+            element: <FormEditAbout />
+        },
+        {
+            path: '/aboutManagement/aboutInfo/:id',
             element: <FormAboutInfo />
+        },
+        {
+            path: '/aboutManagement/formAddCompanyInfo',
+            element: <FormAddCompanyInfo />
         },
         {
             path: '/aboutManagement/aboutBanner',
             element: <AboutBanner />
         },
         {
+            path: '/aboutManagement/addAboutBanner',
+            element: <FormAddCoverImg />
+        },
+        {
             path: '/aboutManagement/aboutInfo/:id',  // corrected path
             element: <FormAboutInfo />
+        },
+        {
+            path: '/contactManagement',
+            element: <ContactManagement />
+        },
+        {
+            path: '/contactManagement/contactDetail/:id',
+            element: <ContactDetail />
         },
         {
             path: '/userInfo',

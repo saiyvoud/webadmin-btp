@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sidebar } from '../../../components/Sidebar';
 import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { getCompanyDataApi, updateCompanyData, updateIconCompanyDataApi } from '../../../api/about';
-import { GetFileObjectApi } from '../../../api/file';
+import { addCompanyDataApi, getCompanyDataApi, updateCompanyData, updateIconCompanyDataApi } from '../../../api/about';
 
-export const FormAboutInfo = () => {
+export const FormAddCompanyInfo = () => {
     const navigate = useNavigate();
-    const { id } = useParams(); // Get the company ID from URL params
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState("");
     const [file, setFile] = useState(null);
@@ -17,29 +15,16 @@ export const FormAboutInfo = () => {
     const imageInputRef = useRef(null);
     const [fileName, setFileName] = useState('');
     const [fileImg, setFileImg] = useState(null);
-    const [companyInfo, setCompanyInfo] = useState([]);
+    const [companyInfo, setCompanyInfo] = useState({});
     const [loading, setLoading] = useState(false);
-    const [fileIcon, setFileIcon] = useState()
 
     const fetchData = async () => {
         setLoading(true);
         try {
             const response = await getCompanyDataApi();
             setCompanyInfo(response);
-            // console.log("response")
-            // console.log(response)
-            // console.log("icon")
-            console.log(response[0].icon)
-            const fileIcon = await GetFileObjectApi(response[0].icon);
-            setFileIcon(fileIcon)
-
-            // Find the company data by id
-            const company = response.find(item => item.id === parseInt(id)); // Ensure id is a number
-            if (company) {
-                setTitle(company.title);
-                setDescription(company.description);
-                setImage(company.icon); // Assuming 'icon' contains the image URL or path
-            }
+            // if (response) {
+            // }
         } catch (error) {
             Swal.fire({
                 title: "ເກີດຂໍ້ຜິດພາດ!",
@@ -54,7 +39,7 @@ export const FormAboutInfo = () => {
 
     useEffect(() => {
         fetchData();
-    }, [id]); // Include id in dependency array to refetch if id changes
+    }, []);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -68,20 +53,18 @@ export const FormAboutInfo = () => {
         setFileImg(file);
     };
 
-    const validateForm = () => {
-        let newErrors = {};
-        if (!image) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
-        if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້ກ່ອນ!';
-        if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດກ່ອນ!';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
+    // const validateForm = () => {
+    //     let newErrors = {};
+    //     if (!image) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
+    //     if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້ກ່ອນ!';
+    //     if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດກ່ອນ!';
+    //     setErrors(newErrors);
+    //     return Object.keys(newErrors).length === 0;
+    // };
+    console.log("company=", companyInfo);
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            handleSaveData();
-        }
+        handleSaveData();
     };
 
     const handleSaveData = async () => {
@@ -98,21 +81,15 @@ export const FormAboutInfo = () => {
                 const data = {
                     title,
                     description,
-                };
-                const dataIcon = {
-                    icon: fileImg ? fileImg : fileIcon,
-                    oldIcon: companyInfo.find(item => item.id === parseInt(id))?.icon // Get the old icon for comparison
+                    icon: fileImg
                 };
 
                 try {
                     // Call both APIs concurrently
-                    const [response, responseIcon] = await Promise.all([
-                        updateCompanyData(id, data),
-                        updateIconCompanyDataApi(id, dataIcon)
-                    ]);
+                    const response = await addCompanyDataApi(data)
 
                     // Handle responses
-                    if (response && responseIcon) {
+                    if (response) {
                         Swal.fire({
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
@@ -134,6 +111,7 @@ export const FormAboutInfo = () => {
             }
         });
     };
+
 
     return (
         <Sidebar>
@@ -202,10 +180,6 @@ export const FormAboutInfo = () => {
                                         </div>
                                     )}
                                 </div>
-                                <p className=' mt-3 flex items-center gap-x-1'>
-                                    <span className=' text-red-400 underline'>ໝາຍເຫດ:</span>
-                                    ຖ້າແກ້ໄຂຂໍ້ມູນໃໝ່ຕ້ອງອັພໂຫຼດຮູບໃໝ່ທຸກຄັ້ງ
-                                </p>
                             </div>
 
                             <div className="text-center mt-4">
@@ -214,7 +188,7 @@ export const FormAboutInfo = () => {
                                     className="bg-[#01A7B1] text-white py-2 px-8 rounded-md"
                                     disabled={loading}
                                 >
-                                    {loading ? <p>ກຳລັງບັນທຶກ... <div className='loader'></div></p> : 'ບັນທຶກ'}
+                                    {loading ? 'ກຳລັງບັນທຶກ...' : 'ບັນທຶກ'}
                                 </button>
                             </div>
                         </form>

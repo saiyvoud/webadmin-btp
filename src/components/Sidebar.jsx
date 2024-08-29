@@ -14,6 +14,7 @@ import { HiOutlineChatAlt } from "react-icons/hi";
 import { MdManageAccounts } from "react-icons/md";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { NavLink, useLocation } from 'react-router-dom';
+import { RiContactsBook3Line } from "react-icons/ri";
 
 export const Sidebar = ({ children }) => {
     const activeLink = 'text-white bg-[#01A7B1] gap-x-4 rounded-lg flex items-center py-3 px-3 lg:px-8 py-3'
@@ -54,6 +55,12 @@ export const Sidebar = ({ children }) => {
             title: 'ຈັດການຂໍ້ມູນກ່ຽວກັບເຮົາ',
             icon: <HiOutlineChatAlt className='sm:text-[20px] lg:text-[24px]' />,
             path: '/aboutManagement'
+        },
+        {
+            id: 6,
+            title: 'ຈັດການຂໍ້ມູນການຕິດຕໍ່',
+            icon: <RiContactsBook3Line className='sm:text-[20px] lg:text-[24px]' />,
+            path: '/contactManagement'
         },
         {
             id: 7,

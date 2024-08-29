@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",
     "@react-spring/web": "^9.7.4",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "antd": "^5.20.1",
     "apexcharts": "^3.52.0",
     "axios": "^1.7.4",

@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
-import { Modal, Input, Button, Skeleton } from 'antd'; // Import Skeleton from Ant Design
+import { Modal, Input, Button, Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { delteUserApi, getUserApi, updateUserApi } from '../../api/user'; // Import updateUserApi
+import { delteUserApi, getUserApi, updateUserApi } from '../../api/user';
 import Swal from 'sweetalert2';
 import { FaCamera } from 'react-icons/fa6';
+import { deleteContactApi, getContactApi } from '../../api/contact';
+import TextArea from 'antd/es/input/TextArea';
 
-
-
-export const UserInfo = () => {
+export const ContactManagement = () => {
     const navigate = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [updatedData, setUpdatedData] = useState({
         email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
+        name: '',
         phoneNumber: '',
-        role: '',
+        comment: '',
     });
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await getUserApi();
+            const response = await getContactApi();
             if (!response) {
                 throw new Error('No response from API');
             }
@@ -51,22 +49,18 @@ export const UserInfo = () => {
         if (item) {
             setEditingItem(item);
             setUpdatedData({
-                firstName: item.firstName,
-                lastName: item.lastName,
+                name: item.name,
                 phoneNumber: item.phoneNumber,
                 email: item.email,
-                password: item.password,
-                role: item.role,
+                comment: item.comment
             });
         } else {
             setEditingItem(null);
             setUpdatedData({
-                firstName: '',
-                lastName: '',
+                name: '',
                 phoneNumber: '',
                 email: '',
-                password: '',
-                role: '',
+                comment: ''
             });
         }
         setIsModalVisible(true);
@@ -78,12 +72,12 @@ export const UserInfo = () => {
             if (editingItem) {
                 const response = await updateUserApi(
                     editingItem.id,
-                    updatedData // Pass the entire updatedData object here
+                    updatedData
                 );
 
                 if (response) {
                     Swal.fire('ສຳເລັດ', 'ຂໍໍໍມູນຖືກອັບເດດແລ້ວ', 'success');
-                    fetchData(); // Refresh data after update
+                    fetchData();
                 }
             }
         } catch (error) {
@@ -112,14 +106,14 @@ export const UserInfo = () => {
                 cancelButtonText: 'ຍົກເລີກ'
             });
             if (result.isConfirmed) {
-                const response = await delteUserApi(id);
+                const response = await deleteContactApi(id);
                 if (response) {
                     Swal.fire(
                         'ລົບສຳເລັດ!',
                         'ລາຍການຖືກລົບອອກແລ້ວ.',
                         'success'
                     );
-                    fetchData(); // Refresh the data
+                    fetchData();
                 } else {
                     throw new Error("Failed to delete");
                 }
@@ -134,31 +128,21 @@ export const UserInfo = () => {
         }
     };
 
-
-    const TableRow = ({ index, id, profile, firstName, lastName, phoneNumber, email, password, role, onEdit, onDelete }) => (
+    const TableRow = ({ index, id, name, phoneNumber, email, comment, onShowDetail, onDelete }) => (
         <tr className="border-b w-full border-gray-200">
             <td className="py-4 px-1 w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
-            <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
-                <div className="relative w-16 h-16">
-                    <img src={profile} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
-                    <div
-                        onClick={() => navigate(`/userInfo/editProfile/${id}`)}
-                        className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
-                    >
-                        <FaCamera className='text-white text-[16px]' />
-                    </div>
-                </div>
-            </td>
-            <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-900 truncate">{firstName}</td>
-            <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{lastName}</td>
+            <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-900 truncate">{name}</td>
             <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{phoneNumber}</td>
             <td className="py-4 px-3 text-[12px] w-[150px] text-center text-gray-500 truncate">{email}</td>
-            <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{password}</td>
-            <td className="py-4 px-3 text-[12px] w-[100px] text-center text-gray-500 truncate">{role}</td>
+            <td className="py-4 px-3 text-[12px] w-[200px] text-center text-gray-500">
+                <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {comment}
+                </div>
+            </td>
             <td className="py-4 px-3 text-[12px] w-[150px]">
                 <div className='flex items-center justify-center space-x-2'>
                     <button
-                        onClick={() => onEdit({ id, firstName, lastName, phoneNumber, email, password, role })}
+                        onClick={() => onShowDetail({ id, name, phoneNumber, email, comment })}
                         className="bg-[#01A7B1] text-white w-[60px] py-1 rounded-full"
                     >
                         ແກ້ໄຂ
@@ -176,29 +160,23 @@ export const UserInfo = () => {
                     <p className="text-gray-500 text-[14px]">
                         ທັງໝົດ {data ? data.length : 0} ລາຍການ
                     </p>
-                    <button onClick={() => navigate('/userInfo/formAddUser')}
+                    {/* <button onClick={() => navigate('/userInfo/formAddUser')}
                         className="text-white px-4 py-2 text-[14px] bg-[#01A7B1] rounded-full">
                         ເພີ່ມປະເພດລາຍການ
-                    </button>
+                    </button> */}
                 </div>
                 <Modal
                     open={isModalVisible}
-                    onOk={handleOk}
+                    // onOk={handleOk}
                     onCancel={handleCancel}
                     footer={null}
                 >
                     <div className="py-10">
-                        <h2 className='mb-7 text-[20px] font-medium text-center'>ແກ້ໄຂຂໍໍໍມູນຜູ້ໃຊ້</h2>
+                        <h2 className='mb-7 text-[20px] font-medium text-center'>ລາຍລະອຽດຂໍ້ມູນການຕິດຕໍໍ່</h2>
                         <Input
-                            placeholder="First Name"
-                            value={updatedData.firstName}
-                            onChange={(e) => setUpdatedData({ ...updatedData, firstName: e.target.value })}
-                            className="mb-3"
-                        />
-                        <Input
-                            placeholder="Last Name"
-                            value={updatedData.lastName}
-                            onChange={(e) => setUpdatedData({ ...updatedData, lastName: e.target.value })}
+                            placeholder="Full name"
+                            value={updatedData.name}
+                            onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
                             className="mb-3"
                         />
                         <Input
@@ -213,41 +191,32 @@ export const UserInfo = () => {
                             onChange={(e) => setUpdatedData({ ...updatedData, email: e.target.value })}
                             className="mb-3"
                         />
-                        <Input
-                            placeholder="Password"
-                            value={updatedData.password}
-                            onChange={(e) => setUpdatedData({ ...updatedData, password: e.target.value })}
+                        <TextArea
+                            rows={5}
+                            placeholder="Comment"
+                            value={updatedData.comment}
+                            onChange={(e) => setUpdatedData({ ...updatedData, comment: e.target.value })}
                             className="mb-3"
                         />
-                        <Input
-                            placeholder="Role"
-                            value={updatedData.role}
-                            onChange={(e) => setUpdatedData({ ...updatedData, role: e.target.value })}
-                            className="mb-7"
-                        />
                         <div className="flex justify-center">
-                            <Button onClick={handleOk} type="primary" className="mr-2">Save</Button>
-                            <Button onClick={handleCancel}>Cancel</Button>
+                            {/* <Button onClick={handleOk} type="primary" className="mr-2">Save</Button> */}
+                            <Button onClick={handleCancel} type="primary" >ປິດ</Button>
                         </div>
                     </div>
                 </Modal>
 
-                {/* Display Skeleton while loading */}
                 {loading ? (
                     <Skeleton active />
                 ) : (
-                    <div className="rounded-lg overflow-x-auto border w-full  h-full pb-5">
-                        <table className="w-full  h-full">
+                    <div className="rounded-lg overflow-x-auto border w-full h-full pb-5">
+                        <table className="w-full h-full">
                             <thead>
                                 <tr className="bg-[#01A7B1]/20 border-b w-full">
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຮູບ</th>
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຊື່</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ນາມສະກຸນ</th>
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Role</th>
+                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center w-[200px]">Comment</th>
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -257,14 +226,11 @@ export const UserInfo = () => {
                                         key={item.id}
                                         index={index + 1}
                                         id={item.id}
-                                        profile={item.profile}
-                                        firstName={item.firstName}
-                                        lastName={item.lastName}
+                                        name={item.name}
                                         phoneNumber={item.phoneNumber}
                                         email={item.email}
-                                        password={item.password}
-                                        role={item.role}
-                                        onEdit={showModal}
+                                        comment={item.comment}
+                                        onShowDetail={showModal}
                                         onDelete={deleteItem}
                                     />
                                 ))}

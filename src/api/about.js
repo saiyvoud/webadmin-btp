@@ -18,6 +18,21 @@ export const getAboutApi = async () => {
         return false
     }
 }
+export const getAboutOneApi = async (id) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        const response = await axios.get(`${ApiPath.getAboutOne}/${id}`, config)
+        console.log(response?.data?.data);
+        return response?.data?.data
+    } catch (error) {
+        console.error("Error  fetching about API", error);
+        return false
+    }
+}
 
 export const delAboutApi = async (id) => {
     try {
@@ -49,12 +64,52 @@ export const addAboutApi = async (data) => {
         return false
     }
 }
+export const updateAboutApi = async (id, data) => {
+    const token = localStorage.getItem("token")
+    const configHeader = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    const formData = new FormData();
+    formData.append("title", data?.title || "");
+    // formData.append("images", data?.images || "");
+    try {
+        const response = await axios.put(`${ApiPath.updateAbout}/${id}`, formData, configHeader)
+        return response
+    } catch (error) {
+        console.error("Error add cover img api", error);
+        return false
+    }
+}
+export const updateAboutImageApi = async (id, data) => {
+    const token = localStorage.getItem("token")
+    const configHeader = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    const formData = new FormData();
+    // formData.append("title", data?.title || "");
+    formData.append("images", data?.images || "");
+    formData.append("oldImages", data?.oldImages || "");
+    console.log(data);
+    try {
+        const response = await axios.put(`${ApiPath.updateAboutImg}/${id}`, formData, configHeader)
+        return response
+    } catch (error) {
+        console.error("Error add cover img api", error);
+        return false
+    }
+}
 
 export const getCoverImageApi = async () => {
     try {
         const response = await axios.get(ApiPath.getCoverImage, getHeaderConfig())
-        // console.log(response?.data?.data);
-        return response?.data?.data[0]
+        console.log(response?.data?.data);
+        return response?.data?.data
     } catch (error) {
         console.error("Error cover image API", error);
         return false
@@ -155,11 +210,35 @@ export const getCompanyDataApi = async () => {
         };
         const response = await axios.get(ApiPath.getCompanyData, config);
 
-        console.log("Get companyData is success => \n", response?.data?.data[0]);
+        // console.log("Get companyData is success => \n", response?.data?.data[0]);
 
-        return response?.data?.data[0]
+        return response?.data?.data
     } catch (error) {
         console.error("Error cover image API", error);
+        return false
+    }
+}
+
+export const addCompanyDataApi = async (data) => {
+    const token = localStorage.getItem("token")
+    const configHeader = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+    const formData = new FormData()
+    formData.append("title", data?.title || "")
+    formData.append("description", data?.description || "")
+    formData.append("icon", data?.icon || "")
+
+    console.log(data);
+    try {
+        const response = await axios.post(`${ApiPath.addCompanyData}`, formData, configHeader)
+        return response
+    } catch (error) {
+        console.error("Error add cover img api", error);
         return false
     }
 }

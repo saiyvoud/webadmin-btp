@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Skeleton } from 'antd';
+import { Switch, Skeleton, Empty } from 'antd';
 import { useSpring, animated } from '@react-spring/web';
 import { delBannerApi, getBannerApi, upadteSwitchBannerApi } from '../../../api/banner';
 import Swal from 'sweetalert2';
 import { formatDate } from '../../utils';
-import dayjs from 'dayjs'; // import dayjs to handle date comparison
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 export const BannerList = ({ dateRange }) => {
@@ -112,6 +112,10 @@ export const BannerList = ({ dateRange }) => {
                             <Skeleton active avatar />
                         </div>
                     ))
+                ) : filteredData.length < 1 ? (
+                    <div className="col-span-12 h-full w-full flex items-center justify-center">
+                        <Empty description="ບໍ່ມີຂໍ້ມູນ Banner" />
+                    </div>
                 ) : (
                     filteredData.map((item, index) => (
                         <animated.div
@@ -120,19 +124,19 @@ export const BannerList = ({ dateRange }) => {
                             style={{ ...springs }}
                         >
                             <img
-                                src={item.image}
-                                alt={item.title}
+                                src={item?.image}
+                                alt={item?.title}
                                 className="w-full h-[200px] rounded-t-lg object-cover"
                             />
                             <div className="flex flex-col gap-y-1 pt-2 px-5">
                                 <h4 className="text-[16px] font-medium">
-                                    {item.title}
+                                    {item?.title}
                                 </h4>
                                 <p className="text-[#6B7280]">
-                                    {item.detail} Lorem ipsum dolor sit amet
+                                    {item?.detail} Lorem ipsum dolor sit amet
                                 </p>
                                 <span>
-                                    {formatDate(item.createdAt)}
+                                    {formatDate(item?.createdAt)}
                                 </span>
                             </div>
                             <div className="flex w-full absolute bottom-3 items-center justify-between px-5">
