@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { Sidebar } from '../../components/Sidebar';
-import { Button, Modal, Skeleton } from 'antd'; // Import Skeleton from Ant Design
+import { Skeleton } from 'antd';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { deleteServiceApi, getService } from '../../api/serivce';  // Assuming these are the correct imports
-import { getServiceApi } from '../../api/serviceInfo';  // Assuming this is the correct import
+import { deleteServiceApi, getService } from '../../api/serivce';
+import { getServiceApi } from '../../api/serviceInfo';
 import { formatDate } from '../utils';
 
 export const ServiceManagement = () => {
@@ -91,7 +91,7 @@ export const ServiceManagement = () => {
                         'ລາຍການຖືກລົບອອກແລ້ວ.',
                         'success'
                     );
-                    fetchData(); // Refresh the data
+                    fetchData();
                 } else {
                     throw new Error("Failed to delete");
                 }
@@ -132,26 +132,25 @@ export const ServiceManagement = () => {
                         ທັງໝົດ {filteredData.length} ລາຍການ
                     </p>
                     {loading ? (
-                        // Skeleton Loading State
                         <Skeleton active paragraph={{ rows: 4 }} />
                     ) : (
                         <animated.div style={tabContentAnimation} className='grid grid-cols-4 gap-7'>
                             {
                                 filteredData.map((card, index) => (
                                     <div key={index}
-                                        className='h-[330px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
+                                        className='h-[320px] relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
                                     >
                                         <img src={card.image} alt=""
                                             className='object-cover w-full h-[200px] rounded-t-lg'
                                         />
-                                        <div className='flex flex-col gap-y-4 py-4 px-5'>
-                                            <h4 className='text-[16px] font-medium'>
+                                        <div className='flex flex-col py-2 px-5'>
+                                            <h4 className='text-[16px] font-medium leading-6 overflow-hidden text-ellipsis line-clamp-2 break-words '>
                                                 {card.title}
                                             </h4>
-                                            <p className='text-[#6B7280] break-words'>
+                                            <p className='text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2 break-words'>
                                                 {card.description}
                                             </p>
-                                            <div className='flex items-center justify-between'>
+                                            <div className='flex items-center justify-between absolute left-0 right-0 bottom-2 px-5'>
                                                 <span>
                                                     {formatDate(card.createdAt)}
                                                 </span>
