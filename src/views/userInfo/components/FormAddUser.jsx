@@ -20,6 +20,7 @@ export const FormAddUser = () => {
     const imageInputRef = useRef(null);
     const [showPassword, setShowPassword] = useState(false);
     const [fileImg, setFileImg] = useState()
+    const [loading, setLoading] = useState(false)
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -66,6 +67,7 @@ export const FormAddUser = () => {
             cancelButtonText: 'ຍົກເລີກ'
         }).then(async (result) => {
             if (result.isConfirmed) {
+                setLoading(true)
                 const data = {
                     username,
                     email,
@@ -83,6 +85,7 @@ export const FormAddUser = () => {
                     }).then(() => {
                         navigate('/userInfo');
                     });
+                    setLastName(false)
                 } else {
                     Swal.fire({
                         title: "ບັນທຶກລົ້ມເຫລວ!",
@@ -223,8 +226,12 @@ export const FormAddUser = () => {
 
                         {/* Submit Button */}
                         <div className='flex items-center justify-center mt-4'>
-                            <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                ບັນທຶກ
+                            <button
+                                disabled={loading}
+                                type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
+                                {
+                                    loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"
+                                }
                             </button>
                         </div>
                     </form>

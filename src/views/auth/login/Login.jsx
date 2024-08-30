@@ -132,7 +132,7 @@ export const Login = () => {
                                         <input
                                             id="password"
                                             type={passwordVisible ? "text" : "password"}
-                                            className='border border-gray-300 text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
+                                            className='border border-gray-300 passwordInput text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
@@ -165,16 +165,18 @@ export const Login = () => {
                                     type="submit"
                                     className="mt-6 bg-[#01A7B1] h-[40px] font-medium text-[16px]"
                                     fullWidth
-                                    disabled={loading} // Disable button when loading
+                                    disabled={loading}
                                 >
-                                    ລ໋ອກອິນ
+                                    {
+                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງລ໋ອກອິນ <span className="loader"></span></p> : "ລ໋ອກອິນ"
+                                    }
                                 </Button>
-                                <Typography color="gray" className="mt-6 text-center font-normal">
+                                {/* <Typography color="gray" className="mt-6 text-center font-normal">
                                     ຍັງທີ່ບໍ່ມີບັນຊີແມ່ນບໍ່?{" "}
                                     <a href="#" className="font-medium underline text-gray-900">
                                         ລົງທະບຽນ
                                     </a>
-                                </Typography>
+                                </Typography> */}
                             </form>
                         </Card>
                     </div>

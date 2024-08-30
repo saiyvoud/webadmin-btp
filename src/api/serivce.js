@@ -25,6 +25,29 @@ export const getService = async () => {
         return [];
     }
 };
+export const getOneService = async (id) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        const response = await axios.get(`${ApiPath.getOneService}/${id}`, config);
+
+        console.log("Get one service is success => \n", response?.data?.data);
+
+        return response?.data?.data;
+    } catch (error) {
+        if (error.response) {
+            console.error("API Error:", error.response.data);
+        } else if (error.request) {
+            console.error("Network Error: No response received", error.request);
+        } else {
+            console.error("Error in setup:", error.message);
+        }
+        return [];
+    }
+};
 
 
 export const deleteServiceApi = async (id) => {
@@ -100,6 +123,7 @@ export const updateServiceImage = async (id, data) => {
 
     const formData = new FormData()
     formData.append("image", data?.image || "")
+    formData.append("oldImage", data?.oldImage || "")
 
     try {
         const response = await axios.put(`${ApiPath.updateServiceImage}/${id}`, formData, headerConfig);
@@ -122,6 +146,7 @@ export const updateServiceFileApi = async (id, data) => {
 
     const formData = new FormData()
     formData.append("file", data?.file || "")
+    formData.append("oldFile", data?.oldFile || "")
 
     try {
         const response = await axios.put(`${ApiPath.updateServiceFile}/${id}`, formData, headerConfig);

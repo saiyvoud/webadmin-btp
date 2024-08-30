@@ -136,7 +136,7 @@ export const UserInfo = () => {
 
 
     const TableRow = ({ index, id, profile, firstName, lastName, phoneNumber, email, password, role, onEdit, onDelete }) => (
-        <tr className="border-b w-full border-gray-200">
+        <tr className={`border-b w-full border-gray-200 ${data.length > 10 && 'h-full'}`}>
             <td className="py-4 px-1 w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
             <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
                 <div className="relative w-16 h-16">
@@ -171,8 +171,8 @@ export const UserInfo = () => {
 
     return (
         <Sidebar>
-            <div className="mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-screen">
-                <div className="flex items-center justify-between mb-6">
+            <div className={`mt-14 mx-14 bg-white rounded-lg px-8 py-14 ${data.length > 10 ? 'min-h-screen' : 'h-screen'}`}>
+                <div div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
                         ທັງໝົດ {data ? data.length : 0} ລາຍການ
                     </p>
@@ -236,8 +236,8 @@ export const UserInfo = () => {
                 {loading ? (
                     <Skeleton active />
                 ) : (
-                    <div className="rounded-lg overflow-x-auto border w-full  h-full pb-5">
-                        <table className="w-full  h-full">
+                    <div className="rounded-lg overflow-x-auto border w-full h-full pb-5">
+                        <table className="w-full h-full">
                             <thead>
                                 <tr className="bg-[#01A7B1]/20 border-b w-full">
                                     <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
@@ -273,6 +273,6 @@ export const UserInfo = () => {
                     </div>
                 )}
             </div>
-        </Sidebar>
+        </Sidebar >
     );
 };

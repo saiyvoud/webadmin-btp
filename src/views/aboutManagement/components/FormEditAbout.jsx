@@ -9,6 +9,7 @@ import { GetFileObjectApi } from '../../../api/file';
 
 export const FormEditAbout = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
     const [image, setImage] = useState(null);
     const [fileImg, setFileImg] = useState(null);
     const imageInputRef = useRef(null);
@@ -91,12 +92,14 @@ export const FormEditAbout = () => {
                         updateAboutApi(id, data),
                         fileImg ? updateAboutImageApi(id, dataImg) : Promise.resolve()
                     ]);
+                    setLoading(true)
 
-                    if (response) {
+                    if (response && responseImg) {
                         Swal.fire({
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         });
+                        setLoading(false)
                         navigate('/aboutManagement');
                     }
                 } catch (error) {
@@ -171,9 +174,14 @@ export const FormEditAbout = () => {
                             </div>
 
                             <div className='flex items-center justify-center'>
-                                <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                    ບັນທຶກ
+                                <button
+                                    disabled={loading}
+                                    type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
+                                    {
+                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງແກ້ໄຂ <span className="loader"></span></p> : "ແກ້ໄຂ"
+                                    }
                                 </button>
+
                             </div>
                         </form>
                     </div>

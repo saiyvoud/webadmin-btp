@@ -163,9 +163,9 @@ export const ContactManagement = () => {
                 <div className='flex items-center justify-center space-x-2'>
                     <button
                         onClick={() => onShowDetail({ id, name, phoneNumber, email, comment })}
-                        className="bg-[#01A7B1] text-white w-[60px] py-1 rounded-full"
+                        className="bg-[#01A7B1] text-white w-[70px] py-1 rounded-full"
                     >
-                        ແກ້ໄຂ
+                        ລາຍລະອຽດ
                     </button>
                     <button onClick={() => onDelete(id)} className="bg-red-500 text-white w-[60px] py-1 rounded-full">ລົບ</button>
                 </div>

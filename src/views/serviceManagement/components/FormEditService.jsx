@@ -5,7 +5,8 @@ import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getServiceApi } from '../../../api/serviceInfo';
-import { getService, updateServiceApi, updateServiceFileApi, updateServiceImage } from '../../../api/serivce';
+import { getOneService, getService, updateServiceApi, updateServiceFileApi, updateServiceImage } from '../../../api/serivce';
+import { GetFileObjectApi } from '../../../api/file';
 
 export const FormEditService = () => {
     const navigate = useNavigate();
@@ -23,7 +24,11 @@ export const FormEditService = () => {
     const [dataService, setDataService] = useState([]);
     const [showImage, setShowImage] = useState(true);
     const [fileImg, setFileImg] = useState()
-    const { id } = useParams();
+    const [fileIcon, setFileIcon] = useState()
+    const [fileObject, setFileObject] = useState()
+    const sid = useParams();
+    const id = sid.id
+    // console.log(id);
 
     const fetchData = async () => {
         try {
@@ -43,10 +48,14 @@ export const FormEditService = () => {
     };
 
     const fetchDataService = async () => {
+        console.log("id=", id);
         setLoading(true);
         try {
-            const response = await getService();
-            if (!response) throw new Error('No response from API');
+            const response = await getOneService(id);
+            const fileIcon = await GetFileObjectApi(response.image)
+            const file = await GetFileObjectApi(response.file_url)
+            setFileObject(file)
+            setFileIcon(fileIcon)
             setDataService(response);
         } catch (error) {
             Swal.fire({
@@ -76,7 +85,6 @@ export const FormEditService = () => {
         setShowImage(true);
     };
 
-
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -86,14 +94,16 @@ export const FormEditService = () => {
     };
 
     const handleImageRemove = () => {
-        setImage(null); // Remove the current image
-        setShowImage(!showImage)
+        setImage(null);
+        setShowImage(false);
+        setFileImg(null);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         handleSaveData(id);
     };
+    // console.log("category", category);
 
     const handleSaveData = async (id) => {
         Swal.fire({
@@ -109,34 +119,35 @@ export const FormEditService = () => {
                 const data = {
                     description,
                     title,
-                    // file,
                     category_id: category,
-                    // image: fileImg 
                 };
                 const dataImage = {
-                    image: fileImg
+                    image: fileImg ? fileImg : fileIcon,
+                    oldImage: dataService.image
                 }
                 const dataFile = {
-                    file
+                    file: fileObject,
+                    oldFile: dataService.file_url
                 }
 
-                const response = await updateServiceApi(id, data);
-                const responseImg = await updateServiceImage(id, dataImage)
-                const responseFile = await updateServiceFileApi(id, dataFile)
-                if (response) {
-                    if (file) {
-                        responseFile
+                try {
+                    const [response, responseImg, responseFile] = await Promise.all([
+                        updateServiceApi(id, data),
+                        updateServiceImage(id, dataImage),
+                        updateServiceFileApi(id, dataFile)
+                    ])
+                    if (response) {
+                        setLoading(true)
+                        Swal.fire({
+                            title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
+                            icon: "success"
+                        }).then(() => {
+                            navigate('/serviceManagement');
+                        });
+                        setLoading(false)
                     }
-                    if (fileImg) {
-                        responseImg
-                    }
-                    Swal.fire({
-                        title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
-                        icon: "success"
-                    }).then(() => {
-                        navigate('/serviceManagement');
-                    });
-                } else {
+                } catch (error) {
+                    console.error('Error updating service:', error);
                     Swal.fire({
                         title: "Error ການແກ້ໄຂລົ້ມເຫຼວ",
                         icon: "error"
@@ -145,7 +156,6 @@ export const FormEditService = () => {
             }
         });
     };
-
 
     return (
         <Sidebar>
@@ -158,114 +168,115 @@ export const FormEditService = () => {
                     </div>
                     <div className='rounded-lg bg-white p-10 w-[600px]'>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-7'>
-                            {dataService.filter(item => item.id == id).map((item, index) => (
-                                <div key={index}>
-                                    <div className="mb-6">
-                                        <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
-                                            {showImage ? (
-                                                <div className='w-full h-full relative'>
-                                                    <img src={image || item.image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-                                                    <div onClick={handleImageRemove}
-                                                        className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
-                                                        <FaTrashAlt className='text-white text-[14px]' />
-                                                    </div>
+                            <div>
+                                <div className="mb-6">
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
+                                        {showImage ? (
+                                            <div className='w-full h-full relative'>
+                                                <img src={image || dataService.image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                                <div onClick={handleImageRemove}
+                                                    className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
+                                                    <FaTrashAlt className='text-white text-[14px]' />
                                                 </div>
-                                            ) : (
-                                                <div className='flex items-center flex-col justify-center h-full w-full'>
-                                                    <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
-                                                    <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
-                                                    <input
-                                                        type="file"
-                                                        ref={imageInputRef}
-                                                        onChange={handleImageUpload}
-                                                        accept="image/*"
-                                                        className="hidden"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => imageInputRef.current.click()}
-                                                        className="mt-2 px-4 py-2 bg-[#01A7B1] text-white text-[14px] rounded-lg"
-                                                    >
-                                                        ເລືອກຮູບພາບ
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
+                                            </div>
+                                        ) : (
+                                            <div className='flex items-center flex-col justify-center h-full w-full'>
+                                                <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
+                                                <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
+                                                <input
+                                                    type="file"
+                                                    ref={imageInputRef}
+                                                    onChange={handleImageUpload}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => imageInputRef.current.click()}
+                                                    className="mt-2 px-4 py-2 bg-[#01A7B1] text-white text-[14px] rounded-lg"
+                                                >
+                                                    ເລືອກຮູບພາບ
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
+                                </div>
 
-                                    <div className='mb-6'>
-                                        <label htmlFor='title' className='ml-3 text-[14px]'>ຫົວຂໍ້:</label>
+                                <div className='mb-6'>
+                                    <label htmlFor='title' className='ml-3 text-[14px]'>ຫົວຂໍ້:</label>
+                                    <input
+                                        type="text"
+                                        id="title"
+                                        defaultValue={dataService.title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="border border-gray-300 rounded-lg px-4 py-2 w-full"
+                                    />
+                                </div>
+
+                                <div className="mb-4 flex flex-col gap-y-2">
+                                    <p className='text-[14px] font-medium'>
+                                        ອັບໂຫຼດໄຟລ໌
+                                    </p>
+                                    <div className="flex items-center relative">
                                         <input
                                             type="text"
-                                            id="title"
-                                            defaultValue={item.title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            className="border border-gray-300 rounded-lg px-4 py-2 w-full"
+                                            placeholder="Upload File"
+                                            value={fileName || dataService.file_url}
+                                            readOnly
+                                            className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
                                         />
-                                    </div>
-
-                                    {/* File Upload */}
-                                    <div className="mb-4 flex flex-col gap-y-2">
-                                        <p className='text-[14px] font-medium'>
-                                            ອັບໂຫຼດໄຟລ໌
-                                        </p>
-                                        <div className="flex items-center relative">
-                                            <input
-                                                type="text"
-                                                placeholder="Upload File"
-                                                value={item.file_url}
-                                                readOnly
-                                                className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                            />
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                onChange={handleFileChange}
-                                                className="hidden"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => fileInputRef.current.click()}
-                                                className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
-                                            >
-                                                Upload
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className='mb-4'>
-                                        <label htmlFor='typeService' className='ml-3 text-[14px]'>ປະເພດທຶນ:</label>
-                                        <Select
-                                            id='typeService'
-                                            defaultValue={item.category_id} // This sets the default value
-                                            onChange={(value) => setCategory(value)}
-                                            className='w-full'
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current.click()}
+                                            className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
                                         >
-                                            {typeService.map((type) => (
-                                                <Select.Option key={type.id} value={type.id}>
-                                                    {type.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor='description' className='ml-3 text-[14px]'>ລາຍລະອຽດ:</label>
-                                        <textarea
-                                            id='description'
-                                            defaultValue={item.description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                            className='border border-gray-300 rounded-lg px-4 py-2 w-full h-[120px]'
-                                        ></textarea>
-                                    </div>
-
-                                    <div className='flex justify-end'>
-                                        <button type='submit' className='bg-[#01A7B1] text-white text-[14px] px-4 py-2 rounded-lg'>
-                                            ບັນທຶກ
+                                            Upload
                                         </button>
                                     </div>
                                 </div>
-                            ))}
+
+                                <div className='mb-4'>
+                                    <label htmlFor='typeService' className='ml-3 text-[14px]'>ປະເພດທຶນ:</label>
+                                    <Select
+                                        id='typeService'
+                                        defaultValue="ກະລຸນາເລືອກທຶນ"
+                                        onChange={(value) => setCategory(value)}
+                                        className='w-full'
+                                    >
+                                        {typeService.map((type) => (
+                                            <Select.Option key={type.id} value={type.id}>
+                                                {type.name}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+
+                                <div>
+                                    <label htmlFor='description' className='ml-3 text-[14px]'>ລາຍລະອຽດ:</label>
+                                    <textarea
+                                        id='description'
+                                        defaultValue={dataService.description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        className='border border-gray-300 rounded-lg px-4 py-2 w-full h-[120px]'
+                                    ></textarea>
+                                </div>
+
+                                <div className='flex justify-end'>
+                                    <button
+                                        disabled={loading}
+                                        type='submit' className='bg-[#01A7B1] text-white text-[14px] px-4 py-2 rounded-lg'>
+                                        {
+                                            loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງແກ້ໄຂ <span className="loader"></span></p> : "ແກ້ໄຂ"
+                                        }
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

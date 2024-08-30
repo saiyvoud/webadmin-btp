@@ -18,6 +18,20 @@ export const getNewsApi = async () => {
         return false;
     }
 };
+export const getOneNewsApi = async (id) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        const response = await axios.get(`${ApiPath.getOneNews}/${id}`, config);
+        return response?.data?.data;
+    } catch (error) {
+        console.log("Error getNews =>", error);
+        return false;
+    }
+};
 
 export const addNewsApi = async (data) => {
     const token = localStorage.getItem("token");
@@ -65,10 +79,10 @@ export const updateNewsApi = async (id, data) => {
     const formData = new FormData();
     formData.append("title", data?.title || "");
     formData.append("detail", data?.detail || "");
-    formData.append("image", data?.image || "");
-    formData.append("oldImage", data?.oldImage || "");
-    formData.append("file", data?.file || "");
-    formData.append("oldFile", data?.oldFile || "");
+    // formData.append("image", data?.image || "");
+    // formData.append("oldImage", data?.oldImage || "");
+    // formData.append("file", data?.file || "");
+    // formData.append("oldFile", data?.oldFile || "");
 
     try {
         const response = await axios.put(`${ApiPath.updateNews}/${id}`, formData, headerConfig);

@@ -21,7 +21,7 @@ export const FormAddCard = () => {
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('');
     const [typeService, setTypeService] = useState()
-    const [loading, setLoading] = useState()
+    const [loading, setLoading] = useState(false)
     const [fileImg, setFileImg] = useState()
 
     const fetchData = async () => {
@@ -80,52 +80,57 @@ export const FormAddCard = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (validateForm()) {
-            handleSaveData();
+            await handleSaveData();
         } else {
             console.log('Form has errors');
         }
+        setLoading(false);
     };
 
     const handleSaveData = async () => {
-        Swal.fire({
-            title: "ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ເລີຍບໍ່?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ຢຶນຢັນ",
-            cancelButtonText: 'ຍົກເລີກ'
-        }).then(async (result) => {
+        try {
+            const result = await Swal.fire({
+                title: "ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ເລີຍບໍ່?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຢຶນຢັນ",
+                cancelButtonText: 'ຍົກເລີກ'
+            });
+
             if (result.isConfirmed) {
                 const data = {
                     description,
                     title,
                     file,
-                    category_id: category,  // Ensure this key matches the expected key in your API
+                    category_id: category,
                     image: fileImg
                 };
 
                 const response = await addServiceApi(data);
 
                 if (response) {
-                    Swal.fire({
+                    await Swal.fire({
                         title: "ບັນທຶກສຳເລັດ!",
                         icon: "success"
-                    }).then(() => {
-                        navigate('/serviceManagement');
                     });
+                    navigate('/serviceManagement');
                 } else {
-                    Swal.fire({
-                        title: "Error ການບັນທຶກລົ້ມເຫຼວ",
-                        // text: "Please try again.",
-                        icon: "error"
-                    });
+                    throw new Error("API request failed");
                 }
             }
-        });
+        } catch (error) {
+            console.error("Error saving data:", error);
+            await Swal.fire({
+                title: "Error ການບັນທຶກລົ້ມເຫຼວ",
+                icon: "error"
+            });
+        }
     };
 
 
@@ -255,8 +260,19 @@ export const FormAddCard = () => {
 
                             {/* Submit Button */}
                             <div className='flex items-center justify-center'>
-                                <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                    ບັນທຶກ
+                                <button
+                                    type="submit"
+                                    className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            ກຳລັງບັນທຶກ
+                                            <span className="ml-2 inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
+                                        </>
+                                    ) : (
+                                        "ບັນທຶກ"
+                                    )}
                                 </button>
                             </div>
                         </form>

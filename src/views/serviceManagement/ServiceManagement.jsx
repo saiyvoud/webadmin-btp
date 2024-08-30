@@ -138,14 +138,14 @@ export const ServiceManagement = () => {
                             {
                                 filteredData.map((card, index) => (
                                     <div key={index}
-                                        className='h-[320px] relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
+                                        className='h-[310px] relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
                                     >
                                         <img src={card.image} alt=""
-                                            className='object-cover w-full h-[200px] rounded-t-lg'
+                                            className='object-cover w-full h-[190px] rounded-t-lg'
                                         />
                                         <div className='flex flex-col py-2 px-5'>
                                             <h4 className='text-[16px] font-medium leading-6 overflow-hidden text-ellipsis line-clamp-2 break-words '>
-                                                {card.title}
+                                                {card.title}ຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫ
                                             </h4>
                                             <p className='text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2 break-words'>
                                                 {card.description}

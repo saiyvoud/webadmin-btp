@@ -126,36 +126,40 @@ export const NewsList = ({ dateRange }) => {
                     filteredNews.map((news, index) => (
                         <animated.div
                             key={index}
-                            className='h-[330px] rounded-lg object-cover col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
+                            className='col-span-3'
                             style={springs}
                         >
-                            <img
-                                src={news.image || card1} // Use a fallback image if `news.image` is undefined
-                                alt={news.title || 'News Image'}
-                                className='w-full h-[200px] rounded-t-lg object-cover'
-                            />
-                            <div className='flex flex-col gap-y-4 py-4 px-5'>
-                                <h4 className='text-[16px] font-medium'>
-                                    {news.title}
-                                </h4>
-                                <p className='text-[#6B7280]'>
-                                    {news.detail}
-                                </p>
-                                <div className='flex items-center justify-between'>
-                                    <span>
-                                        {formatDate(news.createdAt)}
-                                    </span>
-                                    <div className='flex items-center gap-x-3'>
-                                        <button
-                                            onClick={() => deleteItem(news.id)}
-                                            className='w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1'>
-                                            ລົບ
-                                        </button>
-                                        <button
-                                            onClick={() => navigate(`/newsManagement/formEditCardNews/${news.id}`)}
-                                            className='w-[45px] bg-[#4ADE80] text-white rounded-full text-[10px] py-1'>
-                                            ແກ້ໄຂ
-                                        </button>
+                            <div className='relative h-[310px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50 flex flex-col'>
+                                <img
+                                    src={news.image || 'fallback-image-url'}
+                                    alt={news.title || 'News Image'}
+                                    className='w-full h-[200px] rounded-t-lg object-cover'
+                                />
+                                <div className='flex flex-col gap-y-0 py-2 px-5 flex-grow'>
+                                    <h4 className='text-[16px] leading-6 font-medium text-ellipsis break-words line-clamp-2'>
+                                        {news.title}
+                                    </h4>
+                                    <p className='text-[#6B7280] line-clamp-2'>
+                                        {news.detail}
+                                    </p>
+                                </div>
+                                <div className='p-2 px-5 pt-0'>
+                                    <div className='flex justify-between items-center'>
+                                        <span className='text-sm'>
+                                            {formatDate(news.createdAt)}
+                                        </span>
+                                        <div className='flex items-center gap-x-3'>
+                                            <button
+                                                onClick={() => deleteItem(news.id)}
+                                                className='w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1'>
+                                                ລົບ
+                                            </button>
+                                            <button
+                                                onClick={() => navigate(`/newsManagement/formEditCardNews/${news.id}`)}
+                                                className='w-[45px] bg-[#4ADE80] text-white rounded-full text-[10px] py-1'>
+                                                ແກ້ໄຂ
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

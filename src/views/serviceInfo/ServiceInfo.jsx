@@ -105,7 +105,7 @@ export const ServiceInfo = () => {
 
     return (
         <Sidebar>
-            <div className="mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-screen">
+            <div className="mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-full">
                 <div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
                         ທັງໝົດ {category.length} ລາຍການ

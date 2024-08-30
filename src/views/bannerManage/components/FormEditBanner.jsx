@@ -4,6 +4,7 @@ import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getBannerOneApi, updateBannerApi, updateFileBannerApi, updateImageBannerApi } from '../../../api/banner';
+import { GetFileObjectApi, getFilePDF } from '../../../api/file';
 
 export const FormEditBanner = () => {
     const navigate = useNavigate();
@@ -18,13 +19,18 @@ export const FormEditBanner = () => {
     const [bannerData, setBannerData] = useState([]);
     const [showImage, setShowImage] = useState(true);
     const [fileImg, setFileImg] = useState(null);
+    const [fileImgObject, setFileImgObject] = useState()
+    const [fileObject, setFileObject] = useState()
     const { id } = useParams();
 
     const fetchData = async () => {
         try {
             setLoading(true);
             const response = await getBannerOneApi(id);
-            if (!response) throw new Error('No response from API');
+            const fileIcon = await GetFileObjectApi(response.image)
+            const file = await getFilePDF(response.image)
+            setFileImgObject(fileIcon)
+            setFileObject(file)
             setBannerData(response);
             setTitle(response.title);
             setDetail(response.detail);
@@ -98,12 +104,12 @@ export const FormEditBanner = () => {
                 };
 
                 const dataImg = {
-                    image: fileImg,  // fileImg will have the correct value here
+                    image: fileImg ? fileImg : fileImgObject,  // fileImg will have the correct value here
                     oldImage: bannerData.image,
                 };
 
                 const dataFile = {
-                    file,
+                    file: fileObject,
                     oldFile: bannerData.url_path
                 };
 
@@ -231,13 +237,15 @@ export const FormEditBanner = () => {
                                 />
                             </div>
 
-                            <div className='flex items-center justify-center gap-x-5'>
+                            <div className='flex items-center justify-center'>
                                 <button
                                     type="submit"
+                                    className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
                                     disabled={loading}
-                                    className={`px-4 py-2 bg-[#01A7B1] text-white rounded-md w-full text-center h-[44px] ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
-                                    {loading ? 'Loading...' : 'Save'}
+                                    {
+                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງແກ້ໄຂ <span className="loader"></span></p> : "ແກ້ໄຂ"
+                                    }
                                 </button>
                             </div>
                         </form>

@@ -3,29 +3,42 @@ import { Sidebar } from '../../../components/Sidebar';
 import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { getNewsApi, updateNewsApi, updateNewsFileApi, updateNewsImageApi } from '../../../api/news';
+import { getOneNewsApi, updateNewsApi, updateNewsFileApi, updateNewsImageApi } from '../../../api/news';
+import { GetFileObjectApi, getFilePDF } from '../../../api/file';
 
 export const FormEditCardNews = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
     const [file, setFile] = useState(null);
     const [detail, setDetail] = useState('');
-    const imageInputRef = useRef(null);
-    const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('');
-    const [newsData, setNewsData] = useState([]);
+    const [newsData, setNewsData] = useState({});
     const [showImage, setShowImage] = useState(true);
     const [fileImg, setFileImg] = useState(null);
-    const { id } = useParams(); // Extract the ID from URL parameters
+    const [fileImgObject, setFileImgObject] = useState(null);
+    const [fileObject, setFileObject] = useState(null);
+
+    const imageInputRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await getNewsApi();
-            if (!response) throw new Error('No response from API');
+            const response = await getOneNewsApi(id);
+            const fileImg = await GetFileObjectApi(response.image);
+            const file = await getFilePDF(response.file_url);
             setNewsData(response);
+            setFileImgObject(fileImg);
+            setFileObject(file);
+
+            // Populate form fields with newsData
+            setTitle(response.title || '');
+            setDetail(response.detail || '');
+            setImage(response.image);
+            setFileName(response.file_url ? response.file_url.split('/').pop() : '');
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -40,7 +53,7 @@ export const FormEditCardNews = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [id]);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -48,9 +61,9 @@ export const FormEditCardNews = () => {
             const reader = new FileReader();
             reader.onload = (e) => setImage(e.target.result);
             reader.readAsDataURL(file);
+            setFileImg(file);
+            setShowImage(true);
         }
-        setFileImg(file);
-        setShowImage(true);
     };
 
     const handleFileChange = (event) => {
@@ -64,14 +77,15 @@ export const FormEditCardNews = () => {
     const handleImageRemove = () => {
         setImage(null);
         setShowImage(false);
+        setFileImg(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleSaveData(id);
+        await handleSaveData();
     };
 
-    const handleSaveData = async (id) => {
+    const handleSaveData = async () => {
         Swal.fire({
             title: "ທ່ານຕ້ອງການບັນທຶກຂໍໍ້ມູນນີ້ເລີຍບໍ່?",
             icon: "warning",
@@ -82,19 +96,14 @@ export const FormEditCardNews = () => {
             cancelButtonText: 'ຍົກເລີກ',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const data = {
-                    title,
-                    detail,
-                };
-
+                const data = { title, detail };
                 const dataImg = {
-                    image: fileImg,
-                    oldImage: newsData.find(item => item.id == id)?.image,
+                    image: fileImg ? fileImg : fileImgObject,
+                    oldImage: newsData.image,
                 };
-
                 const dataFile = {
-                    file: file,
-                    oldFile: newsData.find(item => item.id == id)?.file_url
+                    file: file ? file : fileObject,
+                    oldFile: newsData.file_url
                 };
 
                 try {
@@ -123,6 +132,10 @@ export const FormEditCardNews = () => {
         });
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>
@@ -134,88 +147,90 @@ export const FormEditCardNews = () => {
                     </div>
                     <div className='rounded-lg bg-white p-10 w-[600px]'>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-7'>
-                            {newsData.filter(item => item.id == id).map((item, index) => (
-                                <div key={index}>
-                                    <div className="mb-6">
-                                        <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
-                                            {showImage ? (
-                                                <div className='w-full h-full relative'>
-                                                    <img src={image || item.image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-                                                    <div onClick={handleImageRemove}
-                                                        className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
-                                                        <FaTrashAlt className='text-white text-[14px]' />
-                                                    </div>
+                            <div>
+                                <div className="mb-6">
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
+                                        {showImage && (image || newsData.image) ? (
+                                            <div className='w-full h-full relative'>
+                                                <img src={image || newsData.image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                                <div onClick={handleImageRemove}
+                                                    className='w-[25px] h-[25px] cursor-pointer absolute top-1 right-1 bg-black/55 rounded-lg flex items-center justify-center'>
+                                                    <FaTrashAlt className='text-white text-[14px]' />
                                                 </div>
-                                            ) : (
-                                                <div className='flex items-center flex-col justify-center h-full w-full'>
-                                                    <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
-                                                    <p className="text-gray-400">
-                                                        Drag & Drop or Click to Upload
-                                                    </p>
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={handleImageUpload}
-                                                        ref={imageInputRef}
-                                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label htmlFor='title' className='font-medium'>
-                                            ເລື່ອງຂ່າວ
-                                        </label>
-                                        <input type="text" id="title"
-                                            defaultValue={item.title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            className='mt-3 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#01A7B1]' />
-                                    </div>
-
-                                    {/* File Upload */}
-                                    <div className="mb-4 flex flex-col gap-y-2">
-                                        <p className='text-[14px] font-medium'>
-                                            ອັບໂຫຼດໄຟລ໌
-                                        </p>
-                                        <div className="flex items-center relative">
-                                            <input
-                                                type="text"
-                                                placeholder="Upload File"
-                                                value={fileName}
-                                                readOnly
-                                                className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                            />
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                onChange={handleFileChange}
-                                                className="hidden"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => fileInputRef.current.click()}
-                                                className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
-                                            >
-                                                Upload
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor='detail' className='font-medium'>
-                                            ລາຍລະອຽດຂໍໍ້ມູນ
-                                        </label>
-                                        <textarea
-                                            id="detail"
-                                            defaultValue={item.detail}
-                                            onChange={(e) => setDetail(e.target.value)}
-                                            className='mt-3 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#01A7B1]'
-                                            rows="4"
-                                        />
+                                            </div>
+                                        ) : (
+                                            <div className='flex items-center flex-col justify-center h-full w-full'>
+                                                <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
+                                                <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
+                                                <input
+                                                    type="file"
+                                                    ref={imageInputRef}
+                                                    onChange={handleImageUpload}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => imageInputRef.current.click()}
+                                                    className="mt-2 px-4 py-2 bg-[#01A7B1] text-white rounded-md"
+                                                >
+                                                    Upload
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            ))}
+                                <div>
+                                    <label htmlFor='title' className='font-medium'>
+                                        ຫົວຂໍ້
+                                    </label>
+                                    <input type="text" id="title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className='mt-3 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#01A7B1]' />
+                                </div>
+
+                                <div className="mb-4 flex flex-col gap-y-2">
+                                    <p className='text-[14px] font-medium'>
+                                        ອັບໂຫຼດໄຟລ໌
+                                    </p>
+                                    <div className="flex items-center relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Upload File"
+                                            value={fileName}
+                                            readOnly
+                                            className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
+                                        />
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current.click()}
+                                            className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
+                                        >
+                                            Upload
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label htmlFor='detail' className='font-medium'>
+                                        ລາຍລະອຽດຂໍໍ້ມູນ
+                                    </label>
+                                    <textarea
+                                        id="detail"
+                                        value={detail}
+                                        onChange={(e) => setDetail(e.target.value)}
+                                        className='mt-3 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#01A7B1]'
+                                        rows="4"
+                                    />
+                                </div>
+                            </div>
                             <div className='flex justify-center'>
                                 <button
                                     type="submit"

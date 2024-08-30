@@ -27,6 +27,7 @@ export default class ApiPath {
 
     // service
     static getService = `${baseUrl}/services/selAll`
+    static getOneService = `${baseUrl}/services/selOne`
     static deleteSetvice = `${baseUrl}/services/delete`
     static addService = `${baseUrl}/services/insert`
     static updateService = `${baseUrl}/services/update`
@@ -35,6 +36,7 @@ export default class ApiPath {
 
     // news
     static getNews = `${baseUrl}/news/selAll`
+    static getOneNews = `${baseUrl}/news/selOne`
     static addNews = `${baseUrl}/news/insert`
     static delNews = `${baseUrl}/news/delete`
     static updateNews = `${baseUrl}/news/update`
