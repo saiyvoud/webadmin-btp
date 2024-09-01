@@ -14,12 +14,13 @@ export const LoginApi = async (username, password) => {
 
     try {
         const response = await axios.post(ApiPath.login, data, config);
-        // console.log("Full response:", response);
+        console.log("Full response:", response);
         // console.log("response.data.status:", response.data.status);
         // console.log("response.data:", response.data);
 
         if (response.data.status === true) {
             // Store encrypted data in localStorage
+            localStorage.setItem("profile", response.data.data.profile)
             localStorage.setItem("firstName", response.data.data.firstName)
             localStorage.setItem("lastName", response.data.data.lastName)
             localStorage.setItem("profile", response.data.data.profile)

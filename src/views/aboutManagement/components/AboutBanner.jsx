@@ -15,8 +15,8 @@ export const AboutBanner = () => {
     const [coverImg, setCoverImg] = useState([]);
 
     const imgID = coverImg.id
-    console.log("this is imgID=",);
-    console.log(imgID);
+    // console.log("this is imgID=",);
+    // console.log(imgID);
 
     const fetchData = async () => {
         // setLoading(true);

@@ -1,13 +1,55 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sidebar } from '../../../components/Sidebar';
 import { Select } from 'antd';
-import { FaArrowLeft } from "react-icons/fa6";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
+import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { addServiceApi } from '../../../api/serivce';
 import { getServiceApi } from '../../../api/serviceInfo';
+
+const TagListInput = ({ tags, setTags }) => {
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+    };
+
+    const handleInputKeyDown = (e) => {
+        if (e.key === 'Enter' && inputValue.trim() !== '') {
+            e.preventDefault();
+            setTags([...tags, inputValue.trim()]);
+            setInputValue('');
+        }
+    };
+
+    const removeTag = (indexToRemove) => {
+        setTags(tags.filter((_, index) => index !== indexToRemove));
+    };
+
+    return (
+        <div className="w-full">
+            <div className="flex flex-wrap gap-2 mb-2">
+                {tags.map((tag, index) => (
+                    <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
+                        {tag}
+                        <button onClick={() => removeTag(index)} className="ml-1 text-blue-600 hover:text-blue-800">
+                            <X size={14} />
+                        </button>
+                    </span>
+                ))}
+            </div>
+            <input
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyDown={handleInputKeyDown}
+                placeholder="Type and press Enter to add tags"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+    );
+};
 
 export const FormAddCard = () => {
     const navigate = useNavigate();
@@ -16,13 +58,14 @@ export const FormAddCard = () => {
     const [file, setFile] = useState(null);
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
+    const [tags, setTags] = useState([]);
     const [errors, setErrors] = useState({});
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('');
-    const [typeService, setTypeService] = useState()
-    const [loading, setLoading] = useState(false)
-    const [fileImg, setFileImg] = useState()
+    const [typeService, setTypeService] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [fileImg, setFileImg] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -44,13 +87,12 @@ export const FormAddCard = () => {
     }
 
     useEffect(() => {
-        fetchData()
-        console.log(typeService);
-    }, [])
+        fetchData();
+    }, []);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
-        setFileImg(file)
+        setFileImg(file);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -59,7 +101,6 @@ export const FormAddCard = () => {
             reader.readAsDataURL(file);
         }
     };
-    console.log(fileImg);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -76,6 +117,7 @@ export const FormAddCard = () => {
         if (!file) newErrors.file = 'ກະລຸນາອັບໂຫຼດຟາຍ!';
         if (!category) newErrors.category = 'ກະລຸນາເລືອກປະເພດທຶນ!';
         if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດ!';
+        if (tags.length === 0) newErrors.tags = 'ກະລຸນາເພີ່ມແທັກຢ່າງໜ້ອຍໜຶ່ງອັນ!';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -109,7 +151,8 @@ export const FormAddCard = () => {
                     title,
                     file,
                     category_id: category,
-                    image: fileImg
+                    image: fileImg,
+                    tags: tags
                 };
 
                 const response = await addServiceApi(data);
@@ -132,7 +175,6 @@ export const FormAddCard = () => {
             });
         }
     };
-
 
     return (
         <Sidebar>
@@ -235,13 +277,21 @@ export const FormAddCard = () => {
                                     style={{ width: '100%' }}
                                     onChange={(value) => setCategory(value)}
                                     options={typeService?.map((item) => ({
-                                        value: item.id, // Assuming each category has a unique id
+                                        value: item.id,
                                         label: item.name,
                                     }))}
                                 />
-
                                 {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
                             </div>
+
+                            {/* Tag List Input */}
+                            {/* <div className="mb-4 flex flex-col gap-y-2">
+                                <p className='text-[14px] font-medium'>
+                                    ແທັກ
+                                </p>
+                                <TagListInput tags={tags} setTags={setTags} />
+                                {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>}
+                            </div> */}
 
                             {/* Description Input */}
                             <div className="mb-6 flex flex-col gap-y-2">

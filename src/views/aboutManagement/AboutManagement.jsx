@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
-import { DatePicker, Empty } from 'antd';
+import { DatePicker, Empty, Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { AboutList } from './components/AboutList';
 import Swal from 'sweetalert2';
@@ -59,7 +59,7 @@ export const AboutManagement = () => {
     };
 
     const cDataID = companyData?.map((item) => item?.id);
-    console.log("converImg", cDataID[0]);
+    // console.log("converImg", cDataID[0]);
     return (
         <Sidebar>
             <div className='mt-4'>
@@ -109,13 +109,13 @@ export const AboutManagement = () => {
                             ))
                         ) : (
                             converImg.length == 0 ? (
-                                <Empty description="ບໍ່ມີຂໍ້ມູນຮູບພາບພື້ນຫຼັງ" />
-                            ) : (
                                 Array.from({ length: 4 }).map((_, index) => (
-                                    <div key={index} className="h-[330px] col-span-3">
+                                    <div key={index} className="h-full w-full rounded-lg object-cover">
                                         <Skeleton active avatar />
                                     </div>
                                 ))
+                            ) : (
+                                <Empty description="ບໍ່ມີຂໍ້ມູນຮູບພາບພື້ນຫຼັງ" />
                             )
                         )
                     }

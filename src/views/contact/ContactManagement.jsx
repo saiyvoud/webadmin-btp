@@ -175,7 +175,7 @@ export const ContactManagement = () => {
 
     return (
         <Sidebar>
-            <div className={`mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-full ${filteredData.length <= 10 ? 'h-full' : 'h-screen'}`}>
+            <div className="mt-14 mx-14 bg-white rounded-lg px-8 pt-14 h-[calc(100vh-7rem)] flex flex-col">
                 <div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
                         ທັງໝົດ {filteredData.length} ລາຍການ
@@ -189,6 +189,7 @@ export const ContactManagement = () => {
                         />
                     </div>
                 </div>
+
                 <Modal
                     open={isModalVisible}
                     // onOk={handleOk}
@@ -232,34 +233,36 @@ export const ContactManagement = () => {
                 {loading ? (
                     <Skeleton active />
                 ) : (
-                    <div className="rounded-lg overflow-x-auto border w-full pb-5">
-                        <table className="w-full h-full">
-                            <thead>
-                                <tr className="bg-[#01A7B1]/20 border-b w-full">
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຊື່</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center w-[200px]">Comment</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredData.map((item, index) => (
-                                    <TableRow
-                                        key={item.id}
-                                        index={index + 1}
-                                        id={item.id}
-                                        name={item.name}
-                                        phoneNumber={item.phoneNumber}
-                                        email={item.email}
-                                        comment={item.comment}
-                                        onShowDetail={showModal}
-                                        onDelete={deleteItem}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="flex-grow overflow-hidden rounded-lg border w-full pb-5">
+                        <div className="h-full overflow-auto">
+                            <table className="w-full">
+                                <thead className="sticky top-0 bg-white">
+                                    <tr className="bg-[#01A7B1]/20 border-b w-full">
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຊື່</th>
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center w-[200px]">Comment</th>
+                                        <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredData.map((item, index) => (
+                                        <TableRow
+                                            key={item.id}
+                                            index={index + 1}
+                                            id={item.id}
+                                            name={item.name}
+                                            phoneNumber={item.phoneNumber}
+                                            email={item.email}
+                                            comment={item.comment}
+                                            onShowDetail={showModal}
+                                            onDelete={deleteItem}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 )}
             </div>

@@ -84,6 +84,11 @@ export const updateUserImage = async (id, data) => {
 
     try {
         const response = await axios.put(`${ApiPath.updateUserImage}/${id}`, formData, headerConfig);
+        const userID = localStorage.getItem("UID")
+        // console.log(userID == id);
+        // if (userID == id) {
+        //     localStorage.setItem("image", data?.image)
+        // }
         return response;
     } catch (error) {
         console.log("Error occurred in updateUserImage API ==> ", error);

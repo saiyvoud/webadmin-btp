@@ -11,7 +11,7 @@ export const getService = async () => {
         };
         const response = await axios.get(ApiPath.getService, config);
 
-        console.log("Get service is success => \n", response?.data?.data);
+        //console.log("Get service is success => \n", response?.data?.data);
 
         return response?.data?.data;
     } catch (error) {
@@ -34,7 +34,7 @@ export const getOneService = async (id) => {
         };
         const response = await axios.get(`${ApiPath.getOneService}/${id}`, config);
 
-        console.log("Get one service is success => \n", response?.data?.data);
+        //console.log("Get one service is success => \n", response?.data?.data);
 
         return response?.data?.data;
     } catch (error) {
@@ -76,6 +76,18 @@ export const addServiceApi = async (data) => {
     formData.append("file", data?.file || "");
     formData.append("category_id", data?.category_id || "");
     formData.append("image", data?.image || "");
+    if (data?.document && Array.isArray(data.document)) {
+        data.document.forEach((doc, index) => {
+            formData.append(`document[${index}]`, doc);
+        });
+    }
+
+    // Handle typescholarship array
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        data.typescholarship.forEach((type, index) => {
+            formData.append(`typescholarship[${index}]`, type);
+        });
+    }
 
     try {
         const response = await axios.post(ApiPath.addService, formData, headerConfig);
