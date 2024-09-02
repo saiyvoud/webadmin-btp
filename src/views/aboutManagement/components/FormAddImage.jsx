@@ -64,6 +64,7 @@ export const FormAddImage = () => {
             confirmButtonText: "ຕົກລົງ",
             cancelButtonText: 'ຍົກເລີກ'
         }).then(async (result) => {
+            setLoading(true)
             if (result.isConfirmed) {
                 const data = {
                     title,
@@ -77,7 +78,16 @@ export const FormAddImage = () => {
                     });
                     navigate('/aboutManagement')
                 }
+                else {
+                    setLoading(false)
+                    Swal.fire({
+                        title: "ບັນທຶກບໍ່ສຳເລັດ!",
+                        icon: "error"
+                    });
+                    navigate('/aboutManagement')
+                }
             }
+
         });
     };
 
@@ -145,8 +155,10 @@ export const FormAddImage = () => {
                             {/* Submit Button */}
                             <div className='flex items-center justify-center'>
                                 <button
+                                    type="submit"
+                                    className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
                                     disabled={loading}
-                                    type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
+                                >
                                     {
                                         loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"
                                     }
