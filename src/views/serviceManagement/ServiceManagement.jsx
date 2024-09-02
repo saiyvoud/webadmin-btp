@@ -145,7 +145,7 @@ export const ServiceManagement = () => {
                                         />
                                         <div className='flex flex-col py-2 px-5'>
                                             <h4 className='text-[16px] font-medium leading-6 overflow-hidden text-ellipsis line-clamp-2 break-words '>
-                                                {card.title}ຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫຫ
+                                                {card.title}
                                             </h4>
                                             <p className='text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2 break-words'>
                                                 {card.description}

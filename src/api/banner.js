@@ -71,6 +71,20 @@ export const addBannerApi = async (data) => {
     formData.append("url_path", data?.file || "")
     formData.append("title", data?.title || "")
     formData.append("detail", data?.detail || "")
+
+
+    if (data?.document && Array.isArray(data.document)) {
+        formData.append("document", JSON.stringify(data.document));
+    }
+
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
+    }
+    // Log the FormData for debugging
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
     console.log(data);
     try {
         const response = await axios.post(ApiPath.addBanner, formData, headerConfig)
@@ -95,6 +109,15 @@ export const updateBannerApi = async (id, data) => {
     const formData = new FormData()
     formData.append("title", data?.title || "")
     formData.append("detail", data?.detail || "")
+
+    if (data?.document && Array.isArray(data.document)) {
+        formData.append("document", JSON.stringify(data.document));
+    }
+
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
+    }
+
     console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateBanner}/${id}`, formData, headerConfig)

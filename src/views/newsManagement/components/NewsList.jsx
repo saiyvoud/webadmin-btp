@@ -133,10 +133,10 @@ export const NewsList = ({ dateRange }) => {
                                 <img
                                     src={news.image || 'fallback-image-url'}
                                     alt={news.title || 'News Image'}
-                                    className='w-full h-[200px] rounded-t-lg object-cover'
+                                    className='w-full h-[190px] rounded-t-lg object-cover'
                                 />
                                 <div className='flex flex-col gap-y-0 py-2 px-5 flex-grow'>
-                                    <h4 className='text-[16px] leading-6 font-medium text-ellipsis break-words line-clamp-2'>
+                                    <h4 className='text-[16px] leading-6 font-medium text-ellipsis break-words line-clamp-2 mb-1'>
                                         {news.title}
                                     </h4>
                                     <p className='text-[#6B7280] line-clamp-2'>

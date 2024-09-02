@@ -92,6 +92,7 @@ export const FormAddUser = () => {
                         text: "ມີບາງຢ່າງບໍ່ຖືກຕ້ອງ, ກະລຸນາລອງອີກຄັ້ງ.",
                         icon: "error",
                     });
+                    setLoading(false)
                 }
             }
         });

@@ -48,6 +48,18 @@ export const addNewsApi = async (data) => {
     formData.append("image", data?.image || "");
     formData.append("file", data?.file || "");
 
+    if (data?.document && Array.isArray(data.document)) {
+        formData.append("document", JSON.stringify(data.document));
+    }
+
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
+    }
+    // Log the FormData for debugging
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
     try {
         const response = await axios.post(ApiPath.addNews, formData, headerConfig);
         return response;
@@ -79,10 +91,14 @@ export const updateNewsApi = async (id, data) => {
     const formData = new FormData();
     formData.append("title", data?.title || "");
     formData.append("detail", data?.detail || "");
-    // formData.append("image", data?.image || "");
-    // formData.append("oldImage", data?.oldImage || "");
-    // formData.append("file", data?.file || "");
-    // formData.append("oldFile", data?.oldFile || "");
+
+    if (data?.document && Array.isArray(data.document)) {
+        formData.append("document", JSON.stringify(data.document));
+    }
+
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
+    }
 
     try {
         const response = await axios.put(`${ApiPath.updateNews}/${id}`, formData, headerConfig);

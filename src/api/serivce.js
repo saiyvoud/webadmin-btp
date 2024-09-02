@@ -76,29 +76,42 @@ export const addServiceApi = async (data) => {
     formData.append("file", data?.file || "");
     formData.append("category_id", data?.category_id || "");
     formData.append("image", data?.image || "");
+
+    // Handling array data
+    // if (data?.document && Array.isArray(data.document)) {
+    //     data.document.forEach((doc, index) => {
+    //         formData.append(`document[${index}]`, doc);
+    //     });
+    // }
+
+    // if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+    //     data.typescholarship.forEach((type, index) => {
+    //         formData.append(`typescholarship[${index}]`, type);
+    //     });
+    // }
+
     if (data?.document && Array.isArray(data.document)) {
-        data.document.forEach((doc, index) => {
-            formData.append(`document[${index}]`, doc);
-        });
+        formData.append("document", JSON.stringify(data.document));
     }
 
-    // Handle typescholarship array
     if (data?.typescholarship && Array.isArray(data.typescholarship)) {
-        data.typescholarship.forEach((type, index) => {
-            formData.append(`typescholarship[${index}]`, type);
-        });
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
     }
 
+    // Log the FormData for debugging
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
+    console.log(data);
     try {
         const response = await axios.post(ApiPath.addService, formData, headerConfig);
-        // console.log("res of AddProductApi =>> ", response);
         return response;
     } catch (error) {
         console.log("error occurred in AddProductApi ==> ", error);
         return false;
     }
 };
-
 export const updateServiceApi = async (id, data) => {
     // console.log(id);
     const token = localStorage.getItem("token");
@@ -114,6 +127,13 @@ export const updateServiceApi = async (id, data) => {
     // formData.append("file", data?.file || "");
     formData.append("category_id", data?.category_id || "");
     // formData.append("image", data?.image || "");
+    if (data?.document && Array.isArray(data.document)) {
+        formData.append("document", JSON.stringify(data.document));
+    }
+
+    if (data?.typescholarship && Array.isArray(data.typescholarship)) {
+        formData.append("typescholarship", JSON.stringify(data.typescholarship));
+    }
 
     console.log(data);
     try {

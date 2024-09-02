@@ -2,54 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Sidebar } from '../../../components/Sidebar';
 import { Select } from 'antd';
 import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { addServiceApi } from '../../../api/serivce';
 import { getServiceApi } from '../../../api/serviceInfo';
-
-const TagListInput = ({ tags, setTags }) => {
-    const [inputValue, setInputValue] = useState('');
-
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
-    const handleInputKeyDown = (e) => {
-        if (e.key === 'Enter' && inputValue.trim() !== '') {
-            e.preventDefault();
-            setTags([...tags, inputValue.trim()]);
-            setInputValue('');
-        }
-    };
-
-    const removeTag = (indexToRemove) => {
-        setTags(tags.filter((_, index) => index !== indexToRemove));
-    };
-
-    return (
-        <div className="w-full">
-            <div className="flex flex-wrap gap-2 mb-2">
-                {tags.map((tag, index) => (
-                    <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
-                        {tag}
-                        <button onClick={() => removeTag(index)} className="ml-1 text-blue-600 hover:text-blue-800">
-                            <X size={14} />
-                        </button>
-                    </span>
-                ))}
-            </div>
-            <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={handleInputKeyDown}
-                placeholder="Type and press Enter to add tags"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-    );
-};
 
 export const FormAddCard = () => {
     const navigate = useNavigate();
@@ -58,7 +15,8 @@ export const FormAddCard = () => {
     const [file, setFile] = useState(null);
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
-    const [tags, setTags] = useState([]);
+    const [documents, setDocuments] = useState([]);
+    const [typeScholarship, setTypeScholarship] = useState([]);
     const [errors, setErrors] = useState({});
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);
@@ -66,6 +24,52 @@ export const FormAddCard = () => {
     const [typeService, setTypeService] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileImg, setFileImg] = useState(null);
+    const [inputValue1, setInputValue1] = useState('');
+    const [inputValue2, setInputValue2] = useState('');
+
+    const handleInputChange1 = (e) => {
+        setInputValue1(e.target.value);
+    };
+
+    const handleInputChange2 = (e) => {
+        setInputValue2(e.target.value);
+    };
+
+    const addTag1 = () => {
+        if (inputValue1.trim() !== '') {
+            setDocuments([...documents, inputValue1.trim()]);
+            setInputValue1('');
+        }
+    };
+
+    const addTag2 = () => {
+        if (inputValue2.trim() !== '') {
+            setTypeScholarship([...typeScholarship, inputValue2.trim()]);
+            setInputValue2('');
+        }
+    };
+
+    const handleInputKeyDown1 = (e) => {
+        if (e.key === 'Enter' && inputValue1.trim() !== '') {
+            e.preventDefault();
+            addTag1();
+        }
+    };
+
+    const handleInputKeyDown2 = (e) => {
+        if (e.key === 'Enter' && inputValue2.trim() !== '') {
+            e.preventDefault();
+            addTag2();
+        }
+    };
+
+    const removeTag1 = (indexToRemove) => {
+        setDocuments(documents.filter((_, index) => index !== indexToRemove));
+    };
+
+    const removeTag2 = (indexToRemove) => {
+        setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
+    };
 
     const fetchData = async () => {
         try {
@@ -114,10 +118,10 @@ export const FormAddCard = () => {
         let newErrors = {};
         if (!image) newErrors.image = 'ກະລຸນາອັພໂຫຼດຮູບພາບກ່ອນ!';
         if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້!';
-        if (!file) newErrors.file = 'ກະລຸນາອັບໂຫຼດຟາຍ!';
+        if (!file) newErrors.file = 'ກະລຸນາອັບໂຫຼດໄຟລ໌!';
         if (!category) newErrors.category = 'ກະລຸນາເລືອກປະເພດທຶນ!';
         if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດ!';
-        if (tags.length === 0) newErrors.tags = 'ກະລຸນາເພີ່ມແທັກຢ່າງໜ້ອຍໜຶ່ງອັນ!';
+        if (documents.length === 0 && typeScholarship.length === 0) newErrors.tags = 'ກະລຸນາເພີ່ມແທັກຢ່າງໜ້ອຍໜຶ່ງອັນໃນກຸ່ມໃດກຸ່ມໜຶ່ງ!';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -152,7 +156,8 @@ export const FormAddCard = () => {
                     file,
                     category_id: category,
                     image: fileImg,
-                    tags: tags
+                    document: documents,  // Changed from documents to document
+                    typescholarship: typeScholarship  // Changed from typeScholarship to typescholarship
                 };
 
                 const response = await addServiceApi(data);
@@ -175,7 +180,6 @@ export const FormAddCard = () => {
             });
         }
     };
-
     return (
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>
@@ -284,14 +288,77 @@ export const FormAddCard = () => {
                                 {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
                             </div>
 
-                            {/* Tag List Input */}
-                            {/* <div className="mb-4 flex flex-col gap-y-2">
+                            {/* Tag List Input for Group 1 */}
+                            <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
-                                    ແທັກ
+                                    ເອກະສານ
                                 </p>
-                                <TagListInput tags={tags} setTags={setTags} />
-                                {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>}
-                            </div> */}
+                                <div className="w-full">
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {documents.map((tag, index) => (
+                                            <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
+                                                {tag}
+                                                <button onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="flex">
+                                        <input
+                                            type="text"
+                                            value={inputValue1}
+                                            onChange={handleInputChange1}
+                                            onKeyDown={handleInputKeyDown1}
+                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
+                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
+                                        />
+                                        <button
+                                            onClick={addTag1}
+                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Tag List Input for Group 2 */}
+                            <div className="mb-4 flex flex-col gap-y-2">
+                                <p className='text-[14px] font-medium'>
+                                    ຂໍ້ມູນຂອງທຶນ
+                                </p>
+                                <div className="w-full">
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {typeScholarship.map((tag, index) => (
+                                            <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
+                                                {tag}
+                                                <button onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="flex">
+                                        <input
+                                            type="text"
+                                            value={inputValue2}
+                                            onChange={handleInputChange2}
+                                            onKeyDown={handleInputKeyDown2}
+                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
+                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
+                                        />
+                                        <button
+                                            onClick={addTag2}
+                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>}
 
                             {/* Description Input */}
                             <div className="mb-6 flex flex-col gap-y-2">

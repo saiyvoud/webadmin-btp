@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Sidebar } from '../../../components/Sidebar';
 import { Select } from 'antd';
+import { X, Plus } from 'lucide-react';
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
@@ -21,6 +22,54 @@ export const FormAddBanner = () => {
     const [fileName, setFileName] = useState('');
     const [fileImg, setFileImg] = useState()
     const [loading, setLoading] = useState()
+    const [documents, setDocuments] = useState([]);
+    const [typeScholarship, setTypeScholarship] = useState([]);
+    const [inputValue1, setInputValue1] = useState('');
+    const [inputValue2, setInputValue2] = useState('');
+
+    const handleInputChange1 = (e) => {
+        setInputValue1(e.target.value);
+    };
+
+    const handleInputChange2 = (e) => {
+        setInputValue2(e.target.value);
+    };
+
+    const addTag1 = () => {
+        if (inputValue1.trim() !== '') {
+            setDocuments([...documents, inputValue1.trim()]);
+            setInputValue1('');
+        }
+    };
+
+    const addTag2 = () => {
+        if (inputValue2.trim() !== '') {
+            setTypeScholarship([...typeScholarship, inputValue2.trim()]);
+            setInputValue2('');
+        }
+    };
+
+    const handleInputKeyDown1 = (e) => {
+        if (e.key === 'Enter' && inputValue1.trim() !== '') {
+            e.preventDefault();
+            addTag1();
+        }
+    };
+
+    const handleInputKeyDown2 = (e) => {
+        if (e.key === 'Enter' && inputValue2.trim() !== '') {
+            e.preventDefault();
+            addTag2();
+        }
+    };
+
+    const removeTag1 = (indexToRemove) => {
+        setDocuments(documents.filter((_, index) => index !== indexToRemove));
+    };
+
+    const removeTag2 = (indexToRemove) => {
+        setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
+    };
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -65,7 +114,9 @@ export const FormAddBanner = () => {
             title: title,
             detail: detail,
             image: fileImg,
-            file: file
+            file: file,
+            document: documents,
+            typescholarship: typeScholarship
         }
         Swal.fire({
             title: "ທ່ານຕ້ອງການບັນທຶກລາຍການນີ້ແມ່ນບໍ່?",
@@ -200,6 +251,79 @@ export const FormAddBanner = () => {
                                 </div>
                                 {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
                             </div>
+
+                            {/* Tag List Input for Group 1 */}
+                            <div className="mb-4 flex flex-col gap-y-2">
+                                <p className='text-[14px] font-medium'>
+                                    ເອກະສານ
+                                </p>
+                                <div className="w-full">
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {documents.map((tag, index) => (
+                                            <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
+                                                {tag}
+                                                <button onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="flex">
+                                        <input
+                                            type="text"
+                                            value={inputValue1}
+                                            onChange={handleInputChange1}
+                                            onKeyDown={handleInputKeyDown1}
+                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
+                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
+                                        />
+                                        <button
+                                            onClick={addTag1}
+                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Tag List Input for Group 2 */}
+                            <div className="mb-4 flex flex-col gap-y-2">
+                                <p className='text-[14px] font-medium'>
+                                    ຂໍ້ມູນຂອງທຶນ
+                                </p>
+                                <div className="w-full">
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {typeScholarship.map((tag, index) => (
+                                            <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
+                                                {tag}
+                                                <button onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="flex">
+                                        <input
+                                            type="text"
+                                            value={inputValue2}
+                                            onChange={handleInputChange2}
+                                            onKeyDown={handleInputKeyDown2}
+                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
+                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
+                                        />
+                                        <button
+                                            onClick={addTag2}
+                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>}
+
 
                             {/* detail Input */}
                             <div className="mb-6 flex flex-col gap-y-2">
