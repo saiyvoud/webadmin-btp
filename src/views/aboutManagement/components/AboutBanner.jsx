@@ -14,9 +14,10 @@ export const AboutBanner = () => {
     const imageInputRef = useRef(null);
     const [coverImg, setCoverImg] = useState([]);
 
-    const imgID = coverImg.id
+    const imgID = coverImg[0]?.id
     // console.log("this is imgID=",);
     // console.log(imgID);
+    // console.log("ss", imgID);
 
     const fetchData = async () => {
         // setLoading(true);
@@ -74,7 +75,7 @@ export const AboutBanner = () => {
             if (result.isConfirmed) {
                 const data = {
                     image: fileImg,
-                    oldImg: coverImg.image
+                    oldImg: coverImg[0]?.image
                 };
 
                 // console.log("this is old img", coverImg[0].image);
@@ -158,9 +159,7 @@ export const AboutBanner = () => {
                             <div className='flex items-center justify-center'>
                                 <button type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
                                     {loading ?
-                                        <div className=' flex items-center justify-center gap-x-2'>
-                                            <span>ກຳລັງບັນທຶກ</span><Loading />
-                                        </div>
+                                        <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p>
                                         :
                                         image ? "ບັນທຶກ" : "ແກ້ໄຂ"
                                     }

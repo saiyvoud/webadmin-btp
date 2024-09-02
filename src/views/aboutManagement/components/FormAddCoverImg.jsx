@@ -163,13 +163,6 @@ export const FormAddCoverImg = () => {
                                         image ? "ບັນທຶກ" : "ແກ້ໄຂ"
                                     }
                                 </button>
-                                <button
-                                    disabled={loading}
-                                    type="submit" className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                    {
-                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"
-                                    }
-                                </button>
                             </div>
                         </form>
                     </div>
