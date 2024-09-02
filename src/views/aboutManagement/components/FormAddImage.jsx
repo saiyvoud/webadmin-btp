@@ -22,6 +22,7 @@ export const FormAddImage = () => {
     const [fileImg, setFileImg] = useState(null);
     const imageInputRef = useRef(null);
     const [title, setTitle] = useState('');
+    const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({});
 
     const handleImageUpload = (event) => {
