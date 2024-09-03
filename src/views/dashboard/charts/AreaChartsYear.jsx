@@ -2,34 +2,30 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 
-export const AreaCharts = ({ view }) => {
-    // Define the days of the week
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const AreaChartsYear = ({ view }) => {
+    // Define the range of years
+    const startYear = 2018;
+    const endYear = 2028;
 
-    // Initialize an object to count visits for each day of the week
-    const visitCounts = daysOfWeek.reduce((acc, day) => {
-        acc[day] = 0;
-        return acc;
-    }, {});
+    // Initialize an object to count visits for each year
+    const visitCounts = {};
+    for (let year = startYear; year <= endYear; year++) {
+        visitCounts[year] = 0;
+    }
 
     // Populate the visitCounts object based on the view data
     view.forEach(item => {
-        const dayOfWeek = dayjs(item.createdAt).format('ddd');
-        if (visitCounts.hasOwnProperty(dayOfWeek)) {
-            visitCounts[dayOfWeek]++;
+        const year = dayjs(item.createdAt).year();
+        if (year >= startYear && year <= endYear) {
+            visitCounts[year]++;
         }
     });
 
     // Prepare data for the chart
-    const seriesData = daysOfWeek.map(day => ({
-        x: day,
-        y: visitCounts[day]
-    }));
-
-    const series = [
+    const seriesData = [
         {
-            name: 'ຈຳນວນຄົນເຂົ້າເບິ່ງ',
-            data: seriesData
+            name: 'จำนวนผู้เข้าชม',
+            data: Object.keys(visitCounts).map(year => visitCounts[year])
         }
     ];
 
@@ -54,9 +50,8 @@ export const AreaCharts = ({ view }) => {
             }
         },
         xaxis: {
-            categories: daysOfWeek,
+            categories: Object.keys(visitCounts),
             labels: {
-                rotate: -45,
                 style: {
                     fontSize: '12px',
                     colors: '#6c757d'
@@ -85,7 +80,7 @@ export const AreaCharts = ({ view }) => {
     return (
         <div className='px-8'>
             <div id="chart">
-                <ReactApexChart options={options} series={series} type="area" height={250} />
+                <ReactApexChart options={options} series={seriesData} type="area" height={350} />
             </div>
         </div>
     );

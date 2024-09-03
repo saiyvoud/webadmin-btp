@@ -2,28 +2,30 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 
-export const AreaCharts = ({ view }) => {
-    // Define the days of the week
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const AreaChartMonth = ({ view }) => {
+    // Define months of the year
+    const monthsOfYear = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
 
-    // Initialize an object to count visits for each day of the week
-    const visitCounts = daysOfWeek.reduce((acc, day) => {
-        acc[day] = 0;
+    // Initialize an object to count visits for each month of the year
+    const visitCounts = monthsOfYear.reduce((acc, month) => {
+        acc[month] = 0;
         return acc;
     }, {});
 
     // Populate the visitCounts object based on the view data
     view.forEach(item => {
-        const dayOfWeek = dayjs(item.createdAt).format('ddd');
-        if (visitCounts.hasOwnProperty(dayOfWeek)) {
-            visitCounts[dayOfWeek]++;
+        const month = dayjs(item.createdAt).format('MMM');
+        if (visitCounts.hasOwnProperty(month)) {
+            visitCounts[month]++;
         }
     });
 
     // Prepare data for the chart
-    const seriesData = daysOfWeek.map(day => ({
-        x: day,
-        y: visitCounts[day]
+    const seriesData = monthsOfYear.map(month => ({
+        x: month,
+        y: visitCounts[month]
     }));
 
     const series = [
@@ -54,7 +56,7 @@ export const AreaCharts = ({ view }) => {
             }
         },
         xaxis: {
-            categories: daysOfWeek,
+            categories: monthsOfYear,
             labels: {
                 rotate: -45,
                 style: {

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Select } from 'antd';
 
-export const PieCharts = () => {
+export const PieCharts = ({ category }) => {
     const data = [
         { value: 10, name: 'ທຶນກຽມພາສາ 1 ປີ', itemStyle: { color: '#ff8a7d' } }, // Red
         { value: 10, name: 'ທຶນປະລິມຍາຕີ', itemStyle: { color: '#77c6ff' } }, // Blue

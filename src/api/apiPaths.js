@@ -65,4 +65,8 @@ export default class ApiPath {
     static deleteUser = `${baseUrl}/user/delete`
     static register = `${baseUrl}/user/registor`
     static login = `${baseUrl}/user/login`
+
+
+    // view
+    static getView = `${baseUrl}/userView/selBymonth`
 }
