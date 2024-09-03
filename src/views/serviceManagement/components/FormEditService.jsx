@@ -104,9 +104,15 @@ export const FormEditService = () => {
             const response = await getOneService(id);
             const fileIcon = await GetFileObjectApi(response.image)
             const file = await GetFileObjectApi(response.file_url)
-            setFileObject(file)
-            setFileIcon(fileIcon)
+
+            setFileObject(file);
+            setFileIcon(fileIcon);
             setDataService(response);
+
+            // Set initial data for documents and typeScholarship
+            setDocuments(response.document || []);
+            setTypeScholarship(response.typescholarship || []);
+
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -118,6 +124,7 @@ export const FormEditService = () => {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchData();
@@ -209,6 +216,7 @@ export const FormEditService = () => {
         });
     };
 
+    // console.log("ss", dataService.document);
     return (
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>
@@ -329,6 +337,7 @@ export const FormEditService = () => {
                                             <input
                                                 type="text"
                                                 value={inputValue1}
+                                                defaultValue={dataService.document}
                                                 onChange={handleInputChange1}
                                                 onKeyDown={handleInputKeyDown1}
                                                 placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
@@ -364,6 +373,7 @@ export const FormEditService = () => {
                                             <input
                                                 type="text"
                                                 value={inputValue2}
+                                                defaultValue={dataService.typeScholarship}
                                                 onChange={handleInputChange2}
                                                 onKeyDown={handleInputKeyDown2}
                                                 placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"

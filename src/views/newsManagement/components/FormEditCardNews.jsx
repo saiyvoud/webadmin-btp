@@ -77,8 +77,10 @@ export const FormEditCardNews = () => {
         try {
             setLoading(true);
             const response = await getOneNewsApi(id);
+
             const fileImg = await GetFileObjectApi(response.image);
             const file = await getFilePDF(response.file_url);
+
             setNewsData(response);
             setFileImgObject(fileImg);
             setFileObject(file);
@@ -88,6 +90,11 @@ export const FormEditCardNews = () => {
             setDetail(response.detail || '');
             setImage(response.image);
             setFileName(response.file_url ? response.file_url.split('/').pop() : '');
+
+            // Set documents and typescholarship if they exist
+            setDocuments(response.document || []);
+            setTypeScholarship(response.typescholarship || []);
+
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -99,6 +106,7 @@ export const FormEditCardNews = () => {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchData();

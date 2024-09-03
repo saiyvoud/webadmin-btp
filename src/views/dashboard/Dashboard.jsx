@@ -10,12 +10,14 @@ import { formatDate } from '../utils';
 import { getViewApi } from '../../api/view';
 import { AreaChartMonth } from './charts/AreaChartMonth';
 import { AreaChartsYear } from './charts/AreaChartsYear';
+import { getDownloadTotalApi } from '../../api/download';
 
 export const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState([]);
     const [banner, setBanner] = useState([]);
     const [view, setView] = useState([]);
+    const [totalDownload, setTotalDownLoad] = useState([])
     const [selectChart, setSelectChart] = useState(0);
 
     const date = new Date();
@@ -24,19 +26,23 @@ export const Dashboard = () => {
     const day = String(date.getDate()).padStart(2, '0');
 
     const formattedDate = `${year}/${month}/${day}`;
+    // console.log("formattedDate", formattedDate);
 
     const fetchData = async () => {
         setLoading(true);
-        const [response, responseBanner, responseView] = await Promise.all([
+        const [response, responseBanner, responseView, responseTotal] = await Promise.all([
             getServiceApi(),
             getBannerApi(),
-            getViewApi(formattedDate)
+            getViewApi(formattedDate),
+            getDownloadTotalApi(formattedDate)
         ]);
         setCategory(response);
         setBanner(responseBanner);
         setView(responseView);
+        setTotalDownLoad(responseTotal)
         setLoading(false);
     };
+    // console.log(totalDownload);
 
     useEffect(() => {
         fetchData();
@@ -65,6 +71,9 @@ export const Dashboard = () => {
                                 <h4 className='text-[14px] font-medium'>
                                     ຍອດຜູ້ເຂົ້າເບິ່ງເວັບໄຊຕ໌
                                 </h4>
+                                <p className=' text-[12px]'>
+                                    ຈຳນວນທັງໝົດ : <span className=' font-semibold'>{view.length}</span>
+                                </p>
                                 <Select
                                     labelInValue
                                     onChange={(e) => setSelectChart(e.value)}
@@ -114,7 +123,7 @@ export const Dashboard = () => {
                     </div>
                     <div className='col-span-5 w-full h-full'>
                         <div className='w-full h-full bg-white rounded-lg flex items-center justify-center'>
-                            <PieCharts category={category} />
+                            <PieCharts totalDownload={totalDownload} />
                         </div>
                     </div>
                 </div>

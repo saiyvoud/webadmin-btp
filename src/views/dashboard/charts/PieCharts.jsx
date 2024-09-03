@@ -2,11 +2,15 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Select } from 'antd';
 
-export const PieCharts = ({ category }) => {
+export const PieCharts = ({ totalDownload }) => {
+    const totalBanner = totalDownload.filter((item) => item.type === "banner").length
+    const totalService = totalDownload.filter((item) => item.type === "service").length
+    const totalNews = totalDownload.filter((item) => item.type === "news").length
+    // console.log("total", total);
     const data = [
-        { value: 10, name: 'ທຶນກຽມພາສາ 1 ປີ', itemStyle: { color: '#ff8a7d' } }, // Red
-        { value: 10, name: 'ທຶນປະລິມຍາຕີ', itemStyle: { color: '#77c6ff' } }, // Blue
-        { value: 10, name: 'ທຶນຊັ້ນສູງ', itemStyle: { color: '#72e5a7' } }, // Green
+        { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
+        { value: totalNews, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
+        { value: totalBanner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
     ];
 
     const totalAmount = data.reduce((sum, item) => sum + item.value, 0);

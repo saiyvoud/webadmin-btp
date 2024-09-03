@@ -69,4 +69,8 @@ export default class ApiPath {
 
     // view
     static getView = `${baseUrl}/userView/selBymonth`
+
+    //download total
+    static addTotalDownload = `${baseUrl}/totalDownloads/insert`
+    static getTotalDownload = `${baseUrl}/totalDownloads/selByMonth?date=`
 }
