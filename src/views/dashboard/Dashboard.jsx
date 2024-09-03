@@ -6,19 +6,21 @@ import { AreaCharts } from './charts/AreaCharts';
 import { PieCharts } from './charts/PieCharts';
 import { getServiceApi } from '../../api/serviceInfo';
 import { getBannerApi } from '../../api/banner';
-import { formatDate } from '../utils';
 import { getViewApi } from '../../api/view';
 import { AreaChartMonth } from './charts/AreaChartMonth';
 import { AreaChartsYear } from './charts/AreaChartsYear';
 import { getDownloadTotalApi } from '../../api/download';
+import { PieChartsMonth } from './charts/PieChartsMonth';
+import { PieChartsYear } from './charts/PieChartsYear';
 
 export const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState([]);
     const [banner, setBanner] = useState([]);
     const [view, setView] = useState([]);
-    const [totalDownload, setTotalDownLoad] = useState([])
+    const [totalDownload, setTotalDownLoad] = useState([]);
     const [selectChart, setSelectChart] = useState(0);
+    const [selectPieChart, setSelectPieChart] = useState(0);
 
     const date = new Date();
     const year = date.getFullYear();
@@ -26,7 +28,6 @@ export const Dashboard = () => {
     const day = String(date.getDate()).padStart(2, '0');
 
     const formattedDate = `${year}/${month}/${day}`;
-    // console.log("formattedDate", formattedDate);
 
     const fetchData = async () => {
         setLoading(true);
@@ -39,10 +40,9 @@ export const Dashboard = () => {
         setCategory(response);
         setBanner(responseBanner);
         setView(responseView);
-        setTotalDownLoad(responseTotal)
+        setTotalDownLoad(responseTotal);
         setLoading(false);
     };
-    // console.log(totalDownload);
 
     useEffect(() => {
         fetchData();
@@ -50,7 +50,6 @@ export const Dashboard = () => {
 
     const totalItems = 100; // Example total items for percentage calculation
 
-    // Calculate percentages
     const categoryPercentage = (category.length / totalItems) * 100;
     const bannerPercentage = (banner.length / totalItems) * 100;
 
@@ -122,8 +121,26 @@ export const Dashboard = () => {
                         </div>
                     </div>
                     <div className='col-span-5 w-full h-full'>
-                        <div className='w-full h-full bg-white rounded-lg flex items-center justify-center'>
-                            <PieCharts totalDownload={totalDownload} />
+                        <div className='w-full h-full bg-white rounded-lg flex flex-col justify-center'>
+                            <div className=' flex items-center justify-between p-8'>
+                                <h1 className=' text-[18px] font-medium'>
+                                    ອັດຕາການດາວໂຫຼດ
+                                </h1>
+                                <Select
+                                    labelInValue
+                                    onChange={(e) => setSelectPieChart(e.value)}
+                                    defaultValue={{ value: 0, label: 'ລາຍວັນ' }}
+                                    style={{ width: 100 }}
+                                    options={[
+                                        { value: 0, label: 'ລາຍວັນ' },
+                                        { value: 1, label: 'ລາຍເດືອນ' },
+                                        { value: 2, label: 'ລາຍປີ' },
+                                    ]}
+                                />
+                            </div>
+                            {selectPieChart === 0 && <PieCharts totalDownload={totalDownload} />}
+                            {selectPieChart === 1 && <PieChartsMonth totalDownload={totalDownload} />} {/* Replace with monthly pie chart component */}
+                            {selectPieChart === 2 && <PieChartsYear totalDownload={totalDownload} />} {/* Replace with yearly pie chart component */}
                         </div>
                     </div>
                 </div>
