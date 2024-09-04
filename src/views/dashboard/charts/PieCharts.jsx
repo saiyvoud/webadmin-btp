@@ -19,7 +19,7 @@ export const PieCharts = ({ totalDownload }) => {
     const option = {
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ລາຍຊື່ ({d}%)'
+            formatter: '{a} <br/>{b}: {c} ດາວໂຫຼດ ({d}%)'
         },
         legend: {
             bottom: '0%',
@@ -30,7 +30,7 @@ export const PieCharts = ({ totalDownload }) => {
         },
         series: [
             {
-                name: 'ຈຳນວນລາຍຊື່ຜູ້ສະໝັກ',
+                name: 'ຈຳນວນດາວໂຫຼດ',
                 type: 'pie',
                 radius: ['30%', '50%'],
                 center: ['50%', '40%'],
@@ -44,7 +44,7 @@ export const PieCharts = ({ totalDownload }) => {
                     position: 'bottom',
                     formatter: (params) => {
                         const percent = ((params.value / totalAmount) * 100).toFixed(1);
-                        return `${params.name}\n${params.value} ລາຍຊື່ (${percent}%)`;
+                        return `${params.name}\n${params.value} ດາວໂຫຼດ \n (${percent}%)`;
                     },
                     fontSize: 12,
                     fontWeight: 'bold',
@@ -61,10 +61,10 @@ export const PieCharts = ({ totalDownload }) => {
             {
                 type: 'text',
                 left: 'center',
-                top: '38%',
+                top: '34%',
                 style: {
-                    text: `${totalAmount} ລາຍຊື່`,
-                    fontSize: 20,
+                    text: `${totalAmount} \n ດາວໂຫຼດ`,
+                    fontSize: 18,
                     fontWeight: 'bold',
                     textAlign: 'center',
                     fontFamily: 'Noto Sans Lao',

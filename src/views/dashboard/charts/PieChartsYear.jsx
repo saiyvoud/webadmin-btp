@@ -51,6 +51,7 @@ export const PieChartsYear = ({ totalDownload }) => {
                 radius: ['30%', '50%'],
                 center: ['50%', '40%'],
                 avoidLabelOverlap: false,
+                padAngle: 5,
                 itemStyle: {
                     borderRadius: 10,
                 },
@@ -64,7 +65,7 @@ export const PieChartsYear = ({ totalDownload }) => {
                     fontSize: 12,
                     fontWeight: 'bold',
                     fontFamily: 'Noto Sans Lao',
-                    lineHeight: 18,
+                    lineHeight: 16,
                 },
                 labelLine: {
                     show: true,
@@ -95,7 +96,7 @@ export const PieChartsYear = ({ totalDownload }) => {
                 <Select
                     value={selectedYear}
                     onChange={handleYearChange}
-                    style={{ width: 120, marginBottom: 20 }}
+                    style={{ width: 120, marginBottom: 10 }}
                 >
                     {years.map((year) => (
                         <Select.Option key={year} value={year}>

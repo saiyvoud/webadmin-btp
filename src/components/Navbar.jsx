@@ -29,7 +29,7 @@ export const Navbar = () => {
                 </div>
                 <div className=' flex items-center gap-x-4'>
                     <img src={profile} alt=""
-                        className=' rounded-full w-[45px] h-[45px]'
+                        className=' rounded-full object-cover w-[45px] h-[45px]'
                     />
                     <p className=' text-[14px]'>
                         {fistName} {lastName}

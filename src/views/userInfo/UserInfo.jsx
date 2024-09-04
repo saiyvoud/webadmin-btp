@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
-import { Modal, Input, Button, Skeleton } from 'antd'; // Import Skeleton from Ant Design
+import { Modal, Input, Button, Skeleton, Select } from 'antd'; // Import Skeleton from Ant Design
 import { useNavigate } from 'react-router-dom';
 import { delteUserApi, getUserApi, updateUserApi } from '../../api/user'; // Import updateUserApi
 import Swal from 'sweetalert2';
@@ -76,9 +76,16 @@ export const UserInfo = () => {
         setLoading(true);
         try {
             if (editingItem) {
+                const updatedFields = { ...updatedData };
+
+                // Compare the original email with the updated email
+                if (editingItem.email === updatedData.email) {
+                    delete updatedFields.email; // Remove the email field if it hasn't changed
+                }
+
                 const response = await updateUserApi(
                     editingItem.id,
-                    updatedData // Pass the entire updatedData object here
+                    updatedFields // Pass only the changed fields
                 );
 
                 if (response) {
@@ -94,6 +101,7 @@ export const UserInfo = () => {
             setIsModalVisible(false);
         }
     };
+
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -219,12 +227,15 @@ export const UserInfo = () => {
                             onChange={(e) => setUpdatedData({ ...updatedData, password: e.target.value })}
                             className="mb-3"
                         />
-                        <Input
-                            placeholder="Role"
+                        <Select
+                            placeholder="Select Role"
                             value={updatedData.role}
-                            onChange={(e) => setUpdatedData({ ...updatedData, role: e.target.value })}
-                            className="mb-7"
-                        />
+                            onChange={(value) => setUpdatedData({ ...updatedData, role: value })}
+                            className="mb-7 w-full"
+                        >
+                            <Option value="admin">Admin</Option>
+                            <Option value="superadmin">Super Admin</Option>
+                        </Select>
                         <div className="flex justify-center">
                             <Button onClick={handleOk} type="primary" className="mr-2">Save</Button>
                             <Button onClick={handleCancel}>Cancel</Button>
