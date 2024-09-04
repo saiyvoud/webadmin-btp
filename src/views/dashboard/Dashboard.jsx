@@ -12,11 +12,14 @@ import { AreaChartsYear } from './charts/AreaChartsYear';
 import { getDownloadTotalApi } from '../../api/download';
 import { PieChartsMonth } from './charts/PieChartsMonth';
 import { PieChartsYear } from './charts/PieChartsYear';
+import { getService } from '../../api/serivce';
+import { getNewsApi } from '../../api/news';
 
 export const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState([]);
     const [banner, setBanner] = useState([]);
+    const [news, setNews] = useState([])
     const [view, setView] = useState([]);
     const [totalDownload, setTotalDownLoad] = useState([]);
     const [selectChart, setSelectChart] = useState(0);
@@ -31,14 +34,16 @@ export const Dashboard = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        const [response, responseBanner, responseView, responseTotal] = await Promise.all([
-            getServiceApi(),
+        const [response, responseBanner, responseNews, responseView, responseTotal] = await Promise.all([
+            getService(),
             getBannerApi(),
+            getNewsApi(),
             getViewApi(formattedDate),
             getDownloadTotalApi(formattedDate)
         ]);
         setCategory(response);
         setBanner(responseBanner);
+        setNews(responseNews)
         setView(responseView);
         setTotalDownLoad(responseTotal);
         setLoading(false);
@@ -51,6 +56,7 @@ export const Dashboard = () => {
     const totalItems = 100; // Example total items for percentage calculation
 
     const categoryPercentage = (category.length / totalItems) * 100;
+    const newsPercentage = (news.length / totalItems) * 100;
     const bannerPercentage = (banner.length / totalItems) * 100;
 
     return (
@@ -91,7 +97,7 @@ export const Dashboard = () => {
                         </div>
                         <div className='flex gap-x-5 w-full'>
                             <div className='h-[150px] bg-white rounded-lg p-7 w-full flex flex-col gap-y-7'>
-                                <h6>ທືນການສືກສາທັງຫມົດທັງຫມົດ</h6>
+                                <h6>ບໍລິການທັງໝົດ</h6>
                                 <h1 className='text-[28px] font-medium'>
                                     <span className='text-[#00BAAF] text-[28px]'>
                                         {category.length}
@@ -101,6 +107,20 @@ export const Dashboard = () => {
                                     <div
                                         className='absolute left-0 h-[4px] bg-[#00BAAF] rounded-full'
                                         style={{ width: `${categoryPercentage}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                            <div className='h-[150px] bg-white rounded-lg p-7 w-full flex flex-col gap-y-7'>
+                                <h6>ຂ່າວສານທັງໝົດ</h6>
+                                <h1 className='text-[28px] font-medium'>
+                                    <span className='text-[#00BAAF] text-[28px]'>
+                                        {news.length}
+                                    </span> ລາຍການ
+                                </h1>
+                                <div className='relative w-full flex items-center h-[4px] rounded-full bg-[#F1F5F9]'>
+                                    <div
+                                        className='absolute left-0 h-[4px] bg-[#00BAAF] rounded-full'
+                                        style={{ width: `${newsPercentage}%` }}
                                     ></div>
                                 </div>
                             </div>
