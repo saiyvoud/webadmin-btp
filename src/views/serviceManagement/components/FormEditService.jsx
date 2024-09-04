@@ -188,6 +188,8 @@ export const FormEditService = () => {
                     file: fileObject,
                     oldFile: dataService.file_url
                 }
+                console.log("dataImage ==> ", dataImage);
+                console.log("dataFile ==> ", dataFile);
 
                 try {
                     const [response, responseImg, responseFile] = await Promise.all([
