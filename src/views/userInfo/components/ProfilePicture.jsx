@@ -155,14 +155,14 @@ export const ProfilePicture = () => {
                                 )}
                             </div>
                             <div className='flex items-center justify-center'>
-                                <button type="submit" className="w-[140px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full">
-                                    {loading ?
-                                        (
-                                            <div className=' flex justify-center gap-x-2 items-center text-[14px]'>
-                                                ກຳລັງແກ້ໄຂ <Loading />
-                                            </div>
-                                        )
-                                        : "ແກ້ໄຂ"}
+                                <button
+                                    type="submit"
+                                    className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
+                                    disabled={loading}
+                                >
+                                    {
+                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງແກ້ໄຂ <span className="loader"></span></p> : "ແກ້ໄຂ"
+                                    }
                                 </button>
                             </div>
                         </form>

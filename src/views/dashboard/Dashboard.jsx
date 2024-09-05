@@ -70,7 +70,7 @@ export const Dashboard = () => {
                     />
                 </div>
                 <div className='grid grid-cols-12 mt-10 gap-x-10'>
-                    <div className='col-span-7'>
+                    <div className=' col-span-7'>
                         <div className='w-full bg-white rounded-lg mb-5'>
                             <div className='flex justify-between items-center mb-5 px-8 pt-8'>
                                 <h4 className='text-[14px] font-medium'>

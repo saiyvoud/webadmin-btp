@@ -24,7 +24,7 @@ export const Navbar = () => {
                 <IoIosSearch className=' absolute left-2 text-[24px] text-[#00BAAF]' />
             </div> */}
             <div className=' flex items-center gap-x-10'>
-                <div className=' bg-[#01A7B1] w-[45px] h-[45px] flex items-center justify-center rounded-full'>
+                <div className=' bg-[#01A7B1] hidden w-[45px] h-[45px]  items-center justify-center rounded-full'>
                     <IoMdNotifications className=' text-[28px] text-[#F9C23C]' />
                 </div>
                 <div className=' flex items-center gap-x-4'>
