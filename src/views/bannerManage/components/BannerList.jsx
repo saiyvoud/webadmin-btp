@@ -140,8 +140,8 @@ export const BannerList = ({ dateRange }) => {
                                 <h4 className="text-[16px] font-medium">
                                     {item?.title}
                                 </h4>
-                                <p className="text-[#6B7280]">
-                                    {item?.detail} Lorem ipsum dolor sit amet
+                                <p className="text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2">
+                                    {item?.detail}
                                 </p>
                                 <span>
                                     {formatDate(item?.createdAt)}

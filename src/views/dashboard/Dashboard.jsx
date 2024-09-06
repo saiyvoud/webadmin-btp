@@ -69,7 +69,7 @@ export const Dashboard = () => {
                         className='h-full w-full object-cover rounded-lg'
                     />
                 </div>
-                <div className='grid grid-cols-12 mt-10 gap-x-10'>
+                <div className='xl:grid xl:grid-cols-12 lg:flex flex-col mt-10 gap-x-10'>
                     <div className=' col-span-7'>
                         <div className='w-full bg-white rounded-lg mb-5'>
                             <div className='flex justify-between items-center mb-5 px-8 pt-8'>
@@ -140,7 +140,7 @@ export const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='col-span-5 w-full h-full'>
+                    <div className='col-span-5 w-full xl:h-full lg:h-[500px] lg:mt-5 xl:mt-0'>
                         <div className='w-full h-full bg-white rounded-lg flex flex-col justify-center'>
                             <div className=' flex items-center justify-between p-8'>
                                 <h1 className=' text-[18px] font-medium'>
