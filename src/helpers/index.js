@@ -19,13 +19,11 @@ export function decryptData(data) {
 export function isAllowedRole(allowedRoles) {
     const encryptedRole = localStorage.getItem("role");
     const currentRole = decryptData(encryptedRole);
-    // localStorage.setItem("currentRole", currentRole)
     if (!(allowedRoles.includes(currentRole))) {
         return false;
     }
     return true;
 }
-
 
 export const encryptData = (data) => {
     // const secretKey = 'yourSecretKey';

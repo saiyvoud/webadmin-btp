@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { delteUserApi, getUserApi, updateUserApi } from '../../api/user'; // Import updateUserApi
 import Swal from 'sweetalert2';
 import { FaCamera } from 'react-icons/fa6';
+import CryptoJS from "crypto-js";
+import { SECREAT_KEY } from '../../constants';
 
 
 
@@ -22,6 +24,13 @@ export const UserInfo = () => {
         role: '',
     });
     const [data, setData] = useState([]);
+
+    function decryptData(data) {
+        return CryptoJS.AES.decrypt(data, SECREAT_KEY).toString(CryptoJS.enc.Utf8);
+    }
+    const encryptedRole = localStorage.getItem("role");
+    const currentRole = decryptData(encryptedRole);
+    console.log(currentRole);
 
     const fetchData = async () => {
         setLoading(true);
@@ -74,31 +83,40 @@ export const UserInfo = () => {
 
     const handleOk = async () => {
         setLoading(true);
-        try {
-            if (editingItem) {
-                const updatedFields = { ...updatedData };
+        if (!(currentRole === "superadmin")) {
+            Swal.fire({
+                icon: "error",
+                title: "ທ່ານບໍ່ມີສິດໃນການແກ້ໄຂ",
+            })
+            setLoading(false)
+        }
+        else {
+            try {
+                if (editingItem) {
+                    const updatedFields = { ...updatedData };
 
-                // Compare the original email with the updated email
-                if (editingItem.email === updatedData.email) {
-                    delete updatedFields.email; // Remove the email field if it hasn't changed
+                    // Compare the original email with the updated email
+                    if (editingItem.email === updatedData.email) {
+                        delete updatedFields.email; // Remove the email field if it hasn't changed
+                    }
+
+                    const response = await updateUserApi(
+                        editingItem.id,
+                        updatedFields // Pass only the changed fields
+                    );
+
+                    if (response) {
+                        Swal.fire('ສຳເລັດ', 'ຂໍ້ມູນຖືກອັບເດດແລ້ວ', 'success');
+                        fetchData(); // Refresh data after update
+                    }
                 }
-
-                const response = await updateUserApi(
-                    editingItem.id,
-                    updatedFields // Pass only the changed fields
-                );
-
-                if (response) {
-                    Swal.fire('ສຳເລັດ', 'ຂໍໍໍມູນຖືກອັບເດດແລ້ວ', 'success');
-                    fetchData(); // Refresh data after update
-                }
+            } catch (error) {
+                Swal.fire('ເກີດຂໍ້ຜິດພາດ', 'ບໍ່ສາມາດອັບເດດຂໍ້ມູນໄດ້', 'error');
+                console.error('Error updating user:', error);
+            } finally {
+                setLoading(false);
+                setIsModalVisible(false);
             }
-        } catch (error) {
-            Swal.fire('ເກີດຂໍ້ຜິດພາດ', 'ບໍ່ສາມາດອັບເດດຂໍໍໍມູນໄດ້', 'error');
-            console.error('Error updating user:', error);
-        } finally {
-            setLoading(false);
-            setIsModalVisible(false);
         }
     };
 
@@ -108,37 +126,46 @@ export const UserInfo = () => {
     };
 
     const deleteItem = async (id) => {
-        try {
-            const result = await Swal.fire({
-                title: 'ຢືນຢັນການລົບ',
-                text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ຢືນຢັນ',
-                cancelButtonText: 'ຍົກເລີກ'
-            });
-            if (result.isConfirmed) {
-                const response = await delteUserApi(id);
-                if (response) {
-                    Swal.fire(
-                        'ລົບສຳເລັດ!',
-                        'ລາຍການຖືກລົບອອກແລ້ວ.',
-                        'success'
-                    );
-                    fetchData(); // Refresh the data
-                } else {
-                    throw new Error("Failed to delete");
-                }
-            }
-        } catch (error) {
+        // console.log(!(currentRole === "superadmin"));
+
+        if (!(currentRole === "superadmin")) {
             Swal.fire({
-                icon: 'error',
-                title: 'ເກີດຂໍ້ຜິດພາດ',
-                text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
-            });
-            console.error('Error deleting item:', error);
+                icon: "error",
+                title: "ທ່ານບໍ່ມີສິດໃນການລົບ",
+            })
+        } else {
+            try {
+                const result = await Swal.fire({
+                    title: 'ຢືນຢັນການລົບ',
+                    text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ຢືນຢັນ',
+                    cancelButtonText: 'ຍົກເລີກ'
+                });
+                if (result.isConfirmed) {
+                    const response = await delteUserApi(id);
+                    if (response) {
+                        Swal.fire(
+                            'ລົບສຳເລັດ!',
+                            'ລາຍການຖືກລົບອອກແລ້ວ.',
+                            'success'
+                        );
+                        fetchData(); // Refresh the data
+                    } else {
+                        throw new Error("Failed to delete");
+                    }
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ເກີດຂໍ້ຜິດພາດ',
+                    text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
+                });
+                console.error('Error deleting item:', error);
+            }
         }
     };
 

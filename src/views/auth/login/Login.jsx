@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Card,
     Checkbox,
@@ -21,6 +21,8 @@ export const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
 
+    const passwordInputRef = useRef(null); // Add a ref for the password input
+
     useEffect(() => {
         // Load saved username from localStorage if it exists
         const savedUsername = localStorage.getItem('username');
@@ -29,7 +31,7 @@ export const Login = () => {
             setUsername(savedUsername);
         }
         if (savedPassword) {
-            setUsername(savedPassword);
+            setPassword(savedPassword);
         }
     }, []);
 
@@ -53,6 +55,15 @@ export const Login = () => {
 
         setErrors(newErrors);
         return isValid;
+    };
+
+    const handleUsernameKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (passwordInputRef.current) {
+                passwordInputRef.current.focus(); // Focus on the password input
+            }
+        }
     };
 
     const handleSubmit = async (event) => {
@@ -122,6 +133,7 @@ export const Login = () => {
                                             className='border border-gray-300 text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
+                                            onKeyDown={handleUsernameKeyDown} // Add this line
                                         />
                                         {errors.username && (
                                             <p className="text-red-500 text-xs mt-1">{errors.username}</p>
@@ -135,6 +147,7 @@ export const Login = () => {
                                             className='border border-gray-300 passwordInput text-gray-900 text-[14px] rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5'
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            ref={passwordInputRef} // Add this line
                                         />
                                         <span
                                             className="absolute right-4 top-12 cursor-pointer"
@@ -171,12 +184,6 @@ export const Login = () => {
                                         loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງລ໋ອກອິນ <span className="loader"></span></p> : "ລ໋ອກອິນ"
                                     }
                                 </Button>
-                                {/* <Typography color="gray" className="mt-6 text-center font-normal">
-                                    ຍັງທີ່ບໍ່ມີບັນຊີແມ່ນບໍ່?{" "}
-                                    <a href="#" className="font-medium underline text-gray-900">
-                                        ລົງທະບຽນ
-                                    </a>
-                                </Typography> */}
                             </form>
                         </Card>
                     </div>

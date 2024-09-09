@@ -110,12 +110,12 @@ export const ServiceManagement = () => {
         <Sidebar>
             <div className='my-10'>
                 <div className='w-full rounded-lg bg-white p-6 flex items-center justify-between'>
-                    <ul className='flex items-center gap-x-5'>
+                    <ul className='xl:flex xl:items-center xl:gap-x-5 md:grid md:grid-cols-12 md:gap-2'>
                         {tabList.map((list, index) => (
                             <li
                                 key={index}
                                 onClick={() => setTabActive(list.id)}
-                                className={`${tabActive === list.id ? 'bg-[#01A7B1] text-white border-2 border-transparent' : 'border-2 border-[#01A7B1] text-[#01A7B1]'} px-6 py-2 rounded-full text-[14px] cursor-pointer duration-300`}
+                                className={` col-span-4 ${tabActive === list.id ? 'bg-[#01A7B1] text-white border-2 border-transparent' : 'border-2 border-[#01A7B1] text-[#01A7B1]'} px-6 py-2 rounded-full text-[14px] cursor-pointer duration-300`}
                             >
                                 {list.name}
                             </li>
@@ -134,27 +134,27 @@ export const ServiceManagement = () => {
                     {loading ? (
                         <Skeleton active paragraph={{ rows: 4 }} />
                     ) : (
-                        <animated.div style={tabContentAnimation} className='grid grid-cols-4 gap-7'>
+                        <animated.div style={tabContentAnimation} className='grid xl:grid-cols-4 md:grid-cols-3 md:gap-x-5 gap-7'>
                             {
                                 filteredData.map((card, index) => (
                                     <div key={index}
-                                        className='h-[310px] relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
+                                        className='h-[310px] md:w-[190px] xl:w-full relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
                                     >
                                         <img src={card.image} alt=""
                                             className='object-cover w-full h-[190px] rounded-t-lg'
                                         />
-                                        <div className='flex flex-col py-2 px-5'>
+                                        <div className='flex flex-col py-2 xl:px-5 md:px-2'>
                                             <h4 className='text-[16px] font-medium leading-6 overflow-hidden text-ellipsis line-clamp-2 break-words '>
                                                 {card.title}
                                             </h4>
                                             <p className='text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2 break-words'>
                                                 {card.description}
                                             </p>
-                                            <div className='flex items-center justify-between absolute left-0 right-0 bottom-2 px-5'>
+                                            <div className='flex items-center justify-between absolute left-0 right-0 bottom-2 px-2 xl:px-5'>
                                                 <span>
                                                     {formatDate(card.createdAt)}
                                                 </span>
-                                                <div className='flex items-center gap-x-3'>
+                                                <div className='flex items-center md:gap-x-1 xl:gap-x-3'>
                                                     <button onClick={() => deleteService(card.id)}
                                                         className='w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1'>
                                                         ລົບ

@@ -4,7 +4,7 @@ import { isAllowedRole } from "../helpers";  // Ensure this import exists
 import Swal from "sweetalert2";
 import { Role } from "../constants";
 
-const Authentication = ({ children, allowedRoles = [Role.admin] }) => {
+const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin] }) => {
     const navigate = useNavigate();
 
     const isAuth = () => {

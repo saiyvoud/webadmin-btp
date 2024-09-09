@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { register } from '../../../api/auth';
+import { decryptData } from '../../../helpers';
 
 export const FormAddUser = () => {
     const navigate = useNavigate();
@@ -21,6 +22,9 @@ export const FormAddUser = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [fileImg, setFileImg] = useState()
     const [loading, setLoading] = useState(false)
+
+    const encryptedRole = localStorage.getItem("role");
+    const currentRole = decryptData(encryptedRole);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -77,22 +81,31 @@ export const FormAddUser = () => {
                     lastName,
                     phoneNumber,
                 };
-                const response = await register(data);
-                if (response) {
+                if (!(currentRole === "superadmin")) {
                     Swal.fire({
-                        title: "ບັນທຶກສຳເລັດ!",
-                        icon: "success",
-                    }).then(() => {
-                        navigate('/userInfo');
-                    });
-                    setLastName(false)
-                } else {
-                    Swal.fire({
-                        title: "ບັນທຶກລົ້ມເຫລວ!",
-                        text: "ມີບາງຢ່າງບໍ່ຖືກຕ້ອງ, ກະລຸນາລອງອີກຄັ້ງ.",
                         icon: "error",
-                    });
+                        title: "ທ່ານບໍ່ມີສິດໃນການແກ້ໄຂ",
+                    })
                     setLoading(false)
+                }
+                else {
+                    const response = await register(data);
+                    if (response) {
+                        Swal.fire({
+                            title: "ບັນທຶກສຳເລັດ!",
+                            icon: "success",
+                        }).then(() => {
+                            navigate('/userInfo');
+                        });
+                        setLastName(false)
+                    } else {
+                        Swal.fire({
+                            title: "ບັນທຶກລົ້ມເຫລວ!",
+                            text: "ມີບາງຢ່າງບໍ່ຖືກຕ້ອງ, ກະລຸນາລອງອີກຄັ້ງ.",
+                            icon: "error",
+                        });
+                        setLoading(false)
+                    }
                 }
             }
         });

@@ -6,6 +6,7 @@ import { getUserOneApi, updateUserImage } from '../../../api/user';
 import { Sidebar } from '../../../components/Sidebar';
 import Swal from 'sweetalert2';
 import { Loading } from '../../../components/Loading';
+import { decryptData } from '../../../helpers';
 
 export const ProfilePicture = () => {
     const navigate = useNavigate();
@@ -16,6 +17,8 @@ export const ProfilePicture = () => {
     const [userData, setUserData] = useState(null);
 
     const { id } = useParams();
+    const encryptedRole = localStorage.getItem("role");
+    const currentRole = decryptData(encryptedRole);
 
     const fetchData = async () => {
         setLoading(true);
@@ -77,33 +80,41 @@ export const ProfilePicture = () => {
                     image: fileImg,
                     oldImage: userData?.profile || ''
                 };
-
-                try {
-                    setLoading(true);
-                    const response = await updateUserImage(id, data);
-                    if (response) {
+                if (!(currentRole === "superadmin")) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "ທ່ານບໍ່ມີສິດໃນການແກ້ໄຂ",
+                    })
+                    setLoading(false)
+                } else {
+                    try {
+                        setLoading(true);
+                        const response = await updateUserImage(id, data);
+                        if (response) {
+                            Swal.fire({
+                                title: "ບັນທຶກສຳເລັດ!",
+                                icon: "success"
+                            }).then(() => {
+                                navigate('/userInfo');
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error ການບັນທຶກລົ້ມເຫຼວ",
+                                icon: "error"
+                            });
+                        }
+                    } catch (error) {
                         Swal.fire({
-                            title: "ບັນທຶກສຳເລັດ!",
-                            icon: "success"
-                        }).then(() => {
-                            navigate('/userInfo');
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error ການບັນທຶກລົ້ມເຫຼວ",
+                            title: "Error",
+                            text: "ບໍ່ສາມາດບັນທຶກຂໍໍໍມູນໄດ້",
                             icon: "error"
                         });
+                        console.error('Error saving data:', error);
+                    } finally {
+                        setLoading(false);
                     }
-                } catch (error) {
-                    Swal.fire({
-                        title: "Error",
-                        text: "ບໍ່ສາມາດບັນທຶກຂໍໍໍມູນໄດ້",
-                        icon: "error"
-                    });
-                    console.error('Error saving data:', error);
-                } finally {
-                    setLoading(false);
                 }
+
             }
         });
     };
