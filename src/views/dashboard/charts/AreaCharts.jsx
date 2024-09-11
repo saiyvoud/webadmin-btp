@@ -13,7 +13,7 @@ export const AreaCharts = ({ view }) => {
     }, {});
 
     // Populate the visitCounts object based on the view data
-    view.forEach(item => {
+    view?.forEach(item => {
         const dayOfWeek = dayjs(item.createdAt).format('ddd');
         if (visitCounts.hasOwnProperty(dayOfWeek)) {
             visitCounts[dayOfWeek]++;

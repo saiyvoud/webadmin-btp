@@ -21,11 +21,11 @@ export const BannerList = ({ dateRange }) => {
             }
             setBannerData(response);
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
+            // Swal.fire({
+            //     icon: 'error',
+            //     title: "ເກີດຂໍ້ຜິດພາດ",
+            //     text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
+            // });
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
@@ -107,12 +107,12 @@ export const BannerList = ({ dateRange }) => {
     };
 
     return (
-        <div className='mt-10'>
+        <div className=' sm:mt-5 xl:mt-10'>
             <p className='text-[14px]'>
                 ທັງໝົດ {filteredData.length} ລາຍການ
             </p>
-            <hr className='mt-3 mb-10 border border-[#D9D9D9]' />
-            <div className='grid grid-cols-12 gap-10'>
+            <hr className='mt-3 sm:mb-5 xl:mb-10 border border-[#D9D9D9]' />
+            <div className='grid grid-cols-12 sm:gap-5 md:gap-7 lg:gap-5 xl:gap-10'>
                 {loading ? (
                     // Skeleton Loading State
                     Array.from({ length: 4 }).map((_, index) => (
@@ -128,7 +128,7 @@ export const BannerList = ({ dateRange }) => {
                     filteredData.map((item, index) => (
                         <animated.div
                             key={index}
-                            className="h-[330px] relative rounded-lg col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
+                            className="h-[330px] xl:w-full lg:w-[220px] sm:w-[190px] md:w-[250px] relative rounded-lg sm:col-span-6 lg:col-span-4 x:col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
                             style={{ ...springs }}
                         >
                             <img
@@ -136,7 +136,7 @@ export const BannerList = ({ dateRange }) => {
                                 alt={item?.title}
                                 className="w-full h-[200px] rounded-t-lg object-cover"
                             />
-                            <div className="flex flex-col gap-y-1 pt-2 px-5">
+                            <div className="flex flex-col gap-y-1 pt-2 lg:px-3 xl:px-5">
                                 <h4 className="text-[16px] font-medium">
                                     {item?.title}
                                 </h4>

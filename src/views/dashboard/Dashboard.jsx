@@ -96,10 +96,10 @@ export const Dashboard = () => {
                             {selectChart === 2 && <AreaChartsYear view={view} />}
                         </div>
                         <div className='flex gap-x-5 w-full'>
-                            <div className='h-[150px] bg-white rounded-lg p-7 w-full flex flex-col gap-y-7'>
+                            <div className='sm:h-[100px] md:h-[130px] lg:h-[150px] bg-white rounded-lg sm:p-5 lg:p-7 w-full flex flex-col lg:gap-y-7 sm:gap-y-3'>
                                 <h6>ບໍລິການທັງໝົດ</h6>
-                                <h1 className='text-[28px] font-medium'>
-                                    <span className='text-[#00BAAF] text-[28px]'>
+                                <h1 className='sm:text-[20px] lg:text-[28px] font-medium'>
+                                    <span className='text-[#00BAAF] sm:text-[20px] lg:text-[28px]'>
                                         {category.length}
                                     </span> ລາຍການ
                                 </h1>
@@ -110,10 +110,10 @@ export const Dashboard = () => {
                                     ></div>
                                 </div>
                             </div>
-                            <div className='h-[150px] bg-white rounded-lg p-7 w-full flex flex-col gap-y-7'>
+                            <div className='sm:h-[100px] md:h-[130px] lg:h-[150px] bg-white rounded-lg sm:p-5 lg:p-7 w-full flex flex-col lg:gap-y-7 sm:gap-y-3'>
                                 <h6>ຂ່າວສານທັງໝົດ</h6>
-                                <h1 className='text-[28px] font-medium'>
-                                    <span className='text-[#00BAAF] text-[28px]'>
+                                <h1 className='sm:text-[20px] lg:text-[28px] font-medium'>
+                                    <span className='text-[#00BAAF] sm:text-[20px] lg:text-[28px]'>
                                         {news.length}
                                     </span> ລາຍການ
                                 </h1>
@@ -124,10 +124,10 @@ export const Dashboard = () => {
                                     ></div>
                                 </div>
                             </div>
-                            <div className='h-[150px] bg-white rounded-lg p-7 w-full flex flex-col gap-y-7'>
+                            <div className='sm:h-[100px] md:h-[130px] lg:h-[150px] bg-white rounded-lg sm:p-5 lg:p-7 w-full flex flex-col lg:gap-y-7 sm:gap-y-3'>
                                 <h6>ໂຄສະນາທັງຫມົດ</h6>
-                                <h1 className='text-[28px] font-medium'>
-                                    <span className='text-[#00BAAF] text-[28px]'>
+                                <h1 className='sm:text-[20px] lg:text-[28px] font-medium'>
+                                    <span className='text-[#00BAAF] sm:text-[20px] lg:text-[28px]'>
                                         {banner.length}
                                     </span> ລາຍການ
                                 </h1>
@@ -140,7 +140,7 @@ export const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='col-span-5 w-full xl:h-full lg:h-[500px] lg:mt-5 xl:mt-0'>
+                    <div className='col-span-5 w-full xl:h-full lg:h-[500px] lg:mt-5 xl:mt-0 sm:h-[400px] sm:mt-5'>
                         <div className='w-full h-full bg-white rounded-lg flex flex-col justify-center'>
                             <div className=' flex items-center justify-between p-8'>
                                 <h1 className=' text-[18px] font-medium'>

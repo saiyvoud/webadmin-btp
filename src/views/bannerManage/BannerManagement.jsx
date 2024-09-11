@@ -15,8 +15,8 @@ export const BannerManagement = () => {
 
     return (
         <Sidebar>
-            <div className='mt-14'>
-                <div className='bg-white rounded-lg p-10 flex items-center justify-between'>
+            <div className='lg:mt-5 xl:mt-14'>
+                <div className='bg-white rounded-lg sm:p-4 lg:p-6 xl:p-10 flex items-center justify-between'>
                     <div>
                         <RangePicker
                             className='border-2 border-[#01A7B1] rounded-full py-2 px-5'
@@ -27,7 +27,7 @@ export const BannerManagement = () => {
                     </div>
                     <button
                         onClick={() => navigate('/bannerManagement/formAddBanner')}
-                        className="text-white px-4 py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                        className="text-white px-4 py-2 text-[12px] lg:text-[14px] bg-[#01A7B1] rounded-full">
                         ເພີ່ມໂຄສະນາ
                     </button>
                 </div>

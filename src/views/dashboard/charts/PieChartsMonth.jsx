@@ -7,8 +7,8 @@ export const PieChartsMonth = ({ totalDownload }) => {
     const [selectedMonth, setSelectedMonth] = useState('01'); // Default to January
 
     // Group data by month
-    const dataByMonth = totalDownload.reduce((acc, item) => {
-        const month = dayjs(item.createdAt).format('MM');
+    const dataByMonth = totalDownload?.reduce((acc, item) => {
+        const month = dayjs(item?.createdAt).format('MM');
         if (!acc[month]) {
             acc[month] = { banner: 0, news: 0, service: 0 };
         }
@@ -23,9 +23,9 @@ export const PieChartsMonth = ({ totalDownload }) => {
     const selectedData = dataByMonth[selectedMonth] || { banner: 0, news: 0, service: 0 };
 
     const data = [
-        { value: selectedData.service, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
-        { value: selectedData.news, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
-        { value: selectedData.banner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
+        { value: selectedData?.service, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
+        { value: selectedData?.news, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
+        { value: selectedData?.banner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
     ];
 
     const totalAmount = data.reduce((sum, item) => sum + item.value, 0);

@@ -175,14 +175,14 @@ export const ContactManagement = () => {
 
     return (
         <Sidebar>
-            <div className="mt-14 mx-14 bg-white rounded-lg px-8 pt-14 h-[calc(100vh-7rem)] flex flex-col">
+            <div className="xl:mt-14 xl:mx-14 bg-white rounded-lg px-8 pt-14 h-[calc(100vh-7rem)] flex flex-col">
                 <div className="flex items-center justify-between mb-6">
-                    <p className="text-gray-500 text-[14px]">
+                    <p className="text-gray-500 text-[12px] xl:text-[14px]">
                         ທັງໝົດ {filteredData.length} ລາຍການ
                     </p>
                     <div>
                         <RangePicker
-                            className='border-2 border-[#01A7B1] rounded-full py-2 px-5'
+                            className='border-2 border-[#01A7B1] rounded-full py-2 xl:px-5 xl:w-full sm:w-[230px]'
                             style={{ color: '#01A7B1' }}
                             placeholder={['ວັນທີ່ເລີ່ມຕົ້ນ', 'ວັນທີ່ສິ້ນສຸດ']}
                             onChange={handleDateChange}
@@ -199,18 +199,21 @@ export const ContactManagement = () => {
                     <div className="py-10">
                         <h2 className='mb-7 text-[20px] font-medium text-center'>ລາຍລະອຽດຂໍ້ມູນການຕິດຕໍໍ່</h2>
                         <Input
+                            disabled={true}
                             placeholder="Full name"
                             value={updatedData.name}
                             onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
                             className="mb-3"
                         />
                         <Input
+                            disabled={true}
                             placeholder="Phone Number"
                             value={updatedData.phoneNumber}
                             onChange={(e) => setUpdatedData({ ...updatedData, phoneNumber: e.target.value })}
                             className="mb-3"
                         />
                         <Input
+                            disabled={true}
                             placeholder="Email"
                             value={updatedData.email}
                             onChange={(e) => setUpdatedData({ ...updatedData, email: e.target.value })}
@@ -218,6 +221,7 @@ export const ContactManagement = () => {
                         />
                         <TextArea
                             rows={5}
+                            disabled={true}
                             placeholder="Comment"
                             value={updatedData.comment}
                             onChange={(e) => setUpdatedData({ ...updatedData, comment: e.target.value })}

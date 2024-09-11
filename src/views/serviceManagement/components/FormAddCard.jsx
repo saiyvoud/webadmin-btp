@@ -258,6 +258,7 @@ export const FormAddCard = () => {
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileChange}
+                                        accept="application/pdf"
                                         className="hidden"
                                     />
                                     <button

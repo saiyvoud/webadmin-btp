@@ -104,21 +104,17 @@ export const AboutList = ({ filteredDates, cDataID }) => {
                 </button>
             </div>
             <hr className='mt-3 mb-6 border border-[#D9D9D9]' />
-            <div className='grid grid-cols-12 gap-10'>
+            <div className='grid grid-cols-12 sm:gap-5 xl:gap-10'>
                 {loading ? (
-                    filteredData?.length < 1 ? (
-                        <Empty description="ບໍ່ມີຂໍ້ມູນ About" />
-                    ) :
-                        (
-                            Array.from({ length: 4 }).map((_, index) => (
-                                <Skeleton.Button key={index} active style={{ width: '100%', height: 285 }} />
-                            ))
-                        )
+                    Array.from({ length: 4 }).map((_, index) => (
+                        <Skeleton.Button key={index} active style={{ width: '100%', height: 285 }} />
+                    ))
                 ) : (
                     filteredData.map((card, index) => (
                         <animated.div
                             key={index}
-                            className='relative h-[285px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:scale-125 duration-300 cursor-pointer bg-white col-span-3'
+                            className='relative h-[285px] xl:w-full lg:w-[210px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:scale-125 duration-300 cursor-pointer bg-white 
+                            xl:col-span-3 lg:col-span-4 sm:col-span-6'
                             style={{ ...Springs }}
                         >
                             <img

@@ -172,7 +172,7 @@ export const UserInfo = () => {
 
     const TableRow = ({ index, id, profile, firstName, lastName, phoneNumber, email, password, role, onEdit, onDelete }) => (
         <tr className={`border-b w-full border-gray-200 ${data.length > 10 && 'h-full'}`}>
-            <td className="py-4 px-1 w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
+            <td className="py-4 sm:px-5 xl:px-1 xl:w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
             <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
                 <div className="relative w-16 h-16">
                     <img src={profile} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
@@ -206,7 +206,7 @@ export const UserInfo = () => {
 
     return (
         <Sidebar>
-            <div className={`mt-14 mx-14 bg-white rounded-lg px-8 py-14 ${data.length > 10 ? 'min-h-screen' : 'h-screen'}`}>
+            <div className={`xl:mt-14 xl:mx-14 bg-white rounded-lg sm:px-6 xl:px-8 lg:py-10 sm:py-6 xl:py-14 ${data.length > 10 ? 'min-h-screen' : 'h-screen'}`}>
                 <div div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
                         ທັງໝົດ {data ? data.length : 0} ລາຍການ
@@ -278,15 +278,15 @@ export const UserInfo = () => {
                         <table className="w-full h-full">
                             <thead>
                                 <tr className="bg-[#01A7B1]/20 border-b w-full">
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຮູບ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ຊື່</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ນາມສະກຸນ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Role</th>
-                                    <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Actions</th>
+                                    <th className="py-4 xl:px-3 xl:w-fit  text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ຮູບ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ຊື່</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ນາມສະກຸນ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Role</th>
+                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

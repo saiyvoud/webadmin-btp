@@ -14,7 +14,7 @@ export const AreaChartsYear = ({ view }) => {
     }
 
     // Populate the visitCounts object based on the view data
-    view.forEach(item => {
+    view?.forEach(item => {
         const year = dayjs(item.createdAt).year();
         if (year >= startYear && year <= endYear) {
             visitCounts[year]++;

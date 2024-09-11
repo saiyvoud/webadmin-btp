@@ -15,7 +15,7 @@ export const AreaChartMonth = ({ view }) => {
     }, {});
 
     // Populate the visitCounts object based on the view data
-    view.forEach(item => {
+    view?.forEach(item => {
         const month = dayjs(item.createdAt).format('MMM');
         if (visitCounts.hasOwnProperty(month)) {
             visitCounts[month]++;

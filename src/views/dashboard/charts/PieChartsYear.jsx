@@ -6,14 +6,14 @@ export const PieChartsYear = ({ totalDownload }) => {
     const years = Array.from({ length: 11 }, (_, i) => 2018 + i); // Years from 2018 to 2028
 
     const getYearlyData = (year) => {
-        const yearData = totalDownload.filter((item) => {
-            const itemYear = new Date(item.createdAt).getFullYear();
+        const yearData = totalDownload?.filter((item) => {
+            const itemYear = new Date(item?.createdAt).getFullYear();
             return itemYear === year;
         });
 
-        const totalBanner = yearData.filter((item) => item.type === 'banner').length;
-        const totalService = yearData.filter((item) => item.type === 'service').length;
-        const totalNews = yearData.filter((item) => item.type === 'news').length;
+        const totalBanner = yearData?.filter((item) => item?.type === 'banner').length;
+        const totalService = yearData?.filter((item) => item?.type === 'service').length;
+        const totalNews = yearData?.filter((item) => item?.type === 'news').length;
 
         return [
             { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red

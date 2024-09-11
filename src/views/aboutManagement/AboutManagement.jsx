@@ -63,38 +63,38 @@ export const AboutManagement = () => {
     return (
         <Sidebar>
             <div className='mt-4'>
-                <div className='bg-white rounded-lg p-10 flex items-center justify-between'>
+                <div className='bg-white rounded-lg lg:p-6 xl:p-10 flex items-center justify-between'>
                     <div>
                         <RangePicker
-                            className='border-2 border-[#01A7B1] rounded-full py-2 px-5'
+                            className='border-2 border-[#01A7B1] rounded-full py-2 px-3 xl:px-5'
                             style={{ color: '#01A7B1' }}
                             placeholder={['ວັນທີ່ເລີ່ມຕົ້ນ', 'ວັນທີ່ສິ້ນສຸດ']}
                             onChange={handleDateChange} // Handle date change
                         />
                     </div>
-                    <div className='flex items-center gap-x-10'>
+                    <div className='xl:flex xl:items-center place-items-center sm:grid lg:grid-cols-12 lg:gap-x-5 xl:gap-x-10'>
                         {
                             companyData.length < 1 && (
                                 <button onClick={() => navigate(`/aboutManagement/formAddCompanyInfo`)}
-                                    className="text-white w-[140px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                                    className="text-white w-[140px] lg:col-span-6 py-2 text-[14px] bg-[#01A7B1] rounded-full">
                                     ເພີ່ມຂໍ້ມູນບໍລິສັດ
                                 </button>
                             )
                         }
                         <button onClick={() => navigate(`/aboutManagement/aboutInfo/${cDataID[0]}`)}
-                            className="text-white w-[140px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                            className="text-white w-[140px] lg:col-span-6 py-2 text-[14px] bg-[#01A7B1] rounded-full">
                             ແກ້ໄຂຂໍ້ມູນບໍລິສັດ
                         </button>
                         {
                             converImg.length < 1 && (
                                 <button onClick={() => navigate('/aboutManagement/addAboutBanner')}
-                                    className="text-white w-[120px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                                    className="text-white w-[120px] lg:col-span-6 py-2 text-[14px] bg-[#01A7B1] rounded-full">
                                     ເພີ່ມຮູບໜ້າປົກ
                                 </button>
                             )
                         }
                         <button onClick={() => navigate('/aboutManagement/aboutBanner')}
-                            className="text-white w-[120px] py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                            className="text-white w-[120px] lg:col-span-6 py-2 text-[14px] bg-[#01A7B1] rounded-full">
                             ແກ້ໄຂຮູບໜ້າປົກ
                         </button>
                     </div>

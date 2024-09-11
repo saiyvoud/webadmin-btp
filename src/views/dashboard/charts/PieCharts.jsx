@@ -4,9 +4,9 @@ import { Select } from 'antd';
 
 export const PieCharts = ({ totalDownload }) => {
     const [selectPieChart, setSelectPieChart] = useState(0)
-    const totalBanner = totalDownload.filter((item) => item.type === "banner").length
-    const totalService = totalDownload.filter((item) => item.type === "service").length
-    const totalNews = totalDownload.filter((item) => item.type === "news").length
+    const totalBanner = totalDownload?.filter((item) => item?.type === "banner").length
+    const totalService = totalDownload?.filter((item) => item?.type === "service").length
+    const totalNews = totalDownload?.filter((item) => item?.type === "news").length
     // console.log("total", total);
     const data = [
         { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
@@ -14,7 +14,7 @@ export const PieCharts = ({ totalDownload }) => {
         { value: totalBanner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
     ];
 
-    const totalAmount = data.reduce((sum, item) => sum + item.value, 0);
+    const totalAmount = data?.reduce((sum, item) => sum + item?.value, 0);
 
     const option = {
         tooltip: {

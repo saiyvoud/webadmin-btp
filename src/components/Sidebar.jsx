@@ -106,7 +106,7 @@ export const Sidebar = ({ children }) => {
             </div>
             <div className='flex-1 flex flex-col overflow-hidden'>
                 <Navbar />
-                <main className='flex-1 overflow-y-auto lg:p-5 py-4 px-4 lg:px-10'>
+                <main className='flex-1 overflow-y-auto  lg:p-5 py-4 px-4 sm:pl-4 lg:pl-6 sm:pr-0 xl:px-10'>
                     {children}
                 </main>
             </div>

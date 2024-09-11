@@ -252,6 +252,7 @@ export const FormAddCardNews = () => {
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileChange}
+                                        accept="application/pdf"
                                         className="hidden"
                                     />
                                     <button
@@ -264,6 +265,7 @@ export const FormAddCardNews = () => {
                                 </div>
                                 {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
                             </div>
+
 
                             {/* Tag List Input for Group 1 */}
                             <div className="mb-4 flex flex-col gap-y-2">

@@ -89,11 +89,11 @@ export const ServiceInfo = () => {
 
     const TableRow = ({ index, id, name, updatedAt, user, onDelete }) => (
         <tr className="border-b border-gray-200">
-            <td className="py-4 px-6 text-[12px] text-gray-500">{index}</td>
-            <td className="py-4 px-6 text-[12px] text-center text-gray-900">{name}</td>
-            <td className="py-4 px-6 text-[12px] text-center text-gray-500">{formatDate(updatedAt)}</td>
-            <td className="py-4 px-6 text-[12px] text-center text-gray-900">{user?.username}</td> {/* Access the username from the user object */}
-            <td className="py-4 px-6 text-[12px]">
+            <td className="py-4 sm:px-2 md:text-start sm:text-center md:px-6 text-[12px] text-gray-500">{index}</td>
+            <td className="py-4 sm:px-2 md:px-6 text-[12px] text-center text-gray-900">{name}</td>
+            <td className="py-4 sm:px-2 md:px-6 text-[12px] text-center text-gray-500">{formatDate(updatedAt)}</td>
+            <td className="py-4 sm:px-2 md:px-6 text-[12px] text-center text-gray-900">{user?.username}</td> {/* Access the username from the user object */}
+            <td className="py-4 sm:px-2 md:px-6 text-[12px]">
                 <div className='flex items-center justify-center'>
                     <button onClick={() => showModalEdit(id, name)} className="bg-[#01A7B1] text-white w-[45px] py-1 rounded-full mr-2">ແກ້ໄຂ</button>
                     <button onClick={() => onDelete(id)} className="bg-red-500 text-white w-[45px] py-1 rounded-full">ລົບ</button>
@@ -105,12 +105,12 @@ export const ServiceInfo = () => {
 
     return (
         <Sidebar>
-            <div className="mt-14 mx-14 bg-white rounded-lg px-8 py-14 h-full">
+            <div className="xl:mt-14 lg:mt-5 xl:mx-14 bg-white rounded-lg px-4 md:px-8 py-14 h-full">
                 <div className="flex items-center justify-between mb-6">
-                    <p className="text-gray-500 text-[14px]">
+                    <p className="text-gray-500 text-[12px] lg:text-[14px]">
                         ທັງໝົດ {category.length} ລາຍການ
                     </p>
-                    <button onClick={showModal} className="text-white px-4 py-2 text-[14px] bg-[#01A7B1] rounded-full">
+                    <button onClick={showModal} className="text-white px-4 py-2 sm:text-[12px] lg:text-[14px] bg-[#01A7B1] rounded-full">
                         ເພີ່ມປະເພດລາຍການ
                     </button>
                 </div>
@@ -124,7 +124,7 @@ export const ServiceInfo = () => {
                     setNameCategory={setNameCategory} // Pass the state setter
                 />
 
-                <div className="overflow-x-auto mt-16">
+                <div className="overflow-x-auto lg:mt-10 xl:mt-16">
                     {loading ? (
                         // Skeleton Loading State
                         <Skeleton active paragraph={{ rows: 10 }} />
@@ -132,11 +132,11 @@ export const ServiceInfo = () => {
                         <table className="min-w-full">
                             <thead className="bg-gray-100 h-[40px]">
                                 <tr>
-                                    <th className="py-3 px-6 text-start text-[12px] font-medium text-gray-500 tracking-wider">ລຳດັບ</th>
-                                    <th className="py-3 px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຊື່</th>
-                                    <th className="py-3 px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ແກ້ໄຂລ່າສຸດ</th>
-                                    <th className="py-3 px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຜູ້ເພີ່ມ</th>
-                                    <th className="py-3 px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຈັດການ</th>
+                                    <th className="py-3 sm:px-2 md:px-6 text-center md:text-start text-[12px] font-medium text-gray-500 tracking-wider">ລຳດັບ</th>
+                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຊື່</th>
+                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ແກ້ໄຂລ່າສຸດ</th>
+                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຜູ້ເພີ່ມ</th>
+                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຈັດການ</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white">
