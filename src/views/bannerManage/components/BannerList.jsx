@@ -128,7 +128,7 @@ export const BannerList = ({ dateRange }) => {
                     filteredData.map((item, index) => (
                         <animated.div
                             key={index}
-                            className="h-[330px] xl:w-full lg:w-[220px] sm:w-[190px] md:w-[250px] relative rounded-lg sm:col-span-6 lg:col-span-4 x:col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
+                            className="h-[330px] xl:w-full lg:w-[220px] sm:w-[190px] md:w-[250px] relative rounded-lg sm:col-span-6 lg:col-span-4 xl:col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
                             style={{ ...springs }}
                         >
                             <img
