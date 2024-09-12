@@ -61,8 +61,8 @@ export const Dashboard = () => {
 
     return (
         <Sidebar>
-            <div className='mt-10'>
-                <div className='w-full h-[270px] rounded-lg'>
+            <div className='mt-5'>
+                <div className='w-full h-[180px] rounded-lg'>
                     <img
                         src={announceImg}
                         alt=""

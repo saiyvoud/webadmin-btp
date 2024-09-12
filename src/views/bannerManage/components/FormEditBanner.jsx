@@ -328,7 +328,7 @@ export const FormEditBanner = () => {
                             {/* Tag List Input for Group 2 */}
                             <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
-                                    ຂໍ້ມູນຂອງທຶນ
+                                    ປະເພດທຶນ
                                 </p>
                                 <div className="w-full">
                                     <div className="flex flex-wrap gap-2 mb-2">

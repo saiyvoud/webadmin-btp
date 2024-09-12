@@ -23,55 +23,55 @@ export const Sidebar = ({ children }) => {
         {
             id: 1,
             title: 'Dashboard',
-            icon: <IoHomeOutline className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <IoHomeOutline className='sm:text-[18px] lg:text-[22px]' />,
             path: '/'
         },
         {
             id: 2,
             title: 'ຈັດການຂໍ້ມູນບໍລິການ',
-            icon: <RiServiceLine className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <RiServiceLine className='sm:text-[18px] lg:text-[22px]' />,
             path: '/serviceManagement'
         },
         {
             id: 3,
             title: 'ປະເພດບໍລິການ',
-            icon: <LuFolderEdit className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <LuFolderEdit className='sm:text-[18px] lg:text-[22px]' />,
             path: '/service'
         },
         {
             id: 4,
             title: 'ຈັດການຂໍ້ມູນຂ່າວສານ',
-            icon: <IoNewspaperOutline className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <IoNewspaperOutline className='sm:text-[18px] lg:text-[22px]' />,
             path: '/newsManagement'
         },
         {
             id: 5,
             title: 'ຈັດການຂໍ້ມູນBanner',
-            icon: <BsInfoCircle className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <BsInfoCircle className='sm:text-[18px] lg:text-[22px]' />,
             path: '/bannerManagement'
         },
         {
             id: 6,
             title: 'ຈັດການຂໍ້ມູນກ່ຽວກັບເຮົາ',
-            icon: <HiOutlineChatAlt className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <HiOutlineChatAlt className='sm:text-[18px] lg:text-[22px]' />,
             path: '/aboutManagement'
         },
         {
             id: 6,
             title: 'ຈັດການຂໍ້ມູນການຕິດຕໍ່',
-            icon: <RiContactsBook3Line className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <RiContactsBook3Line className='sm:text-[18px] lg:text-[22px]' />,
             path: '/contactManagement'
         },
         {
             id: 7,
             title: 'ຂໍ້ມູນຜູ້ໃຊ້ລະບົບ',
-            icon: <MdManageAccounts className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <MdManageAccounts className='sm:text-[18px] lg:text-[22px]' />,
             path: '/userInfo'
         },
         {
             id: 8,
             title: 'ອອກຈາກລະບົບ',
-            icon: <RiLogoutCircleRLine className='sm:text-[20px] lg:text-[24px]' />,
+            icon: <RiLogoutCircleRLine className='sm:text-[18px] lg:text-[22px]' />,
             path: '/login'
         }
     ]
@@ -80,11 +80,11 @@ export const Sidebar = ({ children }) => {
     const isActivePath = (path) => { return pathname === path };
 
     return (
-        <div className='flex h-screen overflow-hidden p-4 lg:p-8'>
-            <div className='lg:w-[280px] md:w-[200px] h-full bg-white rounded-l-lg p-2 lg:p-4 overflow-y-auto'>
+        <div className='flex h-screen overflow-hidden p-4 lg:p-6'>
+            <div className='lg:w-[250px] md:w-[180px] h-full bg-white rounded-l-lg p-2 lg:p-4 overflow-y-auto'>
                 <div className='flex justify-center items-center gap-x-1 lg:gap-x-3 bg-[#D1FAE5] rounded-lg py-2.5'>
-                    <img src={logo} alt="" className=' sm:w-10 lg:w-16' />
-                    <p className='text-[12px] lg:text-[14px]'>
+                    <img src={logo} alt="" className=' sm:w-9  lg:w-14' />
+                    <p className='text-[11px] lg:text-[14px]'>
                         ບີທີພີ ທືນການສຶກສາຕ່າງປະເທດ
                     </p>
                 </div>
@@ -97,7 +97,7 @@ export const Sidebar = ({ children }) => {
                             }
                         >
                             {item.icon}
-                            <h4 className='text-[15px] lg:text-[18px]'>
+                            <h4 className='text-[12px] lg:text-[16px]'>
                                 {item.title}
                             </h4>
                         </NavLink>

@@ -278,7 +278,7 @@ export const FormEditCardNews = () => {
                                 </div>
 
                                 {/* Tag List Input for Group 1 */}
-                                <div className="mb-4 flex flex-col gap-y-2">
+                                {/* <div className="mb-4 flex flex-col gap-y-2">
                                     <p className='text-[14px] font-medium'>
                                         ເອກະສານ
                                     </p>
@@ -310,12 +310,12 @@ export const FormEditCardNews = () => {
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Tag List Input for Group 2 */}
-                                <div className="mb-4 flex flex-col gap-y-2">
+                                {/* <div className="mb-4 flex flex-col gap-y-2">
                                     <p className='text-[14px] font-medium'>
-                                        ຂໍ້ມູນຂອງທຶນ
+                                        ປະເພດທຶນ
                                     </p>
                                     <div className="w-full">
                                         <div className="flex flex-wrap gap-2 mb-2">
@@ -345,7 +345,7 @@ export const FormEditCardNews = () => {
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div>
                                     <label htmlFor='detail' className='font-medium'>

@@ -111,18 +111,27 @@ export const ServiceManagement = () => {
             <div className='sm:my-5 lg:my-10 '>
                 <div className='w-full rounded-lg bg-white p-3 lg:p-6 flex items-center justify-between'>
                     <ul className='xl:grid xl:grid-cols-12 xl:gap-x-5 sm:grid sm:grid-cols-12 sm:gap-2'>
-                        {tabList.map((list, index) => (
-                            <li
-                                key={index}
-                                onClick={() => setTabActive(list.id)}
-                                className={` sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-2 ${tabActive === list.id ? 'bg-[#01A7B1] text-white border-2 border-transparent' : 'border-2 border-[#01A7B1] text-[#01A7B1]'} px-3 text-center lg:px-6 py-2 rounded-full text-[14px] cursor-pointer duration-300`}
-                            >
-                                {list.name}
-                            </li>
-                        ))}
+                        {
+                            loading ? (
+                                <div className="col-span-12">
+                                    <Skeleton active paragraph={{ rows: 2 }} />
+                                </div>
+                            ) : (
+                                tabList.map((list, index) => (
+                                    <li
+                                        key={index}
+                                        onClick={() => setTabActive(list.id)}
+                                        className={` sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-3 ${tabActive === list.id ? 'bg-[#01A7B1] text-white border-2 border-transparent' : 'border-2 border-[#01A7B1] text-[#01A7B1]'} px-2 md:w-[120px] lg:w-[150px] md:h-[45px] xl:h-fit xl:w-full text-center flex items-center 
+                                        justify-center lg:px-4 py-1 xl:py-1.5 rounded-full text-[10px] md:text-[12px] cursor-pointer duration-300`}
+                                    >
+                                        {list.name}
+                                    </li>
+                                ))
+                            )
+                        }
                     </ul>
                     <button onClick={() => navigate('/serviceManagement/formAddCard')}
-                        className='bg-[#01A7B1] rounded-full px-7 py-2 text-white text-[16px]'>
+                        className='bg-[#01A7B1] rounded-full px-7 py-2 text-white text-[12px] lg:text-[14px]'>
                         ເພີ່ມທຶນ +
                     </button>
                 </div>
@@ -134,7 +143,7 @@ export const ServiceManagement = () => {
                     {loading ? (
                         <Skeleton active paragraph={{ rows: 4 }} />
                     ) : (
-                        <animated.div style={tabContentAnimation} className='grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 md:grid-cols-2 sm:gap-3 lg:gap-4 xl:gap-7'>
+                        <animated.div style={tabContentAnimation} className='grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 md:grid-cols-2 sm:gap-3 lg:gap-4 xl:gap-7'>
                             {
                                 filteredData.map((card, index) => (
                                     <div key={index}

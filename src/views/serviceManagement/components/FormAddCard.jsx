@@ -275,10 +275,10 @@ export const FormAddCard = () => {
                             {/* Category Selection */}
                             <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
-                                    ເລືອກປະເພດທຶນ
+                                    ເລືອກປະເພດທຶນຕ່າງໆ
                                 </p>
                                 <Select
-                                    placeholder="Select Category"
+                                    placeholder="ກະລຸນາເລືອກປະເພດທຶນຕ່າງໆ"
                                     style={{ width: '100%' }}
                                     onChange={(value) => setCategory(value)}
                                     options={typeService?.map((item) => ({
@@ -327,7 +327,7 @@ export const FormAddCard = () => {
                             {/* Tag List Input for Group 2 */}
                             <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
-                                    ຂໍ້ມູນຂອງທຶນ
+                                    ປະເພດທຶນ
                                 </p>
                                 <div className="w-full">
                                     <div className="flex flex-wrap gap-2 mb-2">

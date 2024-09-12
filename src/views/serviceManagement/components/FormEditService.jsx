@@ -72,10 +72,12 @@ export const FormEditService = () => {
     };
 
     const removeTag1 = (indexToRemove) => {
+        // e.preventDefault();
         setDocuments(documents.filter((_, index) => index !== indexToRemove));
     };
 
     const removeTag2 = (indexToRemove) => {
+        // e.preventDefault();
         setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
     };
 
@@ -86,11 +88,6 @@ export const FormEditService = () => {
             if (!response) throw new Error('No response from API');
             setTypeService(response);
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
@@ -114,11 +111,6 @@ export const FormEditService = () => {
             setTypeScholarship(response.typescholarship || []);
 
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
@@ -164,7 +156,7 @@ export const FormEditService = () => {
 
     const handleSaveData = async (id) => {
         Swal.fire({
-            title: "ທ່ານຕ້ອງການບັນທຶກຂໍໍ້ມູນນີ້ເລີຍບໍ່?",
+            title: "ທ່ານຕ້ອງການແກ້ໄຂຂໍໍ້ມູນນີ້ບໍ່?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -173,6 +165,7 @@ export const FormEditService = () => {
             cancelButtonText: 'ຍົກເລີກ'
         }).then(async (result) => {
             if (result.isConfirmed) {
+                setLoading(true)
                 const data = {
                     description,
                     title,
@@ -200,7 +193,7 @@ export const FormEditService = () => {
                     if (response && responseImg && responseFile) {
                         setLoading(true)
                         Swal.fire({
-                            title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
+                            title: "ແກ້ໄຂສຳເລັດ!",
                             icon: "success"
                         }).then(() => {
                             navigate('/serviceManagement');
@@ -210,9 +203,11 @@ export const FormEditService = () => {
                 } catch (error) {
                     console.error('Error updating service:', error);
                     Swal.fire({
-                        title: "Error ການແກ້ໄຂລົ້ມເຫຼວ",
+                        title: "ແກ້ໄຂລົ້ມເຫຼວ",
                         icon: "error"
                     });
+                } finally {
+                    setLoading(false)
                 }
             }
         });
@@ -304,10 +299,10 @@ export const FormEditService = () => {
                                 </div>
 
                                 <div className='mb-4'>
-                                    <label htmlFor='typeService' className='ml-3 text-[14px]'>ປະເພດທຶນ:</label>
+                                    <label htmlFor='typeService' className='ml-3 text-[14px]'>ເລືອກປະເພດທຶນຕ່າງໆ:</label>
                                     <Select
                                         id='typeService'
-                                        defaultValue="ກະລຸນາເລືອກທຶນ"
+                                        defaultValue="ກະລຸນາເລືອກປະເພດທຶນຕ່າງໆ"
                                         onChange={(value) => setCategory(value)}
                                         className='w-full'
                                     >
@@ -329,9 +324,9 @@ export const FormEditService = () => {
                                             {documents.map((tag, index) => (
                                                 <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
                                                     {tag}
-                                                    <button onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
+                                                    <div onClick={() => removeTag1(index)} className="ml-1 cursor-pointer text-blue-600 hover:text-blue-800">
                                                         <X size={14} />
-                                                    </button>
+                                                    </div>
                                                 </span>
                                             ))}
                                         </div>
@@ -358,16 +353,16 @@ export const FormEditService = () => {
                                 {/* Tag List Input for Group 2 */}
                                 <div className="mb-4 flex flex-col gap-y-2">
                                     <p className='text-[14px] font-medium'>
-                                        ຂໍ້ມູນຂອງທຶນ
+                                        ປະເພດທຶນ
                                     </p>
                                     <div className="w-full">
                                         <div className="flex flex-wrap gap-2 mb-2">
                                             {typeScholarship.map((tag, index) => (
                                                 <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
                                                     {tag}
-                                                    <button onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
+                                                    <div onClick={() => removeTag2(index)} className="ml-1 cursor-pointer text-green-600 hover:text-green-800">
                                                         <X size={14} />
-                                                    </button>
+                                                    </div>
                                                 </span>
                                             ))}
                                         </div>
@@ -404,10 +399,12 @@ export const FormEditService = () => {
                                     ></textarea>
                                 </div>
 
-                                <div className='flex justify-end'>
+                                <div className='flex items-center justify-center mt-5'>
                                     <button
+                                        type="submit"
+                                        className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
                                         disabled={loading}
-                                        type='submit' className='bg-[#01A7B1] text-white text-[14px] px-4 py-2 rounded-lg'>
+                                    >
                                         {
                                             loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງແກ້ໄຂ <span className="loader"></span></p> : "ແກ້ໄຂ"
                                         }

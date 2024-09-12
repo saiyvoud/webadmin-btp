@@ -128,44 +128,46 @@ export const BannerList = ({ dateRange }) => {
                     filteredData.map((item, index) => (
                         <animated.div
                             key={index}
-                            className="h-[330px] xl:w-full lg:w-[220px] sm:w-[190px] md:w-[250px] relative rounded-lg sm:col-span-6 lg:col-span-4 xl:col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
+                            className="h-[330px] xl:w-full lg:w-[220px] sm:w-[210px] md:w-[250px] relative rounded-lg sm:col-span-6 lg:col-span-4 xl:col-span-3 shadow-[4px_4px_6px_0px_#B5BABE40] bg-white"
                             style={{ ...springs }}
                         >
                             <img
                                 src={item?.image}
                                 alt={item?.title}
-                                className="w-full h-[200px] rounded-t-lg object-cover"
+                                className="w-full h-[190px] md:h-[200px] rounded-t-lg object-cover"
                             />
-                            <div className="flex flex-col gap-y-1 pt-2 lg:px-3 xl:px-5">
+                            <div className="flex flex-col gap-y-1 pt-2 px-3 lg:px-3 xl:px-5">
                                 <h4 className="text-[16px] font-medium">
                                     {item?.title}
                                 </h4>
                                 <p className="text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2">
                                     {item?.detail}
                                 </p>
-                                <span>
+                            </div>
+                            <div className="flex flex-col w-full absolute bottom-3 justify-between sm:px-3 xl:px-5">
+                                <span className=' mb-1'>
                                     {formatDate(item?.createdAt)}
                                 </span>
-                            </div>
-                            <div className="flex w-full absolute bottom-3 items-center justify-between px-5">
-                                <Switch
-                                    onChange={(value) => handleChangeSwitch(item.id, value)}
-                                    defaultChecked={item.isPublished}
-                                    className="custom-switch"
-                                />
-                                <div className="flex items-center gap-x-3">
-                                    <button
-                                        onClick={() => deleteItem(item.id)}
-                                        className="w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1"
-                                    >
-                                        ລົບ
-                                    </button>
-                                    <button
-                                        onClick={() => navigate(`/bannerManagement/formEditBanner/${item.id}`)}
-                                        className="w-[45px] bg-[#4ADE80] text-white rounded-full text-[10px] py-1"
-                                    >
-                                        ແກ້ໄຂ
-                                    </button>
+                                <div className=' flex items-center justify-between w-full'>
+                                    <Switch
+                                        onChange={(value) => handleChangeSwitch(item.id, value)}
+                                        defaultChecked={item.isPublished}
+                                        className="custom-switch"
+                                    />
+                                    <div className="flex items-center gap-x-3">
+                                        <button
+                                            onClick={() => deleteItem(item.id)}
+                                            className="w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1"
+                                        >
+                                            ລົບ
+                                        </button>
+                                        <button
+                                            onClick={() => navigate(`/bannerManagement/formEditBanner/${item.id}`)}
+                                            className="w-[45px] bg-[#4ADE80] text-white rounded-full text-[10px] py-1"
+                                        >
+                                            ແກ້ໄຂ
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </animated.div>

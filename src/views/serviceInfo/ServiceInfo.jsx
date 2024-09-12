@@ -25,11 +25,11 @@ export const ServiceInfo = () => {
             }
             setCategory(response);
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
+            // Swal.fire({
+            //     icon: 'error',
+            //     title: "ເກີດຂໍ້ຜິດພາດ",
+            //     text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
+            // });
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
@@ -110,7 +110,7 @@ export const ServiceInfo = () => {
                     <p className="text-gray-500 text-[12px] lg:text-[14px]">
                         ທັງໝົດ {category.length} ລາຍການ
                     </p>
-                    <button onClick={showModal} className="text-white px-4 py-2 sm:text-[12px] lg:text-[14px] bg-[#01A7B1] rounded-full">
+                    <button onClick={showModal} className="text-white px-4 py-2 text-[12px] lg:text-[14px] bg-[#01A7B1] rounded-full">
                         ເພີ່ມປະເພດລາຍການ
                     </button>
                 </div>
@@ -129,31 +129,33 @@ export const ServiceInfo = () => {
                         // Skeleton Loading State
                         <Skeleton active paragraph={{ rows: 10 }} />
                     ) : (
-                        <table className="min-w-full">
-                            <thead className="bg-gray-100 h-[40px]">
-                                <tr>
-                                    <th className="py-3 sm:px-2 md:px-6 text-center md:text-start text-[12px] font-medium text-gray-500 tracking-wider">ລຳດັບ</th>
-                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຊື່</th>
-                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ແກ້ໄຂລ່າສຸດ</th>
-                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຜູ້ເພີ່ມ</th>
-                                    <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຈັດການ</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white">
-                                {category.map((item, index) => (
-                                    <TableRow
-                                        key={item.id}
-                                        index={index + 1}
-                                        id={item.id}
-                                        name={item.name}
-                                        updatedAt={item.updatedAt}
-                                        user={item.user} // Pass the user object to TableRow
-                                        onDelete={handleDelete}
-                                    />
-                                ))}
-                            </tbody>
+                        <div className="rounded-lg overflow-x-auto border w-full h-full pb-5">
+                            <table className="w-full h-full">
+                                <thead className="bg-gray-100 h-[40px]">
+                                    <tr>
+                                        <th className="py-3 sm:px-2 md:px-6 text-center md:text-start text-[12px] font-medium text-gray-500 tracking-wider">ລຳດັບ</th>
+                                        <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຊື່</th>
+                                        <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ແກ້ໄຂລ່າສຸດ</th>
+                                        <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຜູ້ເພີ່ມ</th>
+                                        <th className="py-3 sm:px-2 md:px-6 text-center text-[12px] font-medium text-gray-500 tracking-wider">ຈັດການ</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white">
+                                    {category.map((item, index) => (
+                                        <TableRow
+                                            key={item.id}
+                                            index={index + 1}
+                                            id={item.id}
+                                            name={item.name}
+                                            updatedAt={item.updatedAt}
+                                            user={item.user} // Pass the user object to TableRow
+                                            onDelete={handleDelete}
+                                        />
+                                    ))}
+                                </tbody>
 
-                        </table>
+                            </table>
+                        </div>
                     )}
                 </div>
             </div>
