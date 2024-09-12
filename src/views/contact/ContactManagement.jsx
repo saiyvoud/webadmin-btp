@@ -175,7 +175,7 @@ export const ContactManagement = () => {
 
     return (
         <Sidebar>
-            <div className="xl:mt-14 xl:mx-14 bg-white rounded-lg px-8 pt-14 h-[calc(100vh-7rem)] flex flex-col">
+            <div className="xl:mt-14 xl:mx-14 bg-white rounded-lg px-8 pb-6 pt-14 h-[calc(100vh-7rem)] flex flex-col">
                 <div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[12px] xl:text-[14px]">
                         ທັງໝົດ {filteredData.length} ລາຍການ
@@ -238,7 +238,7 @@ export const ContactManagement = () => {
                     <Skeleton active />
                 ) : (
                     <div className="flex-grow overflow-hidden rounded-lg border w-full pb-5">
-                        <div className="h-full overflow-auto">
+                        <div className="h-full overflow-auto pb-5">
                             <table className="w-full">
                                 <thead className="sticky top-0 bg-white">
                                     <tr className="bg-[#01A7B1]/20 border-b w-full">
@@ -250,7 +250,7 @@ export const ContactManagement = () => {
                                         <th className="py-4 px-3 text-black text-[12px] font-medium text-center">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className=''>
                                     {filteredData.map((item, index) => (
                                         <TableRow
                                             key={item.id}
