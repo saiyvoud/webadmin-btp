@@ -188,7 +188,12 @@ export const UserInfo = () => {
             <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{lastName}</td>
             <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{phoneNumber}</td>
             <td className="py-4 px-3 text-[12px] w-[150px] text-center text-gray-500 truncate">{email}</td>
-            <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{password}</td>
+            {
+                (currentRole === "superadmin") && (
+                    <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{password}</td>
+                )
+            }
+
             <td className="py-4 px-3 text-[12px] w-[100px] text-center text-gray-500 truncate">{role}</td>
             <td className="py-4 px-3 text-[12px] w-[150px]">
                 <div className='flex items-center justify-center space-x-2'>
@@ -284,7 +289,12 @@ export const UserInfo = () => {
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ນາມສະກຸນ</th>
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ເບີໂທ</th>
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ອີເມລ</th>
-                                    <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
+                                    {
+                                        (currentRole === "superadmin") && (
+                                            <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
+                                        )
+                                    }
+
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Role</th>
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Actions</th>
                                 </tr>
