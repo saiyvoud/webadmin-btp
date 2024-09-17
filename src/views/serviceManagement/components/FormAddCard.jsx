@@ -13,6 +13,9 @@ export const FormAddCard = () => {
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
     const [file, setFile] = useState(null);
+    // const fileInputRef = useRef(null);
+    const [files, setFiles] = useState([]);
+    // const [errors, setErrors] = useState({});
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
     const [documents, setDocuments] = useState([]);
@@ -20,7 +23,7 @@ export const FormAddCard = () => {
     const [errors, setErrors] = useState({});
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);
-    const [fileName, setFileName] = useState('');
+    // const [fileName, setFileName] = useState('');
     const [typeService, setTypeService] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileImg, setFileImg] = useState(null);
@@ -106,25 +109,45 @@ export const FormAddCard = () => {
         }
     };
 
+    // const handleFileChange = (event) => {
+    //     const selectedFile = event.target.files[0];
+    //     if (selectedFile) {
+    //         setFile(selectedFile);
+    //         setFileName(selectedFile.name);
+    //     }
+    // };
+    // ฟังก์ชัน handleFileChange สำหรับอัปเดตไฟล์เมื่อมีการเลือกไฟล์ใหม่
     const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setFileName(selectedFile.name);
-        }
+        const selectedFiles = Array.from(event.target.files);  // Convert FileList to array
+        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);  // Append new files
     };
+
+
+    // ฟังก์ชันสำหรับลบไฟล์ที่เลือก
+    const removeFile = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
+
 
     const validateForm = () => {
         let newErrors = {};
         if (!image) newErrors.image = 'ກະລຸນາອັພໂຫຼດຮູບພາບກ່ອນ!';
         if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້!';
-        if (!file) newErrors.file = 'ກະລຸນາອັບໂຫຼດໄຟລ໌!';
+
+        // Correct the file validation by checking if the array is empty
+        if (files.length === 0) newErrors.files = 'ກະລຸນາອັບໂຫຼດໄຟລ໌!';
+
         if (!category) newErrors.category = 'ກະລຸນາເລືອກປະເພດທຶນ!';
         if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດ!';
-        if (documents.length === 0 && typeScholarship.length === 0) newErrors.tags = 'ກະລຸນາເພີ່ມແທັກຢ່າງໜ້ອຍໜຶ່ງອັນໃນກຸ່ມໃດກຸ່ມໜຶ່ງ!';
+        if (documents.length === 0 && typeScholarship.length === 0) {
+            newErrors.tags = 'ກະລຸນາເພີ່ມແທັກຢ່າງໜ້ອຍໜຶ່ງອັນໃນກຸ່ມໃດກຸ່ມໜຶ່ງ!';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -153,7 +176,7 @@ export const FormAddCard = () => {
                 const data = {
                     description,
                     title,
-                    file,
+                    file: files,
                     category_id: category,
                     image: fileImg,
                     document: documents,  // Changed from documents to document
@@ -180,6 +203,7 @@ export const FormAddCard = () => {
             });
         }
     };
+    console.log(files);
     return (
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>
@@ -242,35 +266,52 @@ export const FormAddCard = () => {
                             </div>
 
                             {/* File Upload */}
-                            <div className="mb-4 flex flex-col gap-y-2">
+                            <div className="mb-0 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
                                     ອັບໂຫຼດໄຟລ໌
                                 </p>
                                 <div className="flex items-center relative">
                                     <input
-                                        type="text"
-                                        placeholder="Upload File"
-                                        value={fileName}
-                                        readOnly
-                                        className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                    />
-                                    <input
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileChange}
                                         accept="application/pdf"
+                                        multiple  // อนุญาตให้เลือกหลายไฟล์
                                         className="hidden"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current.click()}
-                                        className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
+                                        className="px-4 py-2 bg-[#01A7B1] text-white rounded-md"
                                     >
                                         Upload
                                     </button>
                                 </div>
-                                {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
+
                             </div>
+
+                            {/* ສະແດງຟາຍ */}
+                            <div className="mb-4">
+                                <p className='text-[14px] font-medium'>
+                                    ໄຟລ໌ທີ່ເລືອກ:
+                                </p>
+                                <ul className="list-disc flex flex-col gap-y-2 pl-5">
+                                    {files.map((file, index) => (
+                                        <li key={index} className="flex items-center justify-between px-2 py-1.5 rounded-md border-[2px]">
+                                            <span>{file.name}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFile(index)}
+                                                className="ml-2 text-red-500 hover:text-red-700"
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                {errors.files && <p className="text-red-500 text-sm mt-1">{errors.files}</p>}
+                            </div>
+
 
                             {/* Category Selection */}
                             <div className="mb-4 flex flex-col gap-y-2">
@@ -383,14 +424,9 @@ export const FormAddCard = () => {
                                     className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
                                     disabled={loading}
                                 >
-                                    {loading ? (
-                                        <>
-                                            ກຳລັງບັນທຶກ
-                                            <span className="ml-2 inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
-                                        </>
-                                    ) : (
-                                        "ບັນທຶກ"
-                                    )}
+                                    {
+                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"
+                                    }
                                 </button>
                             </div>
                         </form>

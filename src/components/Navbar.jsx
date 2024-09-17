@@ -12,6 +12,7 @@ export const Navbar = () => {
     const profile = localStorage.getItem("profile")
     const fistName = localStorage.getItem("firstName")
     const lastName = localStorage.getItem("lastName")
+    // console.log("profile", profile);
     return (
         <div className='px-10 w-full flex items-center justify-end bg-[#f1f5f9] pb-4
         shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]
@@ -28,7 +29,7 @@ export const Navbar = () => {
                     <IoMdNotifications className=' text-[28px] text-[#F9C23C]' />
                 </div>
                 <div className=' flex items-center gap-x-4'>
-                    <img src={profile} alt=""
+                    <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${profile}`} alt=""
                         className=' rounded-full object-cover w-[45px] h-[45px]'
                     />
                     <p className=' text-[14px]'>

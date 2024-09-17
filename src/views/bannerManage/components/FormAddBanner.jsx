@@ -13,13 +13,13 @@ export const FormAddBanner = () => {
     const navigate = useNavigate();
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
-    const [file, setFile] = useState(null);
+    // const [file, setFile] = useState(null);
     const [category, setCategory] = useState('');
     const [detail, setDetail] = useState('');
     const [errors, setErrors] = useState({});
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);
-    const [fileName, setFileName] = useState('');
+    const [files, setFiles] = useState([]);
     const [fileImg, setFileImg] = useState()
     const [loading, setLoading] = useState()
     const [documents, setDocuments] = useState([]);
@@ -71,6 +71,18 @@ export const FormAddBanner = () => {
         setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
     };
 
+    const handleFileChange = (event) => {
+        const selectedFiles = Array.from(event.target.files);  // Convert FileList to array
+        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);  // Append new files
+    };
+
+
+    // ฟังก์ชันสำหรับลบไฟล์ที่เลือก
+    const removeFile = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
+
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -83,13 +95,6 @@ export const FormAddBanner = () => {
         setFileImg(file)
     };
 
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setFileName(selectedFile.name);
-        }
-    };
 
     const validateForm = () => {
         let newErrors = {};
@@ -114,7 +119,7 @@ export const FormAddBanner = () => {
             title: title,
             detail: detail,
             image: fileImg,
-            file: file,
+            file: files,
             document: documents,
             typescholarship: typeScholarship
         }
@@ -223,34 +228,50 @@ export const FormAddBanner = () => {
                             </div>
 
                             {/* File Upload */}
-                            <div className="mb-4 flex flex-col gap-y-2">
+                            <div className="mb-0 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
                                     ອັບໂຫຼດໄຟລ໌
                                 </p>
                                 <div className="flex items-center relative">
                                     <input
-                                        type="text"
-                                        placeholder="Upload File"
-                                        value={fileName}
-                                        readOnly
-                                        className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                    />
-                                    <input
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileChange}
                                         accept="application/pdf"
+                                        multiple  // อนุญาตให้เลือกหลายไฟล์
                                         className="hidden"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current.click()}
-                                        className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
+                                        className="px-4 py-2 bg-[#01A7B1] text-white rounded-md"
                                     >
                                         Upload
                                     </button>
                                 </div>
-                                {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
+
+                            </div>
+
+                            {/* ສະແດງຟາຍ */}
+                            <div className="mb-4">
+                                <p className='text-[14px] font-medium'>
+                                    ໄຟລ໌ທີ່ເລືອກ:
+                                </p>
+                                <ul className="list-disc flex flex-col gap-y-2 pl-5">
+                                    {files.map((file, index) => (
+                                        <li key={index} className="flex items-center justify-between px-2 py-1.5 rounded-md border-[2px]">
+                                            <span>{file.name}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFile(index)}
+                                                className="ml-2 text-red-500 hover:text-red-700"
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                {errors.files && <p className="text-red-500 text-sm mt-1">{errors.files}</p>}
                             </div>
 
                             {/* Tag List Input for Group 1 */}

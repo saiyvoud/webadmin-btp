@@ -59,6 +59,7 @@ export const Dashboard = () => {
     const newsPercentage = (news.length / totalItems) * 100;
     const bannerPercentage = (banner.length / totalItems) * 100;
 
+    console.log("totalDownload", totalDownload);
     return (
         <Sidebar>
             <div className='mt-5'>
@@ -159,8 +160,8 @@ export const Dashboard = () => {
                                 />
                             </div>
                             {selectPieChart === 0 && <PieCharts totalDownload={totalDownload} />}
-                            {selectPieChart === 1 && <PieChartsMonth totalDownload={totalDownload} />} {/* Replace with monthly pie chart component */}
-                            {selectPieChart === 2 && <PieChartsYear totalDownload={totalDownload} />} {/* Replace with yearly pie chart component */}
+                            {selectPieChart === 1 && <PieChartsMonth totalDownload={totalDownload} />}
+                            {selectPieChart === 2 && <PieChartsYear totalDownload={totalDownload} />}
                         </div>
                     </div>
                 </div>

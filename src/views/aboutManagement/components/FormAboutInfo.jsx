@@ -176,7 +176,7 @@ export const FormAboutInfo = () => {
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-[250px] text-center p-2">
                                         {image ? (
                                             <div className='w-full h-full relative'>
-                                                <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                                <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${image}`} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                                 <div onClick={() => setImage(null)}
                                                     className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                                     <FaTrashAlt className='text-white text-[14px]' />

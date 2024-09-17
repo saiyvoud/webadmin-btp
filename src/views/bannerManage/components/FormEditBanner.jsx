@@ -5,18 +5,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { X, Plus } from 'lucide-react';
 import { getBannerOneApi, updateBannerApi, updateFileBannerApi, updateImageBannerApi } from '../../../api/banner';
-import { GetFileObjectApi, getFilePDF } from '../../../api/file';
+import { GetFileObjectApi, GetFilePDF } from '../../../api/file';
 
 export const FormEditBanner = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
-    const [file, setFile] = useState(null);
     const [detail, setDetail] = useState('');
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);
-    const [fileName, setFileName] = useState('');
+    const [files, setFiles] = useState([]);
     const [bannerData, setBannerData] = useState([]);
     const [showImage, setShowImage] = useState(true);
     const [fileImg, setFileImg] = useState(null);
@@ -27,6 +26,23 @@ export const FormEditBanner = () => {
     const [typeScholarship, setTypeScholarship] = useState([]);
     const [inputValue1, setInputValue1] = useState('');
     const [inputValue2, setInputValue2] = useState('');
+    const [existingFiles, setExistingFiles] = useState([]);
+    const [changeImage, setChangeImage] = useState(false)
+
+
+    const handleFileChange = (event) => {
+        const selectedFiles = Array.from(event.target.files);
+        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    };
+
+    const removeFile = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
+    const removeExistingFile = (index) => {
+        setFiles(existingFiles.filter((_, i) => i !== index));
+    };
+
 
     const handleInputChange1 = (e) => {
         setInputValue1(e.target.value);
@@ -75,29 +91,26 @@ export const FormEditBanner = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await getBannerOneApi(id);
-            const fileIcon = await GetFileObjectApi(response.image)
-            const file = await getFilePDF(response.image)
-            setFileImgObject(fileIcon)
-            setFileObject(file)
+            const response = await getBannerOneApi(id);  // Fetch data based on ID
+            const fileIcon = await GetFileObjectApi(response.image);
+            const files = await Promise.all(response.url_path.map((url, index) => GetFilePDF(url[index])));
+
+            // Set the fetched data into state
+            setFileImgObject(fileIcon);
+            setFileObject(files);
             setBannerData(response);
-            setTitle(response.title);
-            setDetail(response.detail);
-            setImage(response.image);
-            setFileName(response.url_path);
-            setDocuments(response.document)
-            setTypeScholarship(response.typescholarship)
+            setTitle(response.title);           // Set title
+            setDetail(response.detail);         // Set detail
+            setImage(response.image);           // Set image
+            setDocuments(response.document || []);  // Set documents
+            setTypeScholarship(response.typescholarship || []);  // Set scholarship types
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchData();
@@ -116,17 +129,10 @@ export const FormEditBanner = () => {
             // Log the file directly
             console.log(file);
         }
+        setChangeImage(true)
         setShowImage(true);
     };
-    console.log(file);
 
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setFileName(selectedFile.name);
-        }
-    };
 
     const handleImageRemove = () => {
         setImage(null);
@@ -137,6 +143,8 @@ export const FormEditBanner = () => {
         e.preventDefault();
         await handleSaveData(id);
     };
+
+    console.log("bannerData", bannerData);
 
     const handleSaveData = async (id) => {
         Swal.fire({
@@ -160,20 +168,25 @@ export const FormEditBanner = () => {
                     image: fileImg ? fileImg : fileImgObject,  // fileImg will have the correct value here
                     oldImage: bannerData.image,
                 };
-
                 const dataFile = {
-                    file: fileObject,
-                    oldFile: bannerData.url_path
+                    file: files.length > 0 ? files : fileObject.map(file => file),
+                    oldFile: files.length > 0
+                        ? bannerData.url_path.slice(0, files.length).join(',')
+                        : bannerData.url_path.join(',')
                 };
 
                 try {
-                    const [response, responseImg, responseFile] = await Promise.all([
+                    const [response] = await Promise.all([
                         updateBannerApi(id, data),
-                        updateImageBannerApi(id, dataImg),
-                        updateFileBannerApi(id, dataFile)
                     ]);
+                    if (changeImage) {
+                        await updateImageBannerApi(id, dataImg)
+                    }
+                    if (files.length > 0) {
+                        await updateFileBannerApi(id, dataFile)
+                    }
 
-                    if (response && responseImg && responseFile) {
+                    if (response) {
                         Swal.fire({
                             title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
                             icon: "success",
@@ -207,7 +220,7 @@ export const FormEditBanner = () => {
                                 <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
                                     {showImage ? (
                                         <div className='w-full h-full relative'>
-                                            <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                            <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${image}`} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                             <div onClick={handleImageRemove}
                                                 className='w-[25px] h-[25px] cursor-pointer absolute top-1 right-1 bg-black/55 rounded-lg flex items-center justify-center'>
                                                 <FaTrashAlt className='text-white text-[14px]' />
@@ -249,32 +262,61 @@ export const FormEditBanner = () => {
                                 />
                             </div>
 
-                            <div className="mb-4 flex flex-col gap-y-2">
+                            <div className="mb-0 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
                                     ອັບໂຫຼດໄຟລ໌
                                 </p>
                                 <div className="flex items-center relative">
                                     <input
-                                        type="text"
-                                        placeholder="Upload File"
-                                        value={fileName}
-                                        readOnly
-                                        className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                    />
-                                    <input
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileChange}
+                                        accept="application/pdf"
+                                        multiple
                                         className="hidden"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current.click()}
-                                        className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
+                                        className="px-4 py-2 bg-[#01A7B1] text-white rounded-md"
                                     >
                                         Upload
                                     </button>
                                 </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <p className='text-[14px] font-medium'>
+                                    ໄຟລ໌ທີ່ເລືອກ:
+                                </p>
+                                <ul className="list-disc flex flex-col gap-y-2 pl-5">
+                                    {existingFiles.map((file, index) => (
+                                        <li key={index} className="flex items-center justify-between px-2 py-1.5 rounded-md border border-gray-300 overflow-hidden text-ellipsis whitespace-nowrap">
+                                            <span>{file.name}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeExistingFile(index)}
+                                                className="ml-2 text-red-500 hover:text-red-700"
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
+                                        </li>
+                                    ))}
+                                    {files.map((file, index) => (
+                                        <li key={`new-${index}`} className="flex items-center justify-between px-2 py-1.5 rounded-md border border-gray-300 overflow-hidden text-ellipsis whitespace-nowrap">
+                                            <span>{file.name}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFile(index)}
+                                                className="ml-2 text-red-500 hover:text-red-700"
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                {/* {errors.files && <p className="text-red-500 text-sm mt-1">{errors.files}</p>} */}
                             </div>
 
                             <div className="mb-6 flex flex-col gap-y-2">
@@ -300,9 +342,9 @@ export const FormEditBanner = () => {
                                         {documents.map((tag, index) => (
                                             <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
                                                 {tag}
-                                                <button onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
+                                                <div onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
                                                     <X size={14} />
-                                                </button>
+                                                </div>
                                             </span>
                                         ))}
                                     </div>
@@ -315,12 +357,12 @@ export const FormEditBanner = () => {
                                             placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
                                             className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
                                         />
-                                        <button
+                                        <div
                                             onClick={addTag1}
                                             className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
                                         >
                                             <Plus size={20} />
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -335,9 +377,9 @@ export const FormEditBanner = () => {
                                         {typeScholarship.map((tag, index) => (
                                             <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
                                                 {tag}
-                                                <button onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
+                                                <div onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
                                                     <X size={14} />
-                                                </button>
+                                                </div>
                                             </span>
                                         ))}
                                     </div>
@@ -350,12 +392,12 @@ export const FormEditBanner = () => {
                                             placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
                                             className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
                                         />
-                                        <button
+                                        <div
                                             onClick={addTag2}
                                             className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
                                         >
                                             <Plus size={20} />
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

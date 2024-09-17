@@ -132,7 +132,7 @@ export const BannerList = ({ dateRange }) => {
                             style={{ ...springs }}
                         >
                             <img
-                                src={item?.image}
+                                src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${item?.image}`}
                                 alt={item?.title}
                                 className="w-full h-[190px] md:h-[200px] rounded-t-lg object-cover"
                             />

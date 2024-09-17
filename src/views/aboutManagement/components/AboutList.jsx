@@ -118,7 +118,7 @@ export const AboutList = ({ filteredDates, cDataID }) => {
                             style={{ ...Springs }}
                         >
                             <img
-                                src={card.images[0]}
+                                src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${card.images[0]}`}
                                 alt={card.title}
                                 className='w-full h-[200px] rounded-t-lg object-cover'
                             />

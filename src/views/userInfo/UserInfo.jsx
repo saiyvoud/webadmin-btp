@@ -175,7 +175,7 @@ export const UserInfo = () => {
             <td className="py-4 sm:px-5 xl:px-1 xl:w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
             <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
                 <div className="relative w-16 h-16">
-                    <img src={profile} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
+                    <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${profile}`} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
                     <div
                         onClick={() => navigate(`/userInfo/editProfile/${id}`)}
                         className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"

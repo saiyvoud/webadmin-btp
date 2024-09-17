@@ -68,10 +68,13 @@ export const addBannerApi = async (data) => {
 
     const formData = new FormData()
     formData.append("image", data?.image || "")
-    formData.append("url_path", data?.file || "")
+    // formData.append("url_path", data?.file || "")
     formData.append("title", data?.title || "")
     formData.append("detail", data?.detail || "")
 
+    for (let i = 0; i < data?.file?.length; i++) {
+        formData.append("url_path", data?.file[i] || "", data?.file[i].name || "defaultName.pdf");
+    }
 
     if (data?.document && Array.isArray(data.document)) {
         formData.append("document", JSON.stringify(data.document));
@@ -160,10 +163,17 @@ export const updateFileBannerApi = async (id, data) => {
         }
     }
 
-    const formData = new FormData()
-    formData.append("file", data?.file || "")
-    formData.append("oldFile", data?.oldFile || "")
-    // console.log(data);
+    const formData = new FormData();
+    if (data?.file && data.file.length > 0) {
+        data.file.forEach((file) => {
+            formData.append("file", file, file.name); // Use original file name
+            console.log("file.name", file.name);
+        });
+    }
+
+    // Append old file if needed
+    formData.append("oldFile", data?.oldFile);
+
     try {
         const response = await axios.put(`${ApiPath.updateFileBanner}/${id}`, formData, headerConfig)
         return response

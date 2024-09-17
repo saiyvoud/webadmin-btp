@@ -60,35 +60,25 @@ export const deleteServiceApi = async (id) => {
         return false
     }
 }
-
 export const addServiceApi = async (data) => {
     const token = localStorage.getItem("token");
     const headerConfig = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`
-        }
+            "Authorization": `Bearer ${token}`,
+        },
     };
 
     const formData = new FormData();
     formData.append("description", data?.description || "");
     formData.append("title", data?.title || "");
-    formData.append("file", data?.file || "");
     formData.append("category_id", data?.category_id || "");
     formData.append("image", data?.image || "");
 
-    // Handling array data
-    // if (data?.document && Array.isArray(data.document)) {
-    //     data.document.forEach((doc, index) => {
-    //         formData.append(`document[${index}]`, doc);
-    //     });
-    // }
 
-    // if (data?.typescholarship && Array.isArray(data.typescholarship)) {
-    //     data.typescholarship.forEach((type, index) => {
-    //         formData.append(`typescholarship[${index}]`, type);
-    //     });
-    // }
+    for (let i = 0; i < data?.file?.length; i++) {
+        formData.append("file", data?.file[i] || "", data?.file[i].name || "defaultName.pdf");
+    }
 
     if (data?.document && Array.isArray(data.document)) {
         formData.append("document", JSON.stringify(data.document));
@@ -98,20 +88,22 @@ export const addServiceApi = async (data) => {
         formData.append("typescholarship", JSON.stringify(data.typescholarship));
     }
 
-    // Log the FormData for debugging
+    // Log ข้อมูลใน formData สำหรับตรวจสอบ
     for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
     }
 
-    console.log(data);
     try {
         const response = await axios.post(ApiPath.addService, formData, headerConfig);
         return response;
     } catch (error) {
-        console.log("error occurred in AddProductApi ==> ", error);
+        console.log("error occurred in AddServiceApi ==> ", error);
         return false;
     }
 };
+
+
+
 export const updateServiceApi = async (id, data) => {
     // console.log(id);
     const token = localStorage.getItem("token");
@@ -152,7 +144,7 @@ export const updateServiceImage = async (id, data) => {
             "Authorization": `Bearer ${token}`
         }
     };
-
+    console.log("data image api ", data);
     const formData = new FormData()
     formData.append("image", data?.image || "")
     formData.append("oldImage", data?.oldImage || "")
@@ -167,7 +159,9 @@ export const updateServiceImage = async (id, data) => {
         return false;
     }
 }
+
 export const updateServiceFileApi = async (id, data) => {
+    console.log("data updateServiceFileApi =>>", data);
     const token = localStorage.getItem("token");
     const headerConfig = {
         headers: {
@@ -176,17 +170,23 @@ export const updateServiceFileApi = async (id, data) => {
         }
     };
 
-    const formData = new FormData()
-    formData.append("file", data?.file || "")
-    formData.append("oldFile", data?.oldFile || "")
+    const formData = new FormData();
+    if (data?.file && data.file.length > 0) {
+        data.file.forEach((file) => {
+            formData.append("file", file, file.name); // Use original file name
+            console.log("file.name", file.name);
+        });
+    }
+
+    // Append old file if needed
+    formData.append("oldFile", data?.oldFile);
 
     try {
         const response = await axios.put(`${ApiPath.updateServiceFile}/${id}`, formData, headerConfig);
-        console.log("res of UpdateServiceImageApi =>> ");
-        console.log(response);
+        console.log("res of UpdateServiceImageApi =>> ", response);
         return response;
     } catch (error) {
-        console.log("error occured in UpdateProductApi ==> ", error);
+        console.log("error occured in UpdateServiceFileApi ==> ", error);
         return false;
     }
 }

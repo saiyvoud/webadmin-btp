@@ -1,5 +1,9 @@
-const baseUrl = "https://scholarship-api-0oe7.onrender.com/api/v1"
+// const baseUrl = "https://scholarship-api-0oe7.onrender.com/api/v1"
 // const baseUrl = "http://localhost:8000/api/v1"
+const baseUrl = "https://ec2-13-213-6-240.ap-southeast-1.compute.amazonaws.com/api/v1"
+// const baseUrl = "https://nodejsclusters-183358-0.cloudclusters.net/api/v1"
+
+
 
 export default class ApiPath {
     // about

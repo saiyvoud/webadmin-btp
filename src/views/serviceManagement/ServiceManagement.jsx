@@ -149,7 +149,7 @@ export const ServiceManagement = () => {
                                     <div key={index}
                                         className='md:h-[310px] sm:h-[280px] sm:w-[180px] md:w-full relative rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50'
                                     >
-                                        <img src={card.image} alt=""
+                                        <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${card.image}`} alt=""
                                             className='object-cover w-full sm:h-[170px] md:h-[190px] rounded-t-lg'
                                         />
                                         <div className='flex flex-col py-2 xl:px-5 sm:px-2'>

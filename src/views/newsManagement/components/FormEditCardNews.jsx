@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { X, Plus } from 'lucide-react';
 import { getOneNewsApi, updateNewsApi, updateNewsFileApi, updateNewsImageApi } from '../../../api/news';
-import { GetFileObjectApi, getFilePDF } from '../../../api/file';
+import { GetFileObjectApi, GetFilePDF } from '../../../api/file';
 
 export const FormEditCardNews = () => {
     const navigate = useNavigate();
@@ -79,7 +79,7 @@ export const FormEditCardNews = () => {
             const response = await getOneNewsApi(id);
 
             const fileImg = await GetFileObjectApi(response.image);
-            const file = await getFilePDF(response.file_url);
+            const file = await GetFilePDF(response.file_url);
 
             setNewsData(response);
             setFileImgObject(fileImg);
