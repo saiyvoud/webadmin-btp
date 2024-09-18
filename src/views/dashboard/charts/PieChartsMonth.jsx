@@ -24,7 +24,7 @@ export const PieChartsMonth = ({ totalDownload }) => {
 
     const data = [
         { value: selectedData?.service, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
-        { value: selectedData?.news, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
+        // { value: selectedData?.news, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
         { value: selectedData?.banner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
     ];
 

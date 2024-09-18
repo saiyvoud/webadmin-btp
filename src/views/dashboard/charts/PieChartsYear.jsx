@@ -17,7 +17,7 @@ export const PieChartsYear = ({ totalDownload }) => {
 
         return [
             { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
-            { value: totalNews, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
+            // { value: totalNews, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
             { value: totalBanner, name: 'Banner', itemStyle: { color: '#72e5a7' } }, // Green
         ];
     };
