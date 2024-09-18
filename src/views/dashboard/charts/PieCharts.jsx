@@ -7,7 +7,7 @@ export const PieCharts = ({ totalDownload }) => {
     const totalBanner = totalDownload?.filter((item) => item?.type === "banner").length
     const totalService = totalDownload?.filter((item) => item?.type === "service").length
     const totalNews = totalDownload?.filter((item) => item?.type === "news").length
-    // console.log("total", total);
+    // //console.log("total", total);
     const data = [
         { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
         // { value: totalNews, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
@@ -75,7 +75,7 @@ export const PieCharts = ({ totalDownload }) => {
     };
 
     return (
-        <div className='w-full h-full bg-white rounded-lg py-8 px-8'>
+        <div className='w-full h-full bg-white rounded-lg lg:py-8 lg:px-8'>
             <div className='flex flex-col h-full items-center w-full mt-10'>
                 <ReactECharts
                     option={option}

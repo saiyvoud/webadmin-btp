@@ -15,8 +15,8 @@ export const FormAddCoverImg = () => {
     const [coverImg, setCoverImg] = useState([]);
 
     // const imgID = coverImg.id
-    // console.log("this is imgID=",);
-    // console.log(imgID);
+    // //console.log("this is imgID=",);
+    // //console.log(imgID);
 
     const fetchData = async () => {
         // setLoading(true);
@@ -37,7 +37,7 @@ export const FormAddCoverImg = () => {
 
     useEffect(() => {
         fetchData();
-        console.log("this is data in cover img", coverImg);
+        //console.log("this is data in cover img", coverImg);
     }, []);
 
     const handleImageUpload = (event) => {
@@ -57,7 +57,7 @@ export const FormAddCoverImg = () => {
         if (validateForm()) {
             handleSaveData();
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
     };
 
@@ -77,7 +77,7 @@ export const FormAddCoverImg = () => {
                     // oldImg: coverImg.image
                 };
 
-                // console.log("this is old img", coverImg[0].image);
+                // //console.log("this is old img", coverImg[0].image);
 
                 try {
                     setLoading(true); // Set loading to true when saving data

@@ -11,7 +11,7 @@ export const getAboutApi = async () => {
             }
         }
         const response = await axios.get(ApiPath.getAbout, config)
-        console.log(response?.data?.data);
+        //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error  fetching about API", error);
@@ -26,7 +26,7 @@ export const getAboutOneApi = async (id) => {
             }
         }
         const response = await axios.get(`${ApiPath.getAboutOne}/${id}`, config)
-        console.log(response?.data?.data);
+        //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error  fetching about API", error);
@@ -95,7 +95,7 @@ export const updateAboutImageApi = async (id, data) => {
     // formData.append("title", data?.title || "");
     formData.append("images", data?.images || "");
     formData.append("oldImages", data?.oldImages || "");
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateAboutImg}/${id}`, formData, configHeader)
         return response
@@ -108,7 +108,7 @@ export const updateAboutImageApi = async (id, data) => {
 export const getCoverImageApi = async () => {
     try {
         const response = await axios.get(ApiPath.getCoverImage, getHeaderConfig())
-        console.log(response?.data?.data);
+        //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error cover image API", error);
@@ -169,7 +169,7 @@ export const updateCompanyData = async (id, data) => {
     formData.append("description", data?.description || "")
     formData.append("icon", data?.image || "")
 
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateCompanyData}/${id}`, formData, configHeader)
         return response
@@ -191,7 +191,7 @@ export const updateIconCompanyDataApi = async (id, data) => {
     formData.append("icon", data?.icon || "")
     formData.append("oldIcon", data?.oldIcon || "")
 
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateIconCompanyData}/${id}`, formData, configHeader)
         return response
@@ -210,7 +210,7 @@ export const getCompanyDataApi = async () => {
         };
         const response = await axios.get(ApiPath.getCompanyData, config);
 
-        // console.log("Get companyData is success => \n", response?.data?.data[0]);
+        // //console.log("Get companyData is success => \n", response?.data?.data[0]);
 
         return response?.data?.data
     } catch (error) {
@@ -233,7 +233,7 @@ export const addCompanyDataApi = async (data) => {
     formData.append("description", data?.description || "")
     formData.append("icon", data?.icon || "")
 
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.post(`${ApiPath.addCompanyData}`, formData, configHeader)
         return response

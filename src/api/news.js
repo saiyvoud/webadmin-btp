@@ -14,7 +14,7 @@ export const getNewsApi = async () => {
         const response = await axios.get(ApiPath.getNews, config);
         return response?.data?.data;
     } catch (error) {
-        console.log("Error getNews =>", error);
+        //console.log("Error getNews =>", error);
         return false;
     }
 };
@@ -28,7 +28,7 @@ export const getOneNewsApi = async (id) => {
         const response = await axios.get(`${ApiPath.getOneNews}/${id}`, config);
         return response?.data?.data;
     } catch (error) {
-        console.log("Error getNews =>", error);
+        //console.log("Error getNews =>", error);
         return false;
     }
 };
@@ -57,14 +57,14 @@ export const addNewsApi = async (data) => {
     }
     // Log the FormData for debugging
     for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
+        //console.log(`${key}: ${value}`);
     }
 
     try {
         const response = await axios.post(ApiPath.addNews, formData, headerConfig);
         return response;
     } catch (error) {
-        console.log("error occurred in AddProductApi ==> ", error);
+        //console.log("error occurred in AddProductApi ==> ", error);
         return false;
     }
 };

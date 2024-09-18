@@ -105,10 +105,10 @@ export const FormAddCardNews = () => {
         if (validateForm()) {
             handleSaveData();
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
     };
-    console.log("documents=", documents);
+    //console.log("documents=", documents);
 
     const handleSaveData = async () => {
         const data = {

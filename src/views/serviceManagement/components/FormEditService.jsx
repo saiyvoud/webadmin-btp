@@ -141,8 +141,8 @@ export const FormEditService = () => {
         setChangeImage(!changeImage)
     };
 
-    console.log("fileObject type:", typeof fileObject);
-    console.log("dataService reduce ======= \n", fileObject)
+    //console.log("fileObject type:", typeof fileObject);
+    //console.log("dataService reduce ======= \n", fileObject)
 
 
     const handleSubmit = async (e) => {

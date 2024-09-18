@@ -47,12 +47,12 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
     }, []);
 
     if (!isAuth()) {
-        console.log("No token or token expired");
+        //console.log("No token or token expired");
         return <Navigate to="/login" />;
     }
 
     if (!isAllowedRole(allowedRoles)) {
-        console.log("No role");
+        //console.log("No role");
         return <Navigate to="/login" />;
     }
 

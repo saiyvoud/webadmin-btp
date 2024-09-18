@@ -4,7 +4,7 @@ import ApiPath from "./apiPaths";
 
 export const getViewApi = async (date) => {
     // const date = Date()
-    // console.log("date = ", formatDate(date));
+    // //console.log("date = ", formatDate(date));
     // const data ={
     //     date:Date()
     // }

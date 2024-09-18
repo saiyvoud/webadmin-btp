@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 export const getUserApi = async () => {
     try {
         const response = await axios.get(ApiPath.getUser, getHeaderConfig())
-        console.log(response?.data?.data);
+        //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error req get user", error);
@@ -17,7 +17,7 @@ export const getUserApi = async () => {
 export const getUserOneApi = async (id) => {
     try {
         const response = await axios.get(`${ApiPath.getUserOne}/${id}`, getHeaderConfig())
-        console.log(response?.data?.data);
+        //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error req get user", error);
@@ -54,16 +54,16 @@ export const updateUserApi = async (id, data) => {
     try {
         const response = await axios.put(`${ApiPath.updateUser}/${id}`, formData, headerConfig);
         const userID = localStorage.getItem("UID")
-        console.log(userID == id);
+        //console.log(userID == id);
         if (userID == id) {
             localStorage.setItem("firstName", data?.firstName)
             localStorage.setItem("lastName", data?.lastName)
         }
-        // console.log("res of UpdateProductApi =>> ");
-        // console.log(response);
+        // //console.log("res of UpdateProductApi =>> ");
+        // //console.log(response);
         return response;
     } catch (error) {
-        console.log("error occured in UpdateProductApi ==> ", error);
+        //console.log("error occured in UpdateProductApi ==> ", error);
         return false;
     }
 };
@@ -80,7 +80,7 @@ export const updateUserImage = async (id, data) => {
     const formData = new FormData();
     formData.append("image", data?.image || "");
     formData.append("oldProfile", data?.oldImage || "");
-    console.log(data);
+    //console.log(data);
 
     try {
         const response = await axios.put(`${ApiPath.updateUserImage}/${id}`, formData, headerConfig);
@@ -94,7 +94,7 @@ export const updateUserImage = async (id, data) => {
 
         return response;
     } catch (error) {
-        console.log("Error occurred in updateUserImage API ==> ", error);
+        //console.log("Error occurred in updateUserImage API ==> ", error);
         return false;
     }
 };

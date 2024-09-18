@@ -18,12 +18,12 @@ export const addServiceApi = async (name, userId) => {
         };
 
         const response = await axios.post(ApiPath.addCategory, data, config);
-        console.log("Full response:", response);
+        //console.log("Full response:", response);
 
         if (response.data.status === true) {
             return true;
         } else {
-            console.log(`Operation failed: ${response.data.message}`);
+            //console.log(`Operation failed: ${response.data.message}`);
             return false;
         }
     } catch (error) {
@@ -41,10 +41,10 @@ export const updateServiceApi = async (id, name) => {
         }
 
         const response = await axios.put(`${ApiPath.updateCategory}/${id}`, data, getHeaderConfig())
-        console.log(response);
+        //console.log(response);
         return response
     } catch (error) {
-        console.log("error occured in UpdateProductApi ==> ", error)
+        //console.log("error occured in UpdateProductApi ==> ", error)
         return false
     }
 

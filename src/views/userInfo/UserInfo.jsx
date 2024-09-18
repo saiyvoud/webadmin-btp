@@ -30,7 +30,7 @@ export const UserInfo = () => {
     }
     const encryptedRole = localStorage.getItem("role");
     const currentRole = decryptData(encryptedRole);
-    console.log(currentRole);
+    //console.log(currentRole);
 
     const fetchData = async () => {
         setLoading(true);
@@ -126,7 +126,7 @@ export const UserInfo = () => {
     };
 
     const deleteItem = async (id) => {
-        // console.log(!(currentRole === "superadmin"));
+        // //console.log(!(currentRole === "superadmin"));
 
         if (!(currentRole === "superadmin")) {
             Swal.fire({

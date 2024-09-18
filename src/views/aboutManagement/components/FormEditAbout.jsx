@@ -66,7 +66,7 @@ export const FormEditAbout = () => {
         if (validateForm()) {
             handleSaveData();
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
     };
 
@@ -114,8 +114,8 @@ export const FormEditAbout = () => {
         });
     };
 
-    console.log("oone", `https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${aboutOne.images}`);
-    console.log("oone", image);
+    //console.log("oone", `https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${aboutOne.images}`);
+    //console.log("oone", image);
 
     return (
         <Sidebar>

@@ -55,11 +55,11 @@ export const ContactDetail = () => {
             setFileImg(file);
 
             // Log the file directly
-            console.log(file);
+            //console.log(file);
         }
         setShowImage(true);
     };
-    console.log(file);
+    //console.log(file);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];

@@ -155,7 +155,7 @@ export const FormAddCard = () => {
         if (validateForm()) {
             await handleSaveData();
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
         setLoading(false);
     };
@@ -203,7 +203,7 @@ export const FormAddCard = () => {
             });
         }
     };
-    console.log(files);
+    //console.log(files);
     return (
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>

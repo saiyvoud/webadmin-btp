@@ -38,7 +38,7 @@ export const ServiceInfo = () => {
 
     useEffect(() => {
         fetchData();
-        console.log(category);
+        //console.log(category);
     }, []);
 
     const showModal = () => {

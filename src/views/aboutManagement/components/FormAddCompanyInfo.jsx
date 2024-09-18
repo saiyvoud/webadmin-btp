@@ -31,7 +31,7 @@ export const FormAddCompanyInfo = () => {
                 text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
                 icon: "error"
             });
-            console.log("Error response About Data", error);
+            //console.log("Error response About Data", error);
         } finally {
             setLoading(false);
         }
@@ -61,7 +61,7 @@ export const FormAddCompanyInfo = () => {
     //     setErrors(newErrors);
     //     return Object.keys(newErrors).length === 0;
     // };
-    console.log("company=", companyInfo);
+    //console.log("company=", companyInfo);
     const handleSubmit = (e) => {
         e.preventDefault();
         handleSaveData();

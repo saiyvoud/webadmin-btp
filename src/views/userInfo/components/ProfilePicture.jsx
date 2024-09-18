@@ -61,7 +61,7 @@ export const ProfilePicture = () => {
         if (validateForm()) {
             handleSaveData(id);
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
     };
 

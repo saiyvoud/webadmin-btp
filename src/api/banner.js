@@ -10,7 +10,7 @@ export const getBannerApi = async () => {
             }
         }
         const response = await axios.get(ApiPath.getBanner, config)
-        // console.log(response?.data?.data);
+        // //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error get banner", error);
@@ -24,9 +24,9 @@ export const getBannerOneApi = async (id) => {
                 'Content-Type': 'application/json',
             }
         }
-        console.log("Get id is =", id);
+        //console.log("Get id is =", id);
         const response = await axios.get(`${ApiPath.getBannerOne}/${id}`, config)
-        // console.log(response?.data?.data);
+        // //console.log(response?.data?.data);
         return response?.data?.data
     } catch (error) {
         console.error("Error get banner", error);
@@ -47,7 +47,7 @@ export const upadteSwitchBannerApi = async (id, value) => {
     const data = {
         isPublished: (value) ? "true" : "false"
     }
-    // console.log(data);
+    // //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateSwitchBanner}/${id}`, data, getHeaderConfig())
         return response
@@ -85,10 +85,10 @@ export const addBannerApi = async (data) => {
     }
     // Log the FormData for debugging
     for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
+        //console.log(`${key}: ${value}`);
     }
 
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.post(ApiPath.addBanner, formData, headerConfig)
         return response
@@ -121,7 +121,7 @@ export const updateBannerApi = async (id, data) => {
         formData.append("typescholarship", JSON.stringify(data.typescholarship));
     }
 
-    console.log(data);
+    //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateBanner}/${id}`, formData, headerConfig)
         return response
@@ -143,7 +143,7 @@ export const updateImageBannerApi = async (id, data) => {
     const formData = new FormData()
     formData.append("image", data?.image || "")
     formData.append("oldImage", data?.oldImage || "")
-    // console.log(data);
+    // //console.log(data);
     try {
         const response = await axios.put(`${ApiPath.updateImageBanner}/${id}`, formData, headerConfig)
         return response
@@ -167,7 +167,7 @@ export const updateFileBannerApi = async (id, data) => {
     if (data?.file && data.file.length > 0) {
         data.file.forEach((file) => {
             formData.append("file", file, file.name); // Use original file name
-            console.log("file.name", file.name);
+            //console.log("file.name", file.name);
         });
     }
 

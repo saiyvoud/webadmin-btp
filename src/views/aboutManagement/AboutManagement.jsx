@@ -26,7 +26,7 @@ export const AboutManagement = () => {
                 text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
                 icon: "error"
             });
-            console.log("Error response About Data", error);
+            //console.log("Error response About Data", error);
         } finally {
             setLoading(false);
         }
@@ -42,7 +42,7 @@ export const AboutManagement = () => {
                 text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
                 icon: "error"
             });
-            console.log("Error response About Data", error);
+            //console.log("Error response About Data", error);
         } finally {
             setLoading(false);
         }
@@ -52,14 +52,14 @@ export const AboutManagement = () => {
         fetchCompanydata();
         fetchDataAboutBanner()
     }, []);
-    // console.log("cover img", converImg[0]);
+    // //console.log("cover img", converImg[0]);
 
     const handleDateChange = (dates) => {
         setFilteredDates(dates); // Update the state with selected dates
     };
 
     const cDataID = companyData?.map((item) => item?.id);
-    // console.log("converImg", cDataID[0]);
+    // //console.log("converImg", cDataID[0]);
     return (
         <Sidebar>
             <div className='mt-4'>

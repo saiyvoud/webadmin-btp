@@ -56,7 +56,7 @@ export const FormAddUser = () => {
         if (validateForm()) {
             handleSaveData();
         } else {
-            console.log('Form has errors');
+            //console.log('Form has errors');
         }
     };
 

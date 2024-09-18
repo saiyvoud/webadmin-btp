@@ -12,7 +12,7 @@ export const Navbar = () => {
     const profile = localStorage.getItem("profile")
     const fistName = localStorage.getItem("firstName")
     const lastName = localStorage.getItem("lastName")
-    // console.log("profile", profile);
+    // //console.log("profile", profile);
     return (
         <div className='px-10 w-full flex items-center justify-end bg-[#f1f5f9] pb-4
         shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]

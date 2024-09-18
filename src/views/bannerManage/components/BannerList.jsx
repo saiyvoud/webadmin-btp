@@ -34,7 +34,7 @@ export const BannerList = ({ dateRange }) => {
 
     useEffect(() => {
         fetchData();
-        console.log(bannerData);
+        //console.log(bannerData);
     }, []);
 
     const filteredData = dateRange

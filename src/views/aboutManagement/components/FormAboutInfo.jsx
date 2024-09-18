@@ -26,10 +26,10 @@ export const FormAboutInfo = () => {
         try {
             const response = await getCompanyDataApi();
             setCompanyInfo(response);
-            // console.log("response")
-            // console.log(response)
-            // console.log("icon")
-            console.log(response[0].icon)
+            // //console.log("response")
+            // //console.log(response)
+            // //console.log("icon")
+            //console.log(response[0].icon)
             const fileIcon = await GetFileObjectApi(response[0].icon);
             setFileIcon(fileIcon)
 
@@ -46,7 +46,7 @@ export const FormAboutInfo = () => {
                 text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
                 icon: "error"
             });
-            console.log("Error response About Data", error);
+            //console.log("Error response About Data", error);
         } finally {
             setLoading(false);
         }

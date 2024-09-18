@@ -59,7 +59,7 @@ export const Dashboard = () => {
     const newsPercentage = (news.length / totalItems) * 100;
     const bannerPercentage = (banner.length / totalItems) * 100;
 
-    console.log("totalDownload", totalDownload);
+    //console.log("totalDownload", totalDownload);
     return (
         <Sidebar>
             <div className='mt-5'>

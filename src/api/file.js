@@ -9,10 +9,10 @@ export const GetFileObjectApi = async (url) => {
         const blob = response.data;
         const file = new File([blob], "images", { type: "image/jpg" });
         // const file = new File([blob], "image", { type: 'multipart/form-data' });
-        console.log("file get object", file);
+        //console.log("file get object", file);
         return file;
     } catch (error) {
-        console.log("Error Occurred In GetFileObject => ", error);
+        //console.log("Error Occurred In GetFileObject => ", error);
         return null;
     }
 }
@@ -28,7 +28,7 @@ export const GetFilePDF = async (url) => {
         const file = new File([blob], fileName || "document.pdf", { type: 'application/pdf' });
         return file;
     } catch (error) {
-        console.log("Error Occurred In getFilePDF => ", error);
+        //console.log("Error Occurred In getFilePDF => ", error);
         return null;
     }
 }

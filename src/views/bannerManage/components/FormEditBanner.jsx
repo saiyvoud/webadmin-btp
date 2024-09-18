@@ -127,7 +127,7 @@ export const FormEditBanner = () => {
             setFileImg(file);
 
             // Log the file directly
-            console.log(file);
+            //console.log(file);
         }
         setChangeImage(true)
         setShowImage(true);
@@ -144,7 +144,7 @@ export const FormEditBanner = () => {
         await handleSaveData(id);
     };
 
-    console.log("bannerData", bannerData);
+    //console.log("bannerData", bannerData);
 
     const handleSaveData = async (id) => {
         Swal.fire({

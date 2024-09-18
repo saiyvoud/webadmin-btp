@@ -33,7 +33,7 @@ export const AboutList = ({ filteredDates, cDataID }) => {
                 text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
                 icon: "error"
             });
-            console.log("Error response About Data", error);
+            //console.log("Error response About Data", error);
         } finally {
             setLoading(false);
         }
