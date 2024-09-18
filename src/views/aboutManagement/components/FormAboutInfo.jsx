@@ -26,19 +26,13 @@ export const FormAboutInfo = () => {
         try {
             const response = await getCompanyDataApi();
             setCompanyInfo(response);
-            // //console.log("response")
-            // //console.log(response)
-            // //console.log("icon")
-            //console.log(response[0].icon)
-            const fileIcon = await GetFileObjectApi(response[0].icon);
-            setFileIcon(fileIcon)
-
-            // Find the company data by id
             const company = response.find(item => item.id === parseInt(id)); // Ensure id is a number
             if (company) {
                 setTitle(company.title);
                 setDescription(company.description);
-                setImage(company.icon); // Assuming 'icon' contains the image URL or path
+                // Assuming 'icon' contains the image URL or path
+                // Ensure it's a valid URL or base64 image string
+                // setImage(company.icon);
             }
         } catch (error) {
             Swal.fire({
@@ -58,6 +52,7 @@ export const FormAboutInfo = () => {
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
+        setFileImg(file);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -65,7 +60,7 @@ export const FormAboutInfo = () => {
             };
             reader.readAsDataURL(file);
         }
-        setFileImg(file);
+
     };
 
     const validateForm = () => {
@@ -106,13 +101,15 @@ export const FormAboutInfo = () => {
 
                 try {
                     // Call both APIs concurrently
-                    const [response, responseIcon] = await Promise.all([
-                        updateCompanyData(id, data),
-                        updateIconCompanyDataApi(id, dataIcon)
-                    ]);
+                    const response = await updateCompanyData(id, data);
+                    if (fileImg) {
+                        await updateIconCompanyDataApi(id, dataIcon)
+                    } else if (!fileImg) {
+                        return
+                    }
 
                     // Handle responses
-                    if (response && responseIcon) {
+                    if (response) {
                         Swal.fire({
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
@@ -134,6 +131,7 @@ export const FormAboutInfo = () => {
             }
         });
     };
+    console.log("fileImg c", fileImg);
 
     return (
         <Sidebar>
@@ -176,7 +174,7 @@ export const FormAboutInfo = () => {
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-[250px] text-center p-2">
                                         {image ? (
                                             <div className='w-full h-full relative'>
-                                                <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${image}`} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                                <img src={fileImg ? image : `https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${companyInfo.icon}`} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                                                 <div onClick={() => setImage(null)}
                                                     className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
                                                     <FaTrashAlt className='text-white text-[14px]' />
