@@ -157,6 +157,7 @@ export const FormEditBanner = () => {
             cancelButtonText: 'ຍົກເລີກ',
         }).then(async (result) => {
             if (result.isConfirmed) {
+                setLoading(true)
                 const data = {
                     title,
                     detail,
@@ -200,6 +201,8 @@ export const FormEditBanner = () => {
                         icon: "error",
                     });
                     console.error("Error updating banner:", error);
+                } finally {
+                    setLoading(false)
                 }
             }
         });

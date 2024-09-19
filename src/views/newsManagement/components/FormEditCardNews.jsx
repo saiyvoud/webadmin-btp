@@ -249,7 +249,7 @@ export const FormEditCardNews = () => {
                                         className='mt-3 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#01A7B1]' />
                                 </div>
 
-                                <div className="mb-4 flex flex-col gap-y-2">
+                                {/* <div className="mb-4 flex flex-col gap-y-2">
                                     <p className='text-[14px] font-medium'>
                                         ອັບໂຫຼດໄຟລ໌
                                     </p>
@@ -275,7 +275,7 @@ export const FormEditCardNews = () => {
                                             Upload
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Tag List Input for Group 1 */}
                                 {/* <div className="mb-4 flex flex-col gap-y-2">
@@ -347,7 +347,7 @@ export const FormEditCardNews = () => {
                                     </div>
                                 </div> */}
 
-                                <div>
+                                <div className=' mt-5'>
                                     <label htmlFor='detail' className='font-medium'>
                                         ລາຍລະອຽດຂໍໍ້ມູນ
                                     </label>

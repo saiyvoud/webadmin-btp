@@ -151,13 +151,11 @@ export const FormAddCard = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         if (validateForm()) {
             await handleSaveData();
         } else {
             //console.log('Form has errors');
         }
-        setLoading(false);
     };
 
     const handleSaveData = async () => {
@@ -173,6 +171,7 @@ export const FormAddCard = () => {
             });
 
             if (result.isConfirmed) {
+                setLoading(true);
                 const data = {
                     description,
                     title,
@@ -201,6 +200,8 @@ export const FormAddCard = () => {
                 title: "Error ການບັນທຶກລົ້ມເຫຼວ",
                 icon: "error"
             });
+        } finally {
+            setLoading(false);
         }
     };
     //console.log(files);

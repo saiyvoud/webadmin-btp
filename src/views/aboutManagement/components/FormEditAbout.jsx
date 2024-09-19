@@ -17,6 +17,7 @@ export const FormEditAbout = () => {
     const [errors, setErrors] = useState({});
     const [aboutOne, setAboutOne] = useState({});
     const [fileConvertImg, setFileConvertImg] = useState();
+    const [checkUpload, setCheckUpload] = useState(false)
     const { id } = useParams();
 
     const fetchData = async (id) => {
@@ -51,6 +52,7 @@ export const FormEditAbout = () => {
             };
             reader.readAsDataURL(file);
         }
+        setCheckUpload(true)
     };
 
     const validateForm = () => {
@@ -81,6 +83,7 @@ export const FormEditAbout = () => {
             cancelButtonText: 'ຍົກເລີກ'
         }).then(async (result) => {
             if (result.isConfirmed) {
+                setLoading(true)
                 const data = { title };
                 const dataImg = {
                     images: fileImg ? fileImg : fileConvertImg,
@@ -88,13 +91,12 @@ export const FormEditAbout = () => {
                 };
 
                 try {
-                    const [response, responseImg] = await Promise.all([
-                        updateAboutApi(id, data),
-                        fileImg ? updateAboutImageApi(id, dataImg) : Promise.resolve()
-                    ]);
-                    setLoading(true)
+                    const response = await updateAboutApi(id, data)
+                    if (fileImg) {
+                        await updateAboutImageApi(id, dataImg)
+                    }
 
-                    if (response && responseImg) {
+                    if (response) {
                         Swal.fire({
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
@@ -109,6 +111,8 @@ export const FormEditAbout = () => {
                         text: "ບໍ່ສາມາດບັນທຶກຂໍ້ມູນໄດ້",
                         icon: "error"
                     });
+                } finally {
+                    setLoading(false)
                 }
             }
         });
