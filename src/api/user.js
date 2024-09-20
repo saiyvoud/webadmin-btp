@@ -86,10 +86,11 @@ export const updateUserImage = async (id, data) => {
         const response = await axios.put(`${ApiPath.updateUserImage}/${id}`, formData, headerConfig);
         const userID = localStorage.getItem("UID");
 
-        if (userID == id && data?.image) {
+        if (userID == id) {
             // Convert object image to file image URL
-            const imageUrl = URL.createObjectURL(data.image);
-            localStorage.setItem("profile", imageUrl);
+            // const imageUrl = URL.createObjectURL(data.image);
+            // console.log("imageurl", response?.data?.data?.profile);
+            localStorage.setItem("profile", response?.data?.data?.profile);
         }
 
         return response;

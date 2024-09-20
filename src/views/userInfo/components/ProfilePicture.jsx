@@ -67,7 +67,7 @@ export const ProfilePicture = () => {
 
     const handleSaveData = async (id) => {
         Swal.fire({
-            title: "ທ່ານຕ້ອງການບັນທຶກຂໍໍໍມູນນີ້ເລີຍບໍ່?",
+            title: "ທ່ານຕ້ອງການແກ້ໄຂຂໍ້ມູນນີ້ເລີຍບໍ່?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -92,14 +92,14 @@ export const ProfilePicture = () => {
                         const response = await updateUserImage(id, data);
                         if (response) {
                             Swal.fire({
-                                title: "ບັນທຶກສຳເລັດ!",
+                                title: "ແກ້ໄຂສຳເລັດ!",
                                 icon: "success"
                             }).then(() => {
                                 navigate('/userInfo');
                             });
                         } else {
                             Swal.fire({
-                                title: "Error ການບັນທຶກລົ້ມເຫຼວ",
+                                title: "Error ແກ້ໄຂລົ້ມເຫຼວ",
                                 icon: "error"
                             });
                         }

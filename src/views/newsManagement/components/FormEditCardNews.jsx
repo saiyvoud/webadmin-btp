@@ -204,7 +204,7 @@ export const FormEditCardNews = () => {
                         <FaArrowLeft />
                         <h4>ກັບຄືນ</h4>
                     </div>
-                    <div className='rounded-lg bg-white p-10 w-[600px]'>
+                    <div className='rounded-lg bg-white p-10 w-[550px] lg:w-[600px]'>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-7'>
                             <div>
                                 <div className="mb-6">

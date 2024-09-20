@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { isAllowedRole } from "../helpers";  // Ensure this import exists
 import Swal from "sweetalert2";
+import { isAllowedRole } from "../helpers"; // Ensure this import exists
 import { Role } from "../constants";
 
 const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin] }) => {
@@ -9,18 +9,20 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
 
     const isAuth = () => {
         const token = localStorage.getItem("token");
-        if (!token) {
-            return false;
+        const expireToken = localStorage.getItem("expireToken");
+
+        if (!token || !expireToken) {
+            return false; // ไม่มี token หรือ expireToken
         }
 
-        // Check token expiration
-        const tokenData = JSON.parse(atob(token.split('.')[1]));
-        const expirationTime = tokenData.exp * 1000; // Convert to milliseconds
+        // เปรียบเทียบเวลา expiration กับเวลาปัจจุบัน
+        const expirationTime = new Date(expireToken).getTime(); // assume expireToken is a date string
         const currentTime = Date.now();
 
         if (currentTime > expirationTime) {
-            // Token has expired
+            // Token หมดอายุ
             localStorage.removeItem("token");
+            localStorage.removeItem("expireToken");
             Swal.fire({
                 title: "Session ໝົດອາຍຸ",
                 text: "Session ໝົດອາຍຸ ກະລຸນາລ໋ອກອິນໃໝ່ອີກຄັ້ງ!.",
@@ -33,26 +35,24 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
         }
 
         return true;
-    }
+    };
 
     useEffect(() => {
-        // Check authentication status periodically
+        // เช็คสถานะการ authentication เป็นระยะๆ
         const authCheckInterval = setInterval(() => {
             if (!isAuth()) {
-                clearInterval(authCheckInterval);
+                clearInterval(authCheckInterval); // หยุดการเช็คเมื่อหมดอายุ
             }
-        }, 60000); // Check every minute
+        }, 60000); // เช็คทุก 1 นาที
 
         return () => clearInterval(authCheckInterval);
     }, []);
 
     if (!isAuth()) {
-        //console.log("No token or token expired");
         return <Navigate to="/login" />;
     }
 
     if (!isAllowedRole(allowedRoles)) {
-        //console.log("No role");
         return <Navigate to="/login" />;
     }
 

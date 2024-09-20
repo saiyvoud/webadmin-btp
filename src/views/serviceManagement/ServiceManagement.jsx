@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { Sidebar } from '../../components/Sidebar';
-import { Skeleton } from 'antd';
+import { Empty, Skeleton } from 'antd';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { deleteServiceApi, getService } from '../../api/serivce';
@@ -136,12 +136,16 @@ export const ServiceManagement = () => {
                     </button>
                 </div>
 
-                <div className={`${filteredData.length < 4 ? 'sm:mt-5 lg:mt-10 bg-white rounded-lg py-10 px-4 lg:px-5 xl:px-8 h-full md:h-screen' : 'mt-10 bg-white rounded-lg py-10 px-8'} `}>
+                <div className={`lg:mt-10 bg-white rounded-lg py-10 px-4 lg:px-5 xl:px-8${filteredData.length < 4 ? filteredData.length === 0 ? 'h-[700px] bg-white' : 'sm:mt-5   h-full md:h-screen' : 'mt-10 bg-white rounded-lg py-10 px-8'} `}>
                     <p className='text-[14px] mb-3 text-[#9CA3AF]'>
                         ທັງໝົດ {filteredData.length} ລາຍການ
                     </p>
                     {loading ? (
                         <Skeleton active paragraph={{ rows: 4 }} />
+                    ) : filteredData.length === 0 ? ( // Check if no data
+                        <div className=' w-full h-full flex items-center justify-center'>
+                            <Empty description="ບໍ່ມີຂໍ້ມູນ" />
+                        </div> // Show Empty component
                     ) : (
                         <animated.div style={tabContentAnimation} className='grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 md:grid-cols-2 sm:gap-3 lg:gap-4 xl:gap-7'>
                             {
@@ -175,7 +179,6 @@ export const ServiceManagement = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* ss */}
                                     </div>
                                 ))
                             }

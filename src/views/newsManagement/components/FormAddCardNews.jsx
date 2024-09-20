@@ -94,8 +94,8 @@ export const FormAddCardNews = () => {
         let newErrors = {};
         if (!image) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
         if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້ກ່ອນ!';
-        if (!file) newErrors.file = 'Please upload a file';
-        if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດກ່ອນ!';
+        // if (!file) newErrors.file = 'Please upload a file';
+        // if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດກ່ອນ!';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -115,9 +115,9 @@ export const FormAddCardNews = () => {
             title: title,
             detail: description,
             image: fileImg,
-            file: file,
-            document: documents,  // Changed from 'documents' to 'document' to match API expectation
-            typescholarship: typeScholarship  // Changed from 'typeScholarship' to 'typescholarship' to match API expectation
+            // file: file,
+            // document: documents,  // Changed from 'documents' to 'document' to match API expectation
+            // typescholarship: typeScholarship  // Changed from 'typeScholarship' to 'typescholarship' to match API expectation
         };
         Swal.fire({
             title: "ທ່ານຕ້ອງການບັນທຶກລາຍການນີ້ແມ່ນບໍ່?",
@@ -236,7 +236,7 @@ export const FormAddCardNews = () => {
                             </div>
 
                             {/* File Upload */}
-                            <div className="mb-4 flex flex-col gap-y-2">
+                            {/* <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
                                     ອັບໂຫຼດໄຟລ໌
                                 </p>
@@ -264,7 +264,7 @@ export const FormAddCardNews = () => {
                                     </button>
                                 </div>
                                 {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
-                            </div>
+                            </div> */}
 
 
                             {/* Tag List Input for Group 1 */}

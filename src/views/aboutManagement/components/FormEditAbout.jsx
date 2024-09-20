@@ -130,7 +130,7 @@ export const FormEditAbout = () => {
                         <FaArrowLeft />
                         <h4>ກັບຄືນ</h4>
                     </div>
-                    <div className='rounded-lg bg-white p-10 w-[600px]'>
+                    <div className='rounded-lg bg-white p-10 w-[550px] lg:w-[600px]'>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-7'>
                             <div className="mb-4 flex flex-col gap-y-2">
                                 <p className='text-[14px] font-medium'>
