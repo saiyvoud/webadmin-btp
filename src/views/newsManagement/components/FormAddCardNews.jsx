@@ -3,99 +3,60 @@ import { Sidebar } from '../../../components/Sidebar';
 import { FaArrowLeft, FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { X, Plus } from 'lucide-react';
+import { Upload, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { addNewsApi } from '../../../api/news';
-// import { addNewsApi } from 'path/to/your/api/file'; 
 
 export const FormAddCardNews = () => {
     const navigate = useNavigate();
-    const [image, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
     const [title, setTitle] = useState('');
-    const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
-    const [errors, setErrors] = useState({});
+    const [fileList, setFileList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [coverImage, setCoverImage] = useState(null);
+    const [coverImageFile, setCoverImageFile] = useState(null);
     const imageInputRef = useRef(null);
-    const fileInputRef = useRef(null);
-    const [fileName, setFileName] = useState('');
-    const [fileImg, setFileImg] = useState('');
-    const [documents, setDocuments] = useState([]);
-    const [typeScholarship, setTypeScholarship] = useState([]);
-    const [inputValue1, setInputValue1] = useState('');
-    const [inputValue2, setInputValue2] = useState('');
 
-    const handleInputChange1 = (e) => {
-        setInputValue1(e.target.value);
-    };
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
-    const handleInputChange2 = (e) => {
-        setInputValue2(e.target.value);
-    };
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
 
-    const addTag1 = () => {
-        if (inputValue1.trim() !== '') {
-            setDocuments([...documents, inputValue1.trim()]);
-            setInputValue1('');
+    const beforeUpload = (file) => {
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+            message.error('Image must be smaller than 10MB!');
         }
+        return false; // Prevent automatic upload
     };
 
-    const addTag2 = () => {
-        if (inputValue2.trim() !== '') {
-            setTypeScholarship([...typeScholarship, inputValue2.trim()]);
-            setInputValue2('');
-        }
-    };
-
-    const handleInputKeyDown1 = (e) => {
-        if (e.key === 'Enter' && inputValue1.trim() !== '') {
-            e.preventDefault();
-            addTag1();
-        }
-    };
-
-    const handleInputKeyDown2 = (e) => {
-        if (e.key === 'Enter' && inputValue2.trim() !== '') {
-            e.preventDefault();
-            addTag2();
-        }
-    };
-
-    const removeTag1 = (indexToRemove) => {
-        setDocuments(documents.filter((_, index) => index !== indexToRemove));
-    };
-
-    const removeTag2 = (indexToRemove) => {
-        setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
-    };
-
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
+    const handleCoverImageUpload = (e) => {
+        const file = e.target.files[0];
         if (file) {
-            setImage(file);
             const reader = new FileReader();
-            reader.onload = (e) => {
-                setImagePreview(e.target.result);
+            reader.onloadend = () => {
+                setCoverImage(reader.result);
+                setCoverImageFile(file);
             };
             reader.readAsDataURL(file);
         }
-        setFileImg(file)
     };
 
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setFileName(selectedFile.name);
-        }
+    const removeCoverImage = () => {
+        setCoverImage(null);
+        setCoverImageFile(null);
     };
 
     const validateForm = () => {
         let newErrors = {};
-        if (!image) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
+        if (!coverImageFile) newErrors.coverImage = 'ກະລຸນາອັບໂຫຼດຮູບໜ້າປົກກ່ອນ!';
+        if (fileList.length === 0) newErrors.image = 'ກະລຸນາອັບໂຫຼດຮູບພາບກ່ອນ!';
         if (!title.trim()) newErrors.title = 'ກະລຸນາປ້ອນຫົວຂໍ້ກ່ອນ!';
-        // if (!file) newErrors.file = 'Please upload a file';
-        // if (!description.trim()) newErrors.description = 'ກະລຸນາປ້ອນລາຍລະອຽດກ່ອນ!';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -105,20 +66,18 @@ export const FormAddCardNews = () => {
         if (validateForm()) {
             handleSaveData();
         } else {
-            //console.log('Form has errors');
+            console.log('Form has errors');
         }
     };
-    //console.log("documents=", documents);
 
     const handleSaveData = async () => {
         const data = {
             title: title,
             detail: description,
-            image: fileImg,
-            // file: file,
-            // document: documents,  // Changed from 'documents' to 'document' to match API expectation
-            // typescholarship: typeScholarship  // Changed from 'typeScholarship' to 'typescholarship' to match API expectation
+            cover_image: coverImageFile,
+            image: fileList.map(file => file.originFileObj),
         };
+
         Swal.fire({
             title: "ທ່ານຕ້ອງການບັນທຶກລາຍການນີ້ແມ່ນບໍ່?",
             icon: "warning",
@@ -138,7 +97,6 @@ export const FormAddCardNews = () => {
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         });
-                        // Reset form or navigate away
                         resetForm();
                         navigate('/newsManagement');
                     } else {
@@ -162,12 +120,11 @@ export const FormAddCardNews = () => {
     };
 
     const resetForm = () => {
-        setImage(null);
-        setImagePreview(null);
+        setFileList([]);
         setTitle('');
-        setFile(null);
-        setFileName('');
         setDescription('');
+        setCoverImage(null);
+        setCoverImageFile(null);
         setErrors({});
     };
 
@@ -175,56 +132,64 @@ export const FormAddCardNews = () => {
         <Sidebar>
             <div className='my-14 flex items-center justify-center'>
                 <div>
-                    <div onClick={() => navigate(-1)}
-                        className='cursor-pointer text-[#01A7B1] text-[16px] mb-5 flex items-center gap-x-3'>
+                    <div onClick={() => navigate(-1)} className='cursor-pointer text-[#01A7B1] text-[16px] mb-5 flex items-center gap-x-3 w-fit'>
                         <FaArrowLeft />
                         <h4>ກັບຄືນ</h4>
                     </div>
                     <div className='rounded-lg bg-white p-10 w-[600px]'>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-7'>
-                            {/* Image Upload */}
                             <div className="mb-6">
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-full text-center p-2">
-                                    {imagePreview ? (
-                                        <div className='w-full h-full relative'>
-                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-                                            <div onClick={() => {
-                                                setImage(null);
-                                                setImagePreview(null);
-                                            }}
-                                                className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
-                                                <FaTrashAlt className='text-white text-[14px]' />
+                                <p className='text-[14px] font-medium'>ຮູບໜ້າປົກ</p>
+                                <div className=' w-full flex justify-center mt-5'>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] w-[250px] text-center p-2">
+                                        {coverImage ? (
+                                            <div className='w-full h-full relative'>
+                                                <img src={coverImage} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                                                <div onClick={removeCoverImage}
+                                                    className='w-[25px] h-[25px] absolute top-1 right-1 bg-black/55 rounded-lg cursor-pointer flex items-center justify-center'>
+                                                    <FaTrashAlt className='text-white text-[14px]' />
+                                                </div>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <div className='flex items-center flex-col justify-center h-full w-full'>
-                                            <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
-                                            <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
-                                            <input
-                                                type="file"
-                                                ref={imageInputRef}
-                                                onChange={handleImageUpload}
-                                                accept="image/*"
-                                                className="hidden"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => imageInputRef.current.click()}
-                                                className="mt-2 px-4 py-2 bg-[#01A7B1] text-white rounded-md"
-                                            >
-                                                Upload
-                                            </button>
-                                        </div>
-                                    )}
+                                        ) : (
+                                            <div className='flex items-center flex-col justify-center h-full w-full'>
+                                                <FaCloudUploadAlt className="mx-auto text-gray-400 mb-2 text-[52px]" />
+                                                <p className="text-gray-500 text-[14px]">ອັບໂຫຼດຮູບພາບ</p>
+                                                <input
+                                                    type="file"
+                                                    ref={imageInputRef}
+                                                    onChange={handleCoverImageUpload}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => imageInputRef.current.click()}
+                                                    className="bg-[#01A7B1] text-white py-2 px-4 mt-4 rounded-md"
+                                                >
+                                                    ເລືອກຮູບພາບ
+                                                </button>
+                                                {errors.coverImage && <p className="text-red-500 text-sm mt-2">{errors.coverImage}</p>}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+                            </div>
+                            <div className="mb-6 flex flex-col gap-y-2">
+                                <p className='text-[14px] font-medium'>ອັບໂຫຼດຮູບພາບ (ຮູບທຳອິດຈະເປັນຮູບໜ້າປົກ)</p>
+                                <Upload
+                                    listType="picture-card"
+                                    fileList={fileList}
+                                    onChange={handleChange}
+                                    beforeUpload={beforeUpload}
+                                    multiple={true}
+                                >
+                                    {fileList.length >= 8 ? null : uploadButton}
+                                </Upload>
                                 {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
                             </div>
 
-                            {/* Title Input */}
                             <div className="mb-4 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>
-                                    ຫົວຂໍ້
-                                </p>
+                                <p className='text-[14px] font-medium'>ຫົວຂໍ້</p>
                                 <input
                                     type="text"
                                     placeholder="ເພີ່ມຫົວຂໍ້..."
@@ -235,116 +200,8 @@ export const FormAddCardNews = () => {
                                 {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                             </div>
 
-                            {/* File Upload */}
-                            {/* <div className="mb-4 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>
-                                    ອັບໂຫຼດໄຟລ໌
-                                </p>
-                                <div className="flex items-center relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Upload File"
-                                        value={fileName}
-                                        readOnly
-                                        className="flex-grow p-2 border-2 border-gray-300 rounded-md h-[40px]"
-                                    />
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        onChange={handleFileChange}
-                                        accept="application/pdf"
-                                        className="hidden"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => fileInputRef.current.click()}
-                                        className="absolute right-1 px-4 py-2 bg-[#01A7B1] text-white rounded-md h-[32px]"
-                                    >
-                                        Upload
-                                    </button>
-                                </div>
-                                {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
-                            </div> */}
-
-
-                            {/* Tag List Input for Group 1 */}
-                            {/* <div className="mb-4 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>
-                                    ເອກະສານ
-                                </p>
-                                <div className="w-full">
-                                    <div className="flex flex-wrap gap-2 mb-2">
-                                        {documents.map((tag, index) => (
-                                            <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
-                                                {tag}
-                                                <button onClick={() => removeTag1(index)} className="ml-1 text-blue-600 hover:text-blue-800">
-                                                    <X size={14} />
-                                                </button>
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <div className="flex">
-                                        <input
-                                            type="text"
-                                            value={inputValue1}
-                                            onChange={handleInputChange1}
-                                            onKeyDown={handleInputKeyDown1}
-                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
-                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
-                                        />
-                                        <button
-                                            onClick={addTag1}
-                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
-                                        >
-                                            <Plus size={20} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div> */}
-
-                            {/* Tag List Input for Group 2 */}
-                            {/* <div className="mb-4 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>
-                                    ປະເພດທຶນ
-                                </p>
-                                <div className="w-full">
-                                    <div className="flex flex-wrap gap-2 mb-2">
-                                        {typeScholarship.map((tag, index) => (
-                                            <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
-                                                {tag}
-                                                <button onClick={() => removeTag2(index)} className="ml-1 text-green-600 hover:text-green-800">
-                                                    <X size={14} />
-                                                </button>
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <div className="flex">
-                                        <input
-                                            type="text"
-                                            value={inputValue2}
-                                            onChange={handleInputChange2}
-                                            onKeyDown={handleInputKeyDown2}
-                                            placeholder="ພິມ ແລະ ກົດ Enter ເພື່ອເພີ່ມ Tags"
-                                            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-teal-500"
-                                        />
-                                        <button
-                                            onClick={addTag2}
-                                            className="px-3 py-2 bg-[#01A7B1] text-white rounded-r-md hover:bg-teal-600 focus:outline-none"
-                                        >
-                                            <Plus size={20} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>} */}
-
-
-                            {/* Description Input */}
                             <div className="mb-6 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>
-                                    ລາຍລະອຽດ
-                                </p>
+                                <p className='text-[14px] font-medium'>ລາຍລະອຽດ</p>
                                 <textarea
                                     placeholder="ເພີ່ມລາຍລະອຽດ..."
                                     rows="4"
@@ -352,19 +209,15 @@ export const FormAddCardNews = () => {
                                     onChange={(e) => setDescription(e.target.value)}
                                     className="w-full resize-none p-2 border border-gray-300 rounded-md"
                                 ></textarea>
-                                {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
                             </div>
 
-                            {/* Submit Button */}
                             <div className='flex items-center justify-center'>
                                 <button
                                     type="submit"
                                     className="w-[120px] py-3 text-[14px] font-medium bg-[#01A7B1] text-white rounded-full flex items-center justify-center"
                                     disabled={loading}
                                 >
-                                    {
-                                        loading ? <p className=' flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"
-                                    }
+                                    {loading ? <p className='flex items-center justify-center gap-x-3'>ກຳລັງບັນທຶກ <span className="loader"></span></p> : "ບັນທຶກ"}
                                 </button>
                             </div>
                         </form>

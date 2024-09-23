@@ -118,7 +118,7 @@ export const FormAddCompanyInfo = () => {
             <div className='my-14 flex items-center justify-center'>
                 <div>
                     <div onClick={() => navigate(-1)}
-                        className='cursor-pointer text-[#01A7B1] text-[16px] mb-5 flex items-center gap-x-3'>
+                        className='cursor-pointer text-[#01A7B1] text-[16px] mb-5 flex items-center gap-x-3 w-fit'>
                         <FaArrowLeft />
                         <h4>ກັບຄືນ</h4>
                     </div>

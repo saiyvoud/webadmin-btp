@@ -46,6 +46,7 @@ export default class ApiPath {
     static delNews = `${baseUrl}/news/delete`
     static updateNews = `${baseUrl}/news/update`
     static updateNewsImage = `${baseUrl}/news/updateImage`
+    static updateNewsCover = `${baseUrl}/news/updateCover_image`
     static updateNewsFile = `${baseUrl}/news/updateFile`
 
     // banner

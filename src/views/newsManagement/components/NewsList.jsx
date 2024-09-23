@@ -131,7 +131,7 @@ export const NewsList = ({ dateRange }) => {
                         >
                             <div className='relative h-[290px] md:h-[300px] lg:h-[310px] md:w-[250px] lg:w-[220px] xl:w-full rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] border-2 border-[#00BAAF80]/50 flex flex-col'>
                                 <img
-                                    src={news?.image || 'fallback-image-url'}
+                                    src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${news?.cover_image}` || 'fallback-image-url'}
                                     alt={news?.title || 'News Image'}
                                     className='w-full sm:h-[170px] lg:h-[190px] rounded-t-lg object-cover'
                                 />
