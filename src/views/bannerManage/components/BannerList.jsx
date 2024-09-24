@@ -137,7 +137,7 @@ export const BannerList = ({ dateRange }) => {
                                 className="w-full h-[190px] md:h-[200px] rounded-t-lg object-cover"
                             />
                             <div className="flex flex-col gap-y-1 pt-2 px-3 lg:px-3 xl:px-5">
-                                <h4 className="text-[16px] font-medium">
+                                <h4 className="text-[16px] font-medium text-ellipsis break-words line-clamp-2 ">
                                     {item?.title}
                                 </h4>
                                 <p className="text-[#6B7280] overflow-hidden text-ellipsis line-clamp-2">
