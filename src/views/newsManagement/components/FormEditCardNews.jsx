@@ -128,6 +128,7 @@ export const FormEditCardNews = () => {
             cancelButtonColor: "#d33",
             confirmButtonText: "ຢຶນຢັນ",
             cancelButtonText: 'ຍົກເລີກ',
+            // cancelButtonText: 'ຍົກເລີກ',
         }).then(async (result) => {
             if (result.isConfirmed) {
                 setLoading(true);
