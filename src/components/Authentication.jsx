@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { isAllowedRole } from "../helpers"; // Ensure this import exists
 import { Role } from "../constants";
+import { formatDate, formatUnixTimestamp } from "../views/utils";
 
 const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin] }) => {
     const navigate = useNavigate();
@@ -12,42 +13,43 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
         const expireToken = localStorage.getItem("expireToken");
 
         if (!token || !expireToken) {
-            return false; // ไม่มี token หรือ expireToken
+            return false;
         }
 
-        // เปรียบเทียบเวลา expiration กับเวลาปัจจุบัน
-        const expirationTime = new Date(expireToken).getTime(); // assume expireToken is a date string
-        const currentTime = Date.now();
-
-        if (currentTime > expirationTime) {
-            // Token หมดอายุ
+        const expirationTime = formatUnixTimestamp(expireToken);
+        // console.log("expirationTime", expirationTime);
+        const currentTime = Math.floor(Date.now() / 1000);
+        const currentTimeFormat = formatUnixTimestamp(currentTime);
+        // const aT = '28/09/2567 06:11:18'
+        // console.log("currentTimeFormat", currentTimeFormat);
+        // console.log("aT >= expirationTime", aT >= expirationTime);
+        // console.log("currentTime > expirationTime", currentTimeFormat >= expirationTime);
+        if (currentTimeFormat >= expirationTime) {
             localStorage.removeItem("token");
             localStorage.removeItem("expireToken");
-            Swal.fire({
-                title: "Session ໝົດອາຍຸ",
-                text: "Session ໝົດອາຍຸ ກະລຸນາລ໋ອກອິນໃໝ່ອີກຄັ້ງ!.",
-                icon: "warning",
-                confirmButtonText: "OK"
-            }).then(() => {
-                navigate("/login");
-            });
-            return false;
+            return false; // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่าฟังก์ชันจะ return false เมื่อโทเค็นหมดอายุ
         }
 
         return true;
     };
 
     useEffect(() => {
-        // เช็คสถานะการ authentication เป็นระยะๆ
         const authCheckInterval = setInterval(() => {
             if (!isAuth()) {
-                clearInterval(authCheckInterval); // หยุดการเช็คเมื่อหมดอายุ
+                clearInterval(authCheckInterval);
+                Swal.fire({
+                    title: "Session ໝົດອາຍຸ",
+                    text: "Session ໝົດອາຍຸ ກະລຸນາລ໋ອກອິນໃໝ່ອີກຄັ້ງ!.",
+                    icon: "warning",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    navigate("/login");
+                });
             }
-        }, 60000); // เช็คทุก 1 นาที
+        }, 60000);
 
         return () => clearInterval(authCheckInterval);
-    }, []);
-
+    }, [navigate]);
     if (!isAuth()) {
         return <Navigate to="/login" />;
     }
