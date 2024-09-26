@@ -38,95 +38,187 @@ export const RouterPaths = () => {
         },
         {
             path: '/serviceManagement',
-            element: <ServiceManagement />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <ServiceManagement />
+                </Authentication>
+            )
         },
         {
             path: "/serviceManagement/formEditCard/:id",
-            element: <FormEditService />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormEditService />
+                </Authentication>
+            )
         },
         {
             path: '/serviceManagement/formAddCard',
-            element: <FormAddCard />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddCard />
+                </Authentication>
+            )
         },
         {
             path: '/service',
-            element: <ServiceInfo />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <ServiceInfo />
+                </Authentication>
+            )
         },
         {
             path: '/newsManagement',
-            element: <NewsManagement />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <NewsManagement />
+                </Authentication>
+            )
         },
         {
             path: '/newsManagement/formAddCardNews',
-            element: <FormAddCardNews />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddCardNews />
+                </Authentication>
+            )
         },
         {
             path: '/newsManagement/formEditCardNews/:id',
-            element: <FormEditCardNews />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormEditCardNews />
+                </Authentication>
+            )
         },
         {
             path: '/bannerManagement',
-            element: <BannerManagement />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <BannerManagement />
+                </Authentication>
+            )
         },
         {
             path: '/bannerManagement/formAddBanner',
-            element: <FormAddBanner />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddBanner />
+                </Authentication>
+            )
         },
         {
             path: '/bannerManagement/formEditBanner/:id',
-            element: <FormEditBanner />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormEditBanner />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement',
-            element: <AboutManagement />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <AboutManagement />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/formAddImage',
-            element: <FormAddImage />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddImage />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/formEditAbout/:id',
-            element: <FormEditAbout />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormEditAbout />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/aboutInfo/:id',
-            element: <FormAboutInfo />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAboutInfo />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/formAddCompanyInfo',
-            element: <FormAddCompanyInfo />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddCompanyInfo />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/aboutBanner',
-            element: <AboutBanner />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <AboutBanner />
+                </Authentication>
+            )
         },
         {
             path: '/aboutManagement/addAboutBanner',
-            element: <FormAddCoverImg />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddCoverImg />
+                </Authentication>
+            )
         },
         {
-            path: '/aboutManagement/aboutInfo/:id',  // corrected path
-            element: <FormAboutInfo />
+            path: '/aboutManagement/aboutInfo/:id',
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAboutInfo />
+                </Authentication>
+            )
         },
         {
             path: '/contactManagement',
-            element: <ContactManagement />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <ContactManagement />
+                </Authentication>
+            )
         },
         {
             path: '/contactManagement/contactDetail/:id',
-            element: <ContactDetail />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <ContactDetail />
+                </Authentication>
+            )
         },
         {
             path: '/userInfo',
-            element: <UserInfo />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <UserInfo />
+                </Authentication>
+            )
         },
         {
             path: '/userInfo/formAddUser',
-            element: <FormAddUser />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <FormAddUser />
+                </Authentication>
+            )
         },
         {
             path: '/userInfo/editProfile/:id',
-            element: <ProfilePicture />
+            element: (
+                <Authentication allowedRoles={[Role.admin, Role.superadmin]}>
+                    <ProfilePicture />
+                </Authentication>
+            )
         },
         {
             path: '/login',
