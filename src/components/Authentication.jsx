@@ -21,13 +21,13 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
         const currentTime = Math.floor(Date.now() / 1000);
         const currentTimeFormat = formatUnixTimestamp(currentTime);
         // const aT = '28/09/2567 06:11:18'
-        // console.log("currentTimeFormat", currentTimeFormat);
+        console.log("currentTimeFormat", currentTimeFormat);
         // console.log("aT >= expirationTime", aT >= expirationTime);
         // console.log("currentTime > expirationTime", currentTimeFormat >= expirationTime);
         if (currentTimeFormat >= expirationTime) {
             localStorage.removeItem("token");
             localStorage.removeItem("expireToken");
-            return false; // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่าฟังก์ชันจะ return false เมื่อโทเค็นหมดอายุ
+            return false;
         }
 
         return true;

@@ -19,8 +19,12 @@ export const FormEditCardNews = () => {
     const [coverImage, setCoverImage] = useState(null);
     const [coverImageFile, setCoverImageFile] = useState(null);
     const imageInputRef = useRef(null);
+    const [isUpload, setIsUpload] = useState(false)
 
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+    const handleChange = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+        setIsUpload(true);
+    };
 
     const uploadButton = (
         <div>
@@ -89,11 +93,7 @@ export const FormEditCardNews = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            handleSaveData();
-        } else {
-            console.log('Form has errors');
-        }
+        handleSaveData();
     };
 
     const handleSaveData = async () => {
@@ -112,7 +112,7 @@ export const FormEditCardNews = () => {
 
         const dataImg = {
             image: fileList.length > 0 ? fileList.map(file => file.originFileObj) : newsData.image,
-            oldImage: oldImage.join(','), // Join oldImage array into a comma-separated string
+            oldImage: oldImage.join(','),
         };
 
         const dataCover = coverImageFile ? {
@@ -120,45 +120,46 @@ export const FormEditCardNews = () => {
             oldCover_image: newsData.cover_image
         } : null;
 
-        Swal.fire({
-            title: "ທ່ານຕ້ອງການບັນທຶກຂໍໍ້ມູນນີ້ເລີຍບໍ່?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ຢຶນຢັນ",
-            cancelButtonText: 'ຍົກເລີກ',
-            // cancelButtonText: 'ຍົກເລີກ',
-        }).then(async (result) => {
+        try {
+            const result = await Swal.fire({
+                title: "ທ່ານຕ້ອງການບັນທຶກຂໍໍ້ມູນນີ້ເລີຍບໍ່?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຢຶນຢັນ",
+                cancelButtonText: 'ຍົກເລີກ',
+            });
+
             if (result.isConfirmed) {
                 setLoading(true);
-                try {
-                    const response = await updateNewsApi(id, data);
-                    if (dataImg.image.length > 0) {
-                        await updateNewsImageApi(id, dataImg);
-                    }
-                    if (dataCover) {
-                        await updateNewsImageApi(id, dataCover);
-                    }
-                    if (response) {
-                        Swal.fire({
-                            title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
-                            icon: "success",
-                        }).then(() => {
-                            navigate('/newsManagement');
-                        });
-                    }
-                } catch (error) {
-                    Swal.fire({
-                        title: "Error ການແກ້ໄຂລົ້ມເຫຼວ",
-                        icon: "error",
+                const response = await updateNewsApi(id, data);
+
+                if (isUpload) {
+                    await updateNewsImageApi(id, dataImg);
+                }
+                if (dataCover) {
+                    await updateNewsImageApi(id, dataCover);
+                }
+
+                if (response) {
+                    await Swal.fire({
+                        title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
+                        icon: "success",
                     });
-                    console.error("Error updating news:", error);
-                } finally {
-                    setLoading(false);
+                    navigate('/newsManagement');
                 }
             }
-        });
+        } catch (error) {
+            console.error("Error updating news:", error);
+            await Swal.fire({
+                title: "ການແກ້ໄຂລົ້ມເຫຼວ",
+                text: error.response?.data?.message || "ເກີດຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ຈັກ",
+                icon: "error",
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -201,7 +202,6 @@ export const FormEditCardNews = () => {
                                                 >
                                                     ເລືອກຮູບພາບ
                                                 </button>
-                                                {errors.coverImage && <p className="text-red-500 text-sm mt-2">{errors.coverImage}</p>}
                                             </div>
                                         )}
                                     </div>
@@ -218,7 +218,6 @@ export const FormEditCardNews = () => {
                                 >
                                     {fileList.length >= 20 ? null : uploadButton}
                                 </Upload>
-                                {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
                             </div>
 
                             <div className="mb-4 flex flex-col gap-y-2">
@@ -230,7 +229,6 @@ export const FormEditCardNews = () => {
                                     onChange={(e) => setTitle(e.target.value)}
                                     className="w-full p-2 border-2 border-gray-300 rounded-md h-[40px]"
                                 />
-                                {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                             </div>
 
                             <div className="mb-6 flex flex-col gap-y-2">
