@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Upload, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { getOneNewsApi, updateNewsApi, updateNewsImageApi } from '../../../api/news';
+import { getOneNewsApi, updateNewsApi, updateNewsCoverApi, updateNewsImageApi } from '../../../api/news';
 
 export const FormEditCardNews = () => {
     const navigate = useNavigate();
@@ -115,10 +115,10 @@ export const FormEditCardNews = () => {
             oldImage: oldImage.join(','),
         };
 
-        const dataCover = coverImageFile ? {
+        const dataCover = {
             cover_image: coverImageFile,
             oldCover_image: newsData.cover_image
-        } : null;
+        }
 
         try {
             const result = await Swal.fire({
@@ -139,7 +139,7 @@ export const FormEditCardNews = () => {
                     await updateNewsImageApi(id, dataImg);
                 }
                 if (dataCover) {
-                    await updateNewsImageApi(id, dataCover);
+                    await updateNewsCoverApi(id, dataCover);
                 }
 
                 if (response) {
