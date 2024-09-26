@@ -84,7 +84,7 @@ export const FormAddUser = () => {
                 if (!(currentRole === "superadmin")) {
                     Swal.fire({
                         icon: "error",
-                        title: "ທ່ານບໍ່ມີສິດໃນການແກ້ໄຂ",
+                        title: "ທ່ານບໍ່ມີສິດໃນການບັນທຶກ!",
                     })
                     setLoading(false)
                 }
