@@ -16,15 +16,12 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
             return false;
         }
 
-        const expirationTime = formatUnixTimestamp(expireToken);
-        // console.log("expirationTime", expirationTime);
-        const currentTime = Math.floor(Date.now() / 1000);
-        const currentTimeFormat = formatUnixTimestamp(currentTime);
-        // const aT = '28/09/2567 06:11:18'
-        console.log("currentTimeFormat", currentTimeFormat);
-        // console.log("aT >= expirationTime", aT >= expirationTime);
-        // console.log("currentTime > expirationTime", currentTimeFormat >= expirationTime);
-        if (currentTimeFormat >= expirationTime) {
+        const expiresIn = parseInt(expireToken);
+        const expiresTime = expiresIn * 1000;
+        const currentTime = Date.now();
+        const timeLeftInSecond = Math.max(0, (expiresTime - currentTime) / 1000);
+        console.log("timeLeftInSecond==>", timeLeftInSecond);
+        if (currentTime >= expiresTime) {
             localStorage.removeItem("token");
             localStorage.removeItem("expireToken");
             return false;
@@ -33,30 +30,18 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
         return true;
     };
 
-    useEffect(() => {
-        const authCheckInterval = setInterval(() => {
-            if (!isAuth()) {
-                clearInterval(authCheckInterval);
-                Swal.fire({
-                    title: "Session ໝົດອາຍຸ",
-                    text: "Session ໝົດອາຍຸ ກະລຸນາລ໋ອກອິນໃໝ່ອີກຄັ້ງ!.",
-                    icon: "warning",
-                    confirmButtonText: "OK"
-                }).then(() => {
-                    navigate("/login");
-                });
-            }
-        }, 60000);
+    if (!isAuth()) {
+        Swal.fire({
+            title: "Session ໝົດອາຍຸ",
+            text: "Session ໝົດອາຍຸ ກະລຸນາລ໋ອກອິນໃໝ່ອີກຄັ້ງ!.",
+            icon: "warning",
+            confirmButtonText: "OK"
+        }).then(() => {
+            navigate("/login");
+        });
+        return null
+    }
 
-        return () => clearInterval(authCheckInterval);
-    }, [navigate]);
-    // if (!isAuth()) {
-    //     return <Navigate to="/login" />;
-    // }
-
-    // if (!isAllowedRole(allowedRoles)) {
-    //     return <Navigate to="/login" />;
-    // }
 
     return <>{children}</>;
 };
