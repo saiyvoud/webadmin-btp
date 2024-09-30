@@ -80,11 +80,12 @@ export const Login = () => {
                     } else {
                         localStorage.removeItem('username'); // Clear saved username if not remembering
                     }
-                    navigate('/');
+
                     Swal.fire({
                         title: "ເຂົ້າສູ່ລະບົບສຳເລັດ",
                         icon: "success"
                     });
+                    navigate('/');
                 } else {
                     Swal.fire({
                         title: "ເກີດຂໍ້ຜິດພາດ",
