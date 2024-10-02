@@ -78,7 +78,7 @@ export const Dashboard = () => {
                                     ຍອດຜູ້ເຂົ້າເບິ່ງເວັບໄຊຕ໌
                                 </h4>
                                 <p className=' text-[12px]'>
-                                    ຈຳນວນທັງໝົດ : <span className=' font-semibold'>{view.length}</span>
+                                    ຈຳນວນທັງໝົດ : <span className=' font-semibold'>{view.length} </span> ຄັ້ງ
                                 </p>
                                 <Select
                                     labelInValue

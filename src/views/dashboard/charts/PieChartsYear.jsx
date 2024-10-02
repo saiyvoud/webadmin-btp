@@ -13,7 +13,7 @@ export const PieChartsYear = ({ totalDownload }) => {
 
         const totalBanner = yearData?.filter((item) => item?.type === 'banner').length;
         const totalService = yearData?.filter((item) => item?.type === 'service').length;
-        const totalNews = yearData?.filter((item) => item?.type === 'news').length;
+        // const totalNews = yearData?.filter((item) => item?.type === 'news').length;
 
         return [
             { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red

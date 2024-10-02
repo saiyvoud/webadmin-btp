@@ -1,47 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Empty, Skeleton } from 'antd';
 import { Switch } from 'antd';
 import { useSpring, animated } from '@react-spring/web';
-
-// image imports
-import card1 from '../../../assets/images/webp/post1.webp';
-import card2 from '../../../assets/images/webp/post2.webp';
-import card3 from '../../../assets/images/webp/post3.webp';
-import card4 from '../../../assets/images/webp/post4.webp';
-import card5 from '../../../assets/images/webp/post5.webp';
-import card6 from '../../../assets/images/webp/post6.webp';
-import card7 from '../../../assets/images/webp/post7.webp';
-import card8 from '../../../assets/images/webp/post8.webp';
-import { delAboutApi, getAboutApi } from '../../../api/about';
 import Swal from 'sweetalert2';
 import { formatDate } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { useAboutStore } from '../../../store/aboutStore'; // Import Zustand store
 
 export const AboutList = ({ filteredDates, cDataID }) => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [aboutData, setAboutData] = useState([]);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await getAboutApi();
-            setAboutData(response);
-        } catch (error) {
-            Swal.fire({
-                title: "ເກີດຂໍ້ຜິດພາດ!",
-                text: "ການດຶງຂໍ້ມູນບໍ່ສຳເລັດ",
-                icon: "error"
-            });
-            //console.log("Error response About Data", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // ดึง state และ actions จาก store
+    const { aboutData, loading, fetchAboutData, deleteAbout } = useAboutStore();
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchAboutData(); // เรียก fetchAboutData เมื่อ component mount
+    }, [fetchAboutData]);
 
     const Springs = useSpring({
         opacity: 1,
@@ -49,41 +23,6 @@ export const AboutList = ({ filteredDates, cDataID }) => {
         from: { opacity: 0, transform: 'translateY(20px)' },
         config: { duration: 300, friction: 20 }
     });
-
-    const deleteAbout = async (id) => {
-        try {
-            const result = await Swal.fire({
-                title: 'ຢືນຢັນການລົບ',
-                text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ຢືນຢັນ',
-                cancelButtonText: 'ຍົກເລີກ'
-            });
-            if (result.isConfirmed) {
-                const response = await delAboutApi(id);
-                if (response) {
-                    Swal.fire(
-                        'ລົບສຳເລັດ!',
-                        'ລາຍການຖືກລົບອອກແລ້ວ.',
-                        'success'
-                    );
-                    fetchData(); // Refresh the data
-                } else {
-                    throw new Error("Failed to delete");
-                }
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ເກີດຂໍ້ຜິດພາດ',
-                text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
-            });
-            console.error('Error deleting item:', error);
-        }
-    };
 
     const filteredData = filteredDates && filteredDates.length === 2 ?
         aboutData.filter(item =>
@@ -114,7 +53,7 @@ export const AboutList = ({ filteredDates, cDataID }) => {
                         <animated.div
                             key={index}
                             className='relative h-[285px] xl:w-full lg:w-[210px] rounded-lg shadow-[4px_4px_6px_0px_#B5BABE40] hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:scale-125 duration-300 cursor-pointer bg-white 
-                            xl:col-span-3 lg:col-span-4 sm:col-span-6'
+              xl:col-span-3 lg:col-span-4 sm:col-span-6'
                             style={{ ...Springs }}
                         >
                             <img
@@ -134,7 +73,7 @@ export const AboutList = ({ filteredDates, cDataID }) => {
                                     </span>
                                     <div className='flex items-center gap-x-3'>
                                         <button
-                                            onClick={() => deleteAbout(card.id)}
+                                            onClick={() => deleteAbout(card.id, fetchAboutData)}
                                             className='w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1'>
                                             ລົບ
                                         </button>

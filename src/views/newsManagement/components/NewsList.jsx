@@ -1,27 +1,16 @@
-import React, { useEffect, useState } from 'react';
+// NewsList.js
+import React, { useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
-import Swal from 'sweetalert2';
-import { Skeleton } from 'antd'; // Import Skeleton from Ant Design
-
-// image imports
-import card1 from '../../../assets/images/webp/post1.webp';
-import card2 from '../../../assets/images/webp/post2.webp';
-import card3 from '../../../assets/images/webp/post3.webp';
-import card4 from '../../../assets/images/webp/post4.webp';
-import card5 from '../../../assets/images/webp/post5.webp';
-import card6 from '../../../assets/images/webp/post6.webp';
-import card7 from '../../../assets/images/webp/post7.webp';
-import card8 from '../../../assets/images/webp/post8.webp';
-import { delNewsApi, getNewsApi } from '../../../api/news';
-import { formatDate } from '../../utils';
+import { Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import useNewsStore from '../../../store/newsStore'; // Import Zustand store
+import { formatDate } from '../../utils';
 
 export const NewsList = ({ dateRange }) => {
-    const [loading, setLoading] = useState(false);
-    const [newsItem, setNewsItem] = useState([]);
-    const [filteredNews, setFilteredNews] = useState([]);
+    const { newsItem, loading, fetchNews } = useNewsStore(); // Use Zustand store
+    const [filteredNews, setFilteredNews] = React.useState([]);
     const navigate = useNavigate();
-    const [startDate, endDate] = dateRange || []; // Ensure dateRange is defined
+    const [startDate, endDate] = dateRange || [];
 
     // Define animation using react-spring
     const springs = useSpring({
@@ -31,68 +20,15 @@ export const NewsList = ({ dateRange }) => {
         config: { duration: 300, friction: 20 },
     });
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await getNewsApi();
-            if (!response) {
-                throw new Error('No response from API');
-            }
-            setNewsItem(response);
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // Fetch data from Zustand store
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchNews(); // Call fetchNews from the store
+    }, [fetchNews]);
 
+    // Filter news based on date range
     useEffect(() => {
         filterNews();
     }, [startDate, endDate, newsItem]);
-
-    const deleteItem = async (id) => {
-        try {
-            const result = await Swal.fire({
-                title: 'ຢືນຢັນການລົບ',
-                text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ຢືນຢັນ',
-                cancelButtonText: 'ຍົກເລີກ'
-            });
-            if (result.isConfirmed) {
-                const response = await delNewsApi(id);
-                if (response) {
-                    Swal.fire(
-                        'ລົບສຳເລັດ!',
-                        'ລາຍການຖືກລົບອອກແລ້ວ.',
-                        'success'
-                    );
-                    fetchData(); // Refresh the data
-                } else {
-                    throw new Error("Failed to delete");
-                }
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ເກີດຂໍ້ຜິດພາດ',
-                text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
-            });
-            console.error('Error deleting item:', error);
-        }
-    };
 
     const filterNews = () => {
         if (startDate && endDate) {

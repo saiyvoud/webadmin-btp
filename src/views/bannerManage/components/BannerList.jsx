@@ -1,40 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Skeleton, Empty } from 'antd';
 import { useSpring, animated } from '@react-spring/web';
-import { delBannerApi, getBannerApi, upadteSwitchBannerApi } from '../../../api/banner';
+import { useBannerStore } from '../../../store/bannerStore';
 import Swal from 'sweetalert2';
 import { formatDate } from '../../utils';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 export const BannerList = ({ dateRange }) => {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false);
-    const [bannerData, setBannerData] = useState([]);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await getBannerApi();
-            if (!response) {
-                throw new Error("No response from API");
-            }
-            setBannerData(response);
-        } catch (error) {
-            // Swal.fire({
-            //     icon: 'error',
-            //     title: "ເກີດຂໍ້ຜິດພາດ",
-            //     text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            // });
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const navigate = useNavigate();
+    const { bannerData, loading, fetchBanner, deleteBanner, updateBannerSwitch } = useBannerStore();
 
     useEffect(() => {
-        fetchData();
-        //console.log(bannerData);
+        fetchBanner();
     }, []);
 
     const filteredData = dateRange
@@ -51,61 +28,6 @@ export const BannerList = ({ dateRange }) => {
         config: { duration: 300, friction: 20 },
     });
 
-    const deleteItem = async (id) => {
-        try {
-            const result = await Swal.fire({
-                title: 'ຢືນຢັນການລົບ',
-                text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ຢືນຢັນ',
-                cancelButtonText: 'ຍົກເລີກ'
-            });
-            if (result.isConfirmed) {
-                const response = await delBannerApi(id);
-                if (response) {
-                    Swal.fire(
-                        'ລົບສຳເລັດ!',
-                        'ລາຍການຖືກລົບອອກແລ້ວ.',
-                        'success'
-                    );
-                    fetchData(); // Refresh the data
-                } else {
-                    throw new Error("Failed to delete");
-                }
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ເກີດຂໍ້ຜິດພາດ',
-                text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
-            });
-            console.error('Error deleting item:', error);
-        }
-    };
-
-    const handleChangeSwitch = async (id, value) => {
-        const response = await upadteSwitchBannerApi(id, value);
-        if (response) {
-            await fetchData();
-        }
-        if (value == true) {
-            Swal.fire(
-                'ປິດການເຊື່ອງສຳເລັດ!',
-                'ປິດການເຊື່ອງລາຍການແລ້ວ.',
-                'success'
-            );
-        } else {
-            Swal.fire(
-                'ເຊື່ອງສຳເລັດ!',
-                'ລາຍການຖືກເຊື່ອງແລ້ວ.',
-                'success'
-            );
-        }
-    };
-
     return (
         <div className=' sm:mt-5 xl:mt-10'>
             <p className='text-[14px]'>
@@ -114,7 +36,6 @@ export const BannerList = ({ dateRange }) => {
             <hr className='mt-3 sm:mb-5 xl:mb-10 border border-[#D9D9D9]' />
             <div className='grid grid-cols-12 sm:gap-5 md:gap-7 lg:gap-5 xl:gap-10'>
                 {loading ? (
-                    // Skeleton Loading State
                     Array.from({ length: 4 }).map((_, index) => (
                         <div key={index} className="h-[330px] col-span-3">
                             <Skeleton active avatar />
@@ -150,13 +71,13 @@ export const BannerList = ({ dateRange }) => {
                                 </span>
                                 <div className=' flex items-center justify-between w-full'>
                                     <Switch
-                                        onChange={(value) => handleChangeSwitch(item.id, value)}
+                                        onChange={(value) => updateBannerSwitch(item.id, value)}
                                         defaultChecked={item.isPublished}
                                         className="custom-switch"
                                     />
                                     <div className="flex items-center gap-x-3">
                                         <button
-                                            onClick={() => deleteItem(item.id)}
+                                            onClick={() => deleteBanner(item.id)}
                                             className="w-[45px] bg-[#F87171] text-white rounded-full text-[10px] py-1"
                                         >
                                             ລົບ
