@@ -8,6 +8,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { addBannerApi } from '../../../api/banner';
+import { useBannerStore } from '../../../store/bannerStore';
 
 export const FormAddBanner = () => {
     const navigate = useNavigate();
@@ -26,6 +27,8 @@ export const FormAddBanner = () => {
     const [typeScholarship, setTypeScholarship] = useState([]);
     const [inputValue1, setInputValue1] = useState('');
     const [inputValue2, setInputValue2] = useState('');
+    const fetchBanner = useBannerStore(state => state.fetchBanner);
+
 
     const handleInputChange1 = (e) => {
         setInputValue1(e.target.value);
@@ -142,6 +145,7 @@ export const FormAddBanner = () => {
                             text: "ລາຍການ Banner ຖືກເພີ່ມແລ້ວ",
                             icon: "success"
                         });
+                        fetchBanner(true)
                         navigate('/bannerManagement')
                     } else {
                         Swal.fire({

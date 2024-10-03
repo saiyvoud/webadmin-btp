@@ -5,12 +5,15 @@ import { Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import useNewsStore from '../../../store/newsStore'; // Import Zustand store
 import { formatDate } from '../../utils';
+import { delNewsApi } from '../../../api/news';
+import Swal from 'sweetalert2';
 
 export const NewsList = ({ dateRange }) => {
     const { newsItem, loading, fetchNews } = useNewsStore(); // Use Zustand store
     const [filteredNews, setFilteredNews] = React.useState([]);
     const navigate = useNavigate();
     const [startDate, endDate] = dateRange || [];
+
 
     // Define animation using react-spring
     const springs = useSpring({
@@ -41,6 +44,42 @@ export const NewsList = ({ dateRange }) => {
             setFilteredNews(filtered);
         } else {
             setFilteredNews(newsItem);
+        }
+    };
+
+
+    const deleteItem = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: 'ຢືນຢັນການລົບ',
+                text: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລົບລາຍການນີ້?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ຢືນຢັນ',
+                cancelButtonText: 'ຍົກເລີກ'
+            });
+            if (result.isConfirmed) {
+                const response = await delNewsApi(id);
+                if (response) {
+                    Swal.fire(
+                        'ລົບສຳເລັດ!',
+                        'ລາຍການຖືກລົບອອກແລ້ວ.',
+                        'success'
+                    );
+                    fetchNews(true)
+                } else {
+                    throw new Error("Failed to delete");
+                }
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'ເກີດຂໍ້ຜິດພາດ',
+                text: 'ບໍ່ສາມາດລົບລາຍການໄດ້',
+            });
+            console.error('Error deleting item:', error);
         }
     };
 

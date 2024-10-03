@@ -2,17 +2,34 @@ import create from 'zustand';
 import { getCompanyDataApi, getCoverImageApi, getAboutApi, delAboutApi } from '../api/about';
 import Swal from 'sweetalert2';
 
-// Zustand store
-export const useAboutStore = create((set) => ({
+const STALE_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+export const useAboutStore = create((set, get) => ({
     companyData: [],
     coverImg: [],
     aboutData: [],
     loading: false,
-    fetchCompanyData: async () => {
+    lastFetchTime: {
+        companyData: null,
+        coverImg: null,
+        aboutData: null
+    },
+
+    fetchCompanyData: async (force = false) => {
+        const { lastFetchTime } = get();
+        const now = Date.now();
+
+        if (!force && lastFetchTime.companyData && now - lastFetchTime.companyData < STALE_TIME) {
+            return; // Data is still fresh, no need to fetch
+        }
+
         set({ loading: true });
         try {
             const response = await getCompanyDataApi();
-            set({ companyData: response });
+            set(state => ({
+                companyData: response,
+                lastFetchTime: { ...state.lastFetchTime, companyData: now }
+            }));
         } catch (error) {
             Swal.fire({
                 title: "ເກີດຂໍ້ຜິດພາດ!",
@@ -23,11 +40,22 @@ export const useAboutStore = create((set) => ({
             set({ loading: false });
         }
     },
-    fetchCoverImg: async () => {
+
+    fetchCoverImg: async (force = false) => {
+        const { lastFetchTime } = get();
+        const now = Date.now();
+
+        if (!force && lastFetchTime.coverImg && now - lastFetchTime.coverImg < STALE_TIME) {
+            return; // Data is still fresh, no need to fetch
+        }
+
         set({ loading: true });
         try {
             const response = await getCoverImageApi();
-            set({ coverImg: response });
+            set(state => ({
+                coverImg: response,
+                lastFetchTime: { ...state.lastFetchTime, coverImg: now }
+            }));
         } catch (error) {
             Swal.fire({
                 title: "ເກີດຂໍ້ຜິດພາດ!",
@@ -38,11 +66,22 @@ export const useAboutStore = create((set) => ({
             set({ loading: false });
         }
     },
-    fetchAboutData: async () => {
+
+    fetchAboutData: async (force = false) => {
+        const { lastFetchTime } = get();
+        const now = Date.now();
+
+        if (!force && lastFetchTime.aboutData && now - lastFetchTime.aboutData < STALE_TIME) {
+            return; // Data is still fresh, no need to fetch
+        }
+
         set({ loading: true });
         try {
             const response = await getAboutApi();
-            set({ aboutData: response });
+            set(state => ({
+                aboutData: response,
+                lastFetchTime: { ...state.lastFetchTime, aboutData: now }
+            }));
         } catch (error) {
             Swal.fire({
                 title: "ເກີດຂໍ້ຜິດພາດ!",
@@ -53,6 +92,7 @@ export const useAboutStore = create((set) => ({
             set({ loading: false });
         }
     },
+
     deleteAbout: async (id, fetchAboutData) => {
         try {
             const result = await Swal.fire({
@@ -73,7 +113,10 @@ export const useAboutStore = create((set) => ({
                         'ລາຍການຖືກລົບອອກແລ້ວ.',
                         'success'
                     );
-                    fetchAboutData(); // Refresh the data
+                    // Fetch new data after successful deletion
+                    get().fetchAboutData(true);
+                    get().fetchCompanyData(true);
+                    get().fetchCoverImg(true);
                 } else {
                     throw new Error("Failed to delete");
                 }

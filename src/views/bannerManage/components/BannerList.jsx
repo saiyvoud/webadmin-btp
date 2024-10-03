@@ -28,6 +28,7 @@ export const BannerList = ({ dateRange }) => {
         config: { duration: 300, friction: 20 },
     });
 
+
     return (
         <div className=' sm:mt-5 xl:mt-10'>
             <p className='text-[14px]'>

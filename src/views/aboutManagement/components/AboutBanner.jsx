@@ -5,6 +5,7 @@ import { addCoverImageApi, getCoverImageApi, updateCoverImageApi } from '../../.
 import { Sidebar } from '../../../components/Sidebar';
 import Swal from 'sweetalert2';
 import { Loading } from '../../../components/Loading';
+import { useAboutStore } from '../../../store/aboutStore';
 
 export const AboutBanner = () => {
     const navigate = useNavigate();
@@ -15,10 +16,7 @@ export const AboutBanner = () => {
     const [coverImg, setCoverImg] = useState([]);
 
     const imgID = coverImg[0]?.id
-    // //console.log("this is imgID=",);
-    // //console.log(imgID);
-    // //console.log("ss", imgID);
-
+    const { fetchCompanyData, fetchCoverImg, fetchAboutData } = useAboutStore();
     const fetchData = async () => {
         // setLoading(true);
         try {
@@ -88,6 +86,7 @@ export const AboutBanner = () => {
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         }).then(() => {
+                            fetchCoverImg(true)
                             navigate('/aboutManagement');
                         });
                     } else {

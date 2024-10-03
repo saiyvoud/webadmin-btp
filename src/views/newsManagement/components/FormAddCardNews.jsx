@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Upload, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { addNewsApi } from '../../../api/news';
+import useNewsStore from '../../../store/newsStore';
 
 export const FormAddCardNews = () => {
     const navigate = useNavigate();
@@ -17,6 +18,8 @@ export const FormAddCardNews = () => {
     const [coverImage, setCoverImage] = useState(null);
     const [coverImageFile, setCoverImageFile] = useState(null);
     const imageInputRef = useRef(null);
+    const fetchNews = useNewsStore(state => state.fetchNews);
+
 
     const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
@@ -97,6 +100,7 @@ export const FormAddCardNews = () => {
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         });
+                        fetchNews(true)
                         resetForm();
                         navigate('/newsManagement');
                     } else {
@@ -175,7 +179,7 @@ export const FormAddCardNews = () => {
                                 </div>
                             </div>
                             <div className="mb-6 flex flex-col gap-y-2">
-                                <p className='text-[14px] font-medium'>ອັບໂຫຼດຮູບພາບ (ຮູບທຳອິດຈະເປັນຮູບໜ້າປົກ)</p>
+                                <p className='text-[14px] font-medium'>ອັບໂຫຼດຮູບພາບ</p>
                                 <Upload
                                     listType="picture-card"
                                     fileList={fileList}

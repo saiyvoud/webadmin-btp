@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { Loading } from '../../../components/Loading';
 import { decryptData } from '../../../helpers';
 
+import { queryClient } from '../../../config/config'
+
 export const ProfilePicture = () => {
     const navigate = useNavigate();
     const [image, setImage] = useState(null);
@@ -95,6 +97,11 @@ export const ProfilePicture = () => {
                                 title: "ແກ້ໄຂສຳເລັດ!",
                                 icon: "success"
                             }).then(() => {
+                                queryClient.invalidateQueries(
+                                    {
+                                        queryKey: ['users']
+                                    }
+                                )
                                 navigate('/userInfo');
                             });
                         } else {

@@ -9,7 +9,15 @@ import { formatDate } from '../utils';
 
 export const ServiceManagement = () => {
     const navigate = useNavigate();
-    const { loading, cardData, tabList, tabActive, setTabActive, fetchData, fetchDataTab, deleteService } = useServiceStore();
+    const { loading,
+        cardData,
+        tabList,
+        tabActive,
+        setTabActive,
+        fetchData,
+        fetchDataTab,
+        deleteService }
+        = useServiceStore();
 
     useEffect(() => {
         fetchData();

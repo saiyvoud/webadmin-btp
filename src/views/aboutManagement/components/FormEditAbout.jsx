@@ -6,6 +6,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FaCloudUploadAlt, FaTrashAlt } from "react-icons/fa";
 import { updateAboutApi, getAboutOneApi, updateAboutImageApi } from '../../../api/about';
 import { GetFileObjectApi } from '../../../api/file';
+import { useAboutStore } from '../../../store/aboutStore';
 
 export const FormEditAbout = () => {
     const navigate = useNavigate();
@@ -19,6 +20,8 @@ export const FormEditAbout = () => {
     const [fileConvertImg, setFileConvertImg] = useState();
     const [checkUpload, setCheckUpload] = useState(false)
     const { id } = useParams();
+    const { fetchAboutData, fetchCompanyData, fetchCoverImg } = useAboutStore();
+
 
     const fetchData = async (id) => {
         try {
@@ -102,6 +105,10 @@ export const FormEditAbout = () => {
                             icon: "success"
                         });
                         setLoading(false)
+                        // Fetch new data after successful update
+                        fetchAboutData(true);
+                        fetchCompanyData(true);
+                        fetchCoverImg(true);
                         navigate('/aboutManagement');
                     }
                 } catch (error) {

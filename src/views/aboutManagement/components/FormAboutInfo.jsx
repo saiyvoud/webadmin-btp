@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getCompanyDataApi, updateCompanyData, updateIconCompanyDataApi } from '../../../api/about';
 import { GetFileObjectApi } from '../../../api/file';
+import { useAboutStore } from '../../../store/aboutStore';
 
 export const FormAboutInfo = () => {
     const navigate = useNavigate();
@@ -20,6 +21,8 @@ export const FormAboutInfo = () => {
     const [companyInfo, setCompanyInfo] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileIcon, setFileIcon] = useState()
+    const { fetchCompanyData, fetchCoverImg, fetchAboutData } = useAboutStore(); // เพิ่มบรรทัดนี้
+
 
     const fetchData = async () => {
         setLoading(true);
@@ -114,6 +117,10 @@ export const FormAboutInfo = () => {
                             title: "ບັນທຶກສຳເລັດ!",
                             icon: "success"
                         });
+                        // เพิ่มการเรียกใช้ฟังก์ชันอัปเดตข้อมูล
+                        fetchCompanyData(true);
+                        fetchCoverImg(true);
+                        fetchAboutData(true);
                         navigate('/aboutManagement')
                     } else {
                         Swal.fire({
@@ -215,7 +222,7 @@ export const FormAboutInfo = () => {
                                     className="bg-[#01A7B1] text-white py-2 px-8 rounded-md"
                                     disabled={loading}
                                 >
-                                    {loading ? <p>ກຳລັງບັນທຶກ... <div className='loader'></div></p> : 'ບັນທຶກ'}
+                                    {loading ? <p>ກຳລັງແກ້ໄຂ... <div className='loader'></div></p> : 'ແກ້ໄຂ'}
                                 </button>
                             </div>
                         </form>

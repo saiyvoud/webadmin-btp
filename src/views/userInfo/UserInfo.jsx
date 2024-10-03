@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Sidebar } from '../../components/Sidebar';
-import { Modal, Input, Button, Skeleton, Select } from 'antd'; // Import Skeleton from Ant Design
+import { Modal, Input, Button, Skeleton, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { delteUserApi, getUserApi, updateUserApi } from '../../api/user'; // Import updateUserApi
+import { delteUserApi, getUserApi, updateUserApi } from '../../api/user';
 import Swal from 'sweetalert2';
 import { FaCamera } from 'react-icons/fa6';
 import CryptoJS from "crypto-js";
 import { SECREAT_KEY } from '../../constants';
 
-
+const { Option } = Select;
 
 export const UserInfo = () => {
     const navigate = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [updatedData, setUpdatedData] = useState({
         email: '',
@@ -23,38 +23,20 @@ export const UserInfo = () => {
         phoneNumber: '',
         role: '',
     });
-    const [data, setData] = useState([]);
+
+    const { data: userData, isLoading: loading, refetch } = useQuery({
+        queryKey: ['users'],
+        queryFn: getUserApi,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        refetchOnWindowFocus: false,
+    });
+    console.log("us", userData);
 
     function decryptData(data) {
         return CryptoJS.AES.decrypt(data, SECREAT_KEY).toString(CryptoJS.enc.Utf8);
     }
     const encryptedRole = localStorage.getItem("role");
     const currentRole = decryptData(encryptedRole);
-    //console.log(currentRole);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await getUserApi();
-            if (!response) {
-                throw new Error('No response from API');
-            }
-            setData(response);
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: "ເກີດຂໍ້ຜິດພາດ",
-                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
-            });
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const showModal = (item = null) => {
         if (item) {
@@ -82,32 +64,29 @@ export const UserInfo = () => {
     };
 
     const handleOk = async () => {
-        setLoading(true);
         if (!(currentRole === "superadmin")) {
             Swal.fire({
                 icon: "error",
                 title: "ທ່ານບໍ່ມີສິດໃນການແກ້ໄຂ",
             })
-            setLoading(false)
         }
         else {
             try {
                 if (editingItem) {
                     const updatedFields = { ...updatedData };
 
-                    // Compare the original email with the updated email
                     if (editingItem.email === updatedData.email) {
-                        delete updatedFields.email; // Remove the email field if it hasn't changed
+                        delete updatedFields.email;
                     }
 
                     const response = await updateUserApi(
                         editingItem.id,
-                        updatedFields // Pass only the changed fields
+                        updatedFields
                     );
 
                     if (response) {
                         Swal.fire('ສຳເລັດ', 'ຂໍ້ມູນຖືກອັບເດດແລ້ວ', 'success');
-                        fetchData(); // Refresh data after update
+                        refetch();
                     }
                 }
             } catch (error) {
@@ -120,14 +99,11 @@ export const UserInfo = () => {
         }
     };
 
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
     const deleteItem = async (id) => {
-        // //console.log(!(currentRole === "superadmin"));
-
         if (!(currentRole === "superadmin")) {
             Swal.fire({
                 icon: "error",
@@ -153,7 +129,7 @@ export const UserInfo = () => {
                             'ລາຍການຖືກລົບອອກແລ້ວ.',
                             'success'
                         );
-                        fetchData(); // Refresh the data
+                        refetch();
                     } else {
                         throw new Error("Failed to delete");
                     }
@@ -169,18 +145,19 @@ export const UserInfo = () => {
         }
     };
 
-
     const TableRow = ({ index, id, profile, firstName, lastName, phoneNumber, email, password, role, onEdit, onDelete }) => (
-        <tr className={`border-b w-full border-gray-200 ${data.length > 10 && 'h-full'}`}>
+        <tr className={`border-b w-full border-gray-200 ${userData && userData.length > 10 && 'h-full'}`}>
             <td className="py-4 sm:px-5 xl:px-1 xl:w-[70px] text-[12px] text-gray-500 text-center">{index}</td>
-            <td className="py-4 px-3 text-[12px] text-center flex justify-center items-center">
-                <div className="relative w-16 h-16">
-                    <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${profile}`} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
-                    <div
-                        onClick={() => navigate(`/userInfo/editProfile/${id}`)}
-                        className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
-                    >
-                        <FaCamera className='text-white text-[16px]' />
+            <td className="py-4 px-3 text-[12px] text-center">
+                <div className="flex justify-center items-center">
+                    <div className="relative w-16 h-16">
+                        <img src={`https://saiyfonbroker.s3.ap-southeast-1.amazonaws.com/images/${profile}`} alt={firstName} className="w-16 h-16 object-cover rounded-full" />
+                        <div
+                            onClick={() => navigate(`/userInfo/editProfile/${id}`)}
+                            className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                        >
+                            <FaCamera className='text-white text-[16px]' />
+                        </div>
                     </div>
                 </div>
             </td>
@@ -193,7 +170,6 @@ export const UserInfo = () => {
                     <td className="py-4 px-3 text-[12px] w-[120px] text-center text-gray-500 truncate">{password}</td>
                 )
             }
-
             <td className="py-4 px-3 text-[12px] w-[100px] text-center text-gray-500 truncate">{role}</td>
             <td className="py-4 px-3 text-[12px] w-[150px]">
                 <div className='flex items-center justify-center space-x-2'>
@@ -211,10 +187,10 @@ export const UserInfo = () => {
 
     return (
         <Sidebar>
-            <div className={`xl:mt-14 xl:mx-14 bg-white rounded-lg sm:px-6 xl:px-8 lg:py-10 sm:py-6 xl:py-14 ${data.length > 10 ? 'min-h-screen' : 'h-screen'}`}>
-                <div div className="flex items-center justify-between mb-6">
+            <div className={`xl:mt-14 xl:mx-14 bg-white rounded-lg sm:px-6 xl:px-8 lg:py-10 sm:py-6 xl:py-14 ${userData && userData.length > 10 ? 'min-h-screen' : 'h-screen'}`}>
+                <div className="flex items-center justify-between mb-6">
                     <p className="text-gray-500 text-[14px]">
-                        ທັງໝົດ {data ? data.length : 0} ລາຍການ
+                        ທັງໝົດ {userData ? userData.length : 0} ລາຍການ
                     </p>
                     <button onClick={() => navigate('/userInfo/formAddUser')}
                         className="text-white px-4 py-2 text-[14px] bg-[#01A7B1] rounded-full">
@@ -275,12 +251,11 @@ export const UserInfo = () => {
                     </div>
                 </Modal>
 
-                {/* Display Skeleton while loading */}
                 {loading ? (
                     <Skeleton active />
                 ) : (
                     <div className="rounded-lg overflow-x-auto border w-full h-full pb-5">
-                        <table className="w-full h-full">
+                        <table className="w-full ">
                             <thead>
                                 <tr className="bg-[#01A7B1]/20 border-b w-full">
                                     <th className="py-4 xl:px-3 xl:w-fit  text-black text-[12px] font-medium text-center">ລໍາດັບ</th>
@@ -294,13 +269,12 @@ export const UserInfo = () => {
                                             <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">ລະຫັດຜ່ານ</th>
                                         )
                                     }
-
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Role</th>
                                     <th className="py-4 xl:px-3 text-black text-[12px] font-medium text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data && data.map((item, index) => (
+                                {userData && userData.map((item, index) => (
                                     <TableRow
                                         key={item.id}
                                         index={index + 1}
@@ -321,6 +295,6 @@ export const UserInfo = () => {
                     </div>
                 )}
             </div>
-        </Sidebar >
+        </Sidebar>
     );
 };

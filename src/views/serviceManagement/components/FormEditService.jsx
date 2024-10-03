@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { getServiceApi } from '../../../api/serviceInfo';
 import { getOneService, updateServiceApi, updateServiceFileApi, updateServiceImage } from '../../../api/serivce';
 import { GetFileObjectApi, GetFilePDF } from '../../../api/file';
+import useServiceStore from '../../../store/useServiceStore';
 
 export const FormEditService = () => {
     const navigate = useNavigate();
@@ -33,7 +34,10 @@ export const FormEditService = () => {
     const [inputValue2, setInputValue2] = useState('');
     const [existingFiles, setExistingFiles] = useState([]);
     const [changeImage, setChangeImage] = useState(false)
-
+    const {
+        fetchData
+    }
+        = useServiceStore();
 
     const handleInputChange1 = (e) => {
         setInputValue1(e.target.value);
@@ -79,15 +83,24 @@ export const FormEditService = () => {
         setTypeScholarship(typeScholarship.filter((_, index) => index !== indexToRemove));
     };
 
-    const fetchData = async () => {
+    const fetchDataInfo = async () => {
         try {
             const response = await getServiceApi();
-            if (!response) throw new Error('No response from API');
+            if (!response) {
+                throw new Error('No response from API');
+            }
             setTypeService(response);
         } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: "ເກີດຂໍ້ຜິດພາດ",
+                text: "ບໍ່ສາມາດດຶງຂໍ້ມູນໄດ້",
+            });
             console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
         }
-    };
+    }
 
     const fetchDataService = async () => {
         setLoading(true);
@@ -114,7 +127,7 @@ export const FormEditService = () => {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchDataInfo()
         fetchDataService();
     }, [id]);
 
@@ -210,7 +223,7 @@ export const FormEditService = () => {
                     title: "ແກ້ໄຂສຳເລັດ!",
                     icon: "success"
                 });
-
+                fetchData(true)
                 navigate('/serviceManagement');
             }
         } catch (error) {
@@ -340,20 +353,20 @@ export const FormEditService = () => {
                                     {errors.files && <p className="text-red-500 text-sm mt-1">{errors.files}</p>}
                                 </div>
 
-                                <div className='mb-4'>
-                                    <label htmlFor='typeService' className='ml-3 text-[14px]'>ເລືອກປະເພດທຶນຕ່າງໆ:</label>
+                                <div className="mb-4 flex flex-col gap-y-2">
+                                    <p className='text-[14px] font-medium'>
+                                        ເລືອກປະເພດທຶນຕ່າງໆ
+                                    </p>
                                     <Select
-                                        id='typeService'
-                                        value={category}
+                                        placeholder="ກະລຸນາເລືອກປະເພດທຶນຕ່າງໆ"
+                                        style={{ width: '100%' }}
                                         onChange={(value) => setCategory(value)}
-                                        className='w-full'
-                                    >
-                                        {typeService.map((type) => (
-                                            <Select.Option key={type.id} value={type.id}>
-                                                {type.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                        options={typeService?.map((item) => ({
+                                            value: item.id,
+                                            label: item.name,
+                                        }))}
+                                    />
+                                    {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
                                 </div>
 
                                 <div className="mb-4 flex flex-col gap-y-2">

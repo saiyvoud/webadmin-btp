@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { X, Plus } from 'lucide-react';
 import { getBannerOneApi, updateBannerApi, updateFileBannerApi, updateImageBannerApi } from '../../../api/banner';
 import { GetFileObjectApi, GetFilePDF } from '../../../api/file';
+import { useBannerStore } from '../../../store/bannerStore';
 
 export const FormEditBanner = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const FormEditBanner = () => {
     const [inputValue2, setInputValue2] = useState('');
     const [existingFiles, setExistingFiles] = useState([]);
     const [changeImage, setChangeImage] = useState(false)
+    const fetchBanner = useBannerStore(state => state.fetchBanner);
 
 
     const handleFileChange = (event) => {
@@ -188,10 +190,12 @@ export const FormEditBanner = () => {
                     }
 
                     if (response) {
+                        await fetchBanner(true); // Force refresh banner data
                         Swal.fire({
                             title: "ບັນທຶກການແກ້ໄຂສຳເລັດ!",
                             icon: "success",
                         }).then(() => {
+                            fetchBanner(true)
                             navigate('/bannerManagement');
                         });
                     }

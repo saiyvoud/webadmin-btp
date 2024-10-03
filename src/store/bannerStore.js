@@ -1,28 +1,43 @@
 import { create } from 'zustand';
 import { getBannerApi, delBannerApi, upadteSwitchBannerApi } from '../api/banner';
+import Swal from 'sweetalert2';
 
-export const useBannerStore = create((set) => ({
+const STALE_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+export const useBannerStore = create((set, get) => ({
     bannerData: [],
     loading: false,
+    error: null,
+    lastFetchTime: null,
 
-    // Fetch banner data
-    fetchBanner: async () => {
+    fetchBanner: async (force = false) => {
+        const { lastFetchTime } = get();
+        const now = Date.now();
+
+        if (!force && lastFetchTime && now - lastFetchTime < STALE_TIME) {
+            return; // Data is still fresh, no need to fetch
+        }
+
         set({ loading: true });
         try {
             const response = await getBannerApi();
-            if (response) {
-                set({ bannerData: response });
-            } else {
-                throw new Error("No response from API");
+            if (!response) {
+                throw new Error('No response from API');
             }
+            set({ bannerData: response, error: null, lastFetchTime: now });
         } catch (error) {
+            set({ error: 'Failed to fetch banner data' });
+            Swal.fire({
+                icon: 'error',
+                title: 'Error fetching banner data',
+                text: 'Unable to fetch banner data',
+            });
             console.error('Error fetching data:', error);
         } finally {
             set({ loading: false });
         }
     },
 
-    // Delete banner
     deleteBanner: async (id) => {
         try {
             const result = await Swal.fire({
@@ -37,7 +52,9 @@ export const useBannerStore = create((set) => ({
                 const response = await delBannerApi(id);
                 if (response) {
                     Swal.fire('ລົບສຳເລັດ!', 'ລາຍການຖືກລົບອອກແລ້ວ.', 'success');
-                    await set((state) => ({ bannerData: state.bannerData.filter(item => item.id !== id) }));
+                    set((state) => ({
+                        bannerData: state.bannerData.filter(item => item.id !== id)
+                    }));
                 } else {
                     throw new Error("Failed to delete");
                 }
@@ -52,12 +69,11 @@ export const useBannerStore = create((set) => ({
         }
     },
 
-    // Update banner switch
     updateBannerSwitch: async (id, value) => {
         try {
             const response = await upadteSwitchBannerApi(id, value);
             if (response) {
-                await set((state) => ({
+                set((state) => ({
                     bannerData: state.bannerData.map(item =>
                         item.id === id ? { ...item, isPublished: value } : item
                     )
