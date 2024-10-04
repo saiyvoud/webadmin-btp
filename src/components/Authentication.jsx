@@ -20,7 +20,6 @@ const Authentication = ({ children, allowedRoles = [Role.admin, Role.superadmin]
         const expiresTime = expiresIn * 1000;
         const currentTime = Date.now();
         const timeLeftInSecond = Math.max(0, (expiresTime - currentTime) / 1000);
-        console.log("timeLeftInSecond==>", timeLeftInSecond);
         if (currentTime >= expiresTime) {
             localStorage.removeItem("token");
             localStorage.removeItem("expireToken");

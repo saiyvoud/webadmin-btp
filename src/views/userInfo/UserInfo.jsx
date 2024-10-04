@@ -30,7 +30,6 @@ export const UserInfo = () => {
         staleTime: 5 * 60 * 1000, // 5 minutes
         refetchOnWindowFocus: false,
     });
-    console.log("us", userData);
 
     function decryptData(data) {
         return CryptoJS.AES.decrypt(data, SECREAT_KEY).toString(CryptoJS.enc.Utf8);

@@ -7,7 +7,7 @@ export const PieCharts = ({ totalDownload }) => {
     const totalBanner = totalDownload?.filter((item) => item?.type === "banner").length
     const totalService = totalDownload?.filter((item) => item?.type === "service").length
     // const totalNews = totalDownload?.filter((item) => item?.type === "news").length
-    // console.log("total", total);
+    // console.log("total", totalDownload);
     const data = [
         { value: totalService, name: 'Service', itemStyle: { color: '#ff8a7d' } }, // Red
         // { value: totalNews, name: 'News', itemStyle: { color: '#77c6ff' } }, // Blue
